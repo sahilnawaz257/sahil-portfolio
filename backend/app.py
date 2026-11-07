@@ -1,23 +1,30 @@
 """
-Sahil Nawaz Portfolio — Flask Backend Entry Point (Phase 1)
-Serves static frontend assets and provides REST API endpoints.
+Sahil Nawaz Portfolio — Flask Application Entry Point (Phase 2)
+Integrates SQLite Database initialization, REST API blueprint,
+and static frontend page serving.
 """
 
 import os
 from flask import Flask, send_from_directory, request, make_response, jsonify
 from flask_cors import CORS
+from database import init_db
 from routes import api_bp
 
-# Resolve paths
+# Resolve directory paths
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "sahil-portfolio-dev-secret-key-2026")
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
-# Enable CORS for cross-origin frontend requests
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Initialize SQLite Database & Tables (PART 1, 2, 4)
+init_db()
+
+# Enable CORS for local cross-origin frontend requests
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
 # Register modular API blueprint
 app.register_blueprint(api_bp)
@@ -45,7 +52,6 @@ def add_cors_headers(response):
 def not_found_error(error):
     if request.path.startswith("/api/"):
         return jsonify({"success": False, "error": "Endpoint not found"}), 404
-    # Fallback to index.html for frontend routing
     return send_from_directory(FRONTEND_DIR, "index.html"), 404
 
 @app.errorhandler(405)
@@ -71,6 +77,11 @@ def serve_about():
 def serve_projects():
     return send_from_directory(FRONTEND_DIR, "projects.html")
 
+@app.route("/admin")
+@app.route("/admin.html")
+def serve_admin():
+    return send_from_directory(FRONTEND_DIR, "admin.html")
+
 @app.route("/<path:path>")
 def serve_static(path):
     file_path = os.path.join(FRONTEND_DIR, path)
@@ -80,8 +91,9 @@ def serve_static(path):
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("  🚀 Sahil Nawaz Portfolio — Flask Backend Running")
+    print("  🚀 Sahil Nawaz Portfolio — Flask Backend (Phase 2)")
     print("  🌐 Website:  http://127.0.0.1:5000")
+    print("  🔐 Admin:    http://127.0.0.1:5000/admin")
     print("  🔌 Health:   http://127.0.0.1:5000/api/health")
     print("  📁 Projects: http://127.0.0.1:5000/api/projects")
     print("  ✉️ Contact:  http://127.0.0.1:5000/api/contact")

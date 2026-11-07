@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initRoleTypingAnimation();
     initScrollReveal();
     initContactForm();
+    initDynamicProjects();
     initProjectFilters();
     initCopyrightYear();
   } catch (err) {
@@ -438,9 +439,11 @@ function initContactForm() {
         const result = await response.json().catch(() => ({}));
 
         if (response.ok && result.success) {
-          // Success Response from Flask Backend
+          // Success Response from Flask Backend with SQLite Persistence
+          const inquiryId = result.contact_id || (result.stored_data ? result.stored_data.id : "");
+          const idBadge = inquiryId ? ` <span class="badge" style="background: rgba(16,185,129,0.15); color: #047857; padding: 2px 8px; border-radius: 999px; font-weight: 700; font-size: 0.8rem;">Ref #${inquiryId}</span>` : "";
           showAlert(
-            `✔ <strong>Message Received by Flask Backend!</strong> ${result.message || "Your message was successfully received."} <br><small style="opacity: 0.85;">(Note: Backend received & verified the payload. SQLite persistence will be connected in Phase 2.)</small>`,
+            `✔ <strong>Message Saved to SQLite Database!</strong> ${result.message || "Your message was successfully received."}${idBadge}<br><small style="opacity: 0.9;">Inquiry stored persistently in <code>database/portfolio.db</code>.</small>`,
             "success"
           );
 
@@ -598,4 +601,162 @@ function initProjectFilters() {
       });
     });
   });
+}
+
+/**
+ * 11. Dynamic Projects Loader from SQLite Database (Phase 2)
+ * Fetches projects from GET /api/projects and populates the project grid
+ * while retaining progressive enhancement fallback if API is unavailable.
+ */
+async function initDynamicProjects() {
+  const grid = document.getElementById("project-grid");
+  if (!grid) return;
+
+  const API_BASE_URL = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
+    ? ""
+    : "http://127.0.0.1:5000";
+  const endpoint = `${API_BASE_URL}/api/projects`;
+
+  try {
+    const res = await fetch(endpoint, {
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!res.ok) {
+      console.info("Projects API returned status:", res.status);
+      return; // Keep existing static markup
+    }
+
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.projects) && data.projects.length > 0) {
+      renderProjectCards(grid, data.projects);
+    }
+  } catch (err) {
+    console.info("Using static projects showcase (backend offline or standalone mode):", err.message);
+  }
+}
+
+/**
+ * Renders dynamic project cards into the given container
+ */
+function renderProjectCards(container, projects) {
+  const cardsHtml = projects.map((p, idx) => {
+    const num = String(idx + 1).padStart(2, "0");
+    const titleLower = (p.title || "").toLowerCase();
+
+    // Determine banner theme based on project title/type
+    let bannerHtml = "";
+    if (titleLower.includes("crowd") || titleLower.includes("density")) {
+      bannerHtml = `
+        <div class="project-banner banner-crowd" aria-hidden="true">
+          <span class="stat-number">1,248</span>
+          <span class="stat-label">Crowd Analytics Preview</span>
+          <div class="crowd-bars">
+            <span style="height: 18px;"></span>
+            <span style="height: 32px;"></span>
+            <span style="height: 24px;"></span>
+            <span style="height: 48px;"></span>
+            <span style="height: 36px;"></span>
+            <span style="height: 40px;"></span>
+            <span style="height: 22px;"></span>
+          </div>
+        </div>
+      `;
+    } else if (titleLower.includes("library")) {
+      bannerHtml = `
+        <div class="project-banner banner-library" aria-hidden="true">
+          <div class="library-mockup">
+            <small>LIBRARY & ATTENDANCE</small>
+            <b>Books. Records.<br>Transactions.</b>
+          </div>
+        </div>
+      `;
+    } else if (titleLower.includes("brand") || titleLower.includes("guideline") || titleLower.includes("audit")) {
+      bannerHtml = `
+        <div class="project-banner banner-brand" aria-hidden="true">
+          <div class="brand-mockup">
+            <span class="brand-symbol">Aa</span>
+            <div class="brand-palette">
+              <small>AUDIT TOKENS</small>
+              <div class="palette-swatches">
+                <span style="background: #df7568;"></span>
+                <span style="background: #f3b5aa;"></span>
+                <span style="background: #e8d6c9;"></span>
+                <span style="background: #39312e;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      bannerHtml = `
+        <div class="project-banner banner-api" aria-hidden="true">
+          <div class="code-mockup">
+            <span>&lt;/&gt; ${escapeHtml(p.title)}</span><br>
+            <span style="color: #ef5966;">Active Production Build</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Process technology badges
+    const techItems = (p.technologies || "")
+      .split(/[,|;]/)
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const techListHtml = techItems.length > 0
+      ? techItems.map((t) => `<li>${escapeHtml(t)}</li>`).join("")
+      : `<li>Software</li>`;
+
+    // Process project action links (only rendered if URL is valid)
+    let linksHtml = "";
+    if (p.github_url && p.github_url.trim()) {
+      linksHtml += `
+        <a href="${escapeHtml(p.github_url)}" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View ${escapeHtml(p.title)} on GitHub">
+          <span class="btn-icon" aria-hidden="true">🐙</span> GitHub ↗
+        </a>
+      `;
+    }
+    if (p.live_demo_url && p.live_demo_url.trim()) {
+      linksHtml += `
+        <a href="${escapeHtml(p.live_demo_url)}" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="Live Demo for ${escapeHtml(p.title)}">
+          <span class="btn-icon" aria-hidden="true">🌐</span> Live Demo ↗
+        </a>
+      `;
+    }
+    if (!linksHtml) {
+      linksHtml = `<span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic; padding: 6px 0;">Academic Repository / Core Project</span>`;
+    }
+
+    const tag = `${num} / ${escapeHtml(p.title.split(' ')[0])}`;
+
+    return `
+      <article class="project-card">
+        ${bannerHtml}
+        <div class="project-body">
+          <span class="project-tag">${tag}</span>
+          <h3 class="project-title">${escapeHtml(p.title)}</h3>
+          <p class="project-desc">${escapeHtml(p.description)}</p>
+          <ul class="project-tech" aria-label="Technologies used">
+            ${techListHtml}
+          </ul>
+          <div class="project-links">
+            ${linksHtml}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  container.innerHTML = cardsHtml;
+}
+
+/**
+ * Escapes HTML characters safely to prevent XSS injection
+ */
+function escapeHtml(text) {
+  if (!text) return "";
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
 }

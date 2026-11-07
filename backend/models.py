@@ -1,91 +1,81 @@
-from database import get_db_connection
+"""
+Sahil Nawaz Portfolio — Database Models (Phase 2)
+Provides SQLite CRUD operations for contact messages, projects, and admin authentication.
+"""
 
-class Contact:
+from database import get_db_connection
+from werkzeug.security import check_password_hash, generate_password_hash
+
+class ContactMessage:
+    """Manages visitor inquiries submitted through the contact form."""
+
     @staticmethod
-    def create(name, email, subject, message):
-        """Save a new contact message into the database."""
+    def create(full_name, email, subject, message):
+        """Insert a validated contact message into SQLite."""
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO contacts (name, email, subject, message)
+            INSERT INTO contact_messages (full_name, email, subject, message)
             VALUES (?, ?, ?, ?)
-        """, (name.strip(), email.strip(), subject.strip() if subject else "", message.strip()))
+        """, (full_name.strip(), email.strip(), subject.strip() if subject else "", message.strip()))
         conn.commit()
-        contact_id = cursor.lastrowid
+        msg_id = cursor.lastrowid
         conn.close()
-        return contact_id
+        return msg_id
 
     @staticmethod
     def get_all():
-        """Retrieve all submitted messages ordered by newest first."""
+        """Retrieve all messages sorted by newest first."""
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM contacts ORDER BY created_at DESC")
+        cursor.execute("SELECT * FROM contact_messages ORDER BY created_at DESC")
         rows = cursor.fetchall()
         conn.close()
         return [dict(row) for row in rows]
 
     @staticmethod
-    def get_by_id(contact_id):
-        """Retrieve a specific contact message by ID."""
+    def get_by_id(msg_id):
+        """Retrieve a single message by ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM contacts WHERE id = ?", (contact_id,))
+        cursor.execute("SELECT * FROM contact_messages WHERE id = ?", (msg_id,))
         row = cursor.fetchone()
         conn.close()
         return dict(row) if row else None
 
     @staticmethod
-    def mark_as_read(contact_id):
-        """Mark a contact message as read."""
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE contacts SET status = 'read' WHERE id = ?", (contact_id,))
-        conn.commit()
-        rows_affected = cursor.rowcount
-        conn.close()
-        return rows_affected > 0
-
-    @staticmethod
-    def delete(contact_id):
+    def delete(msg_id):
         """Delete a contact message by ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM contacts WHERE id = ?", (contact_id,))
+        cursor.execute("DELETE FROM contact_messages WHERE id = ?", (msg_id,))
         conn.commit()
-        rows_affected = cursor.rowcount
+        deleted = cursor.rowcount > 0
         conn.close()
-        return rows_affected > 0
+        return deleted
 
 
 class Project:
+    """Manages portfolio project records in SQLite."""
+
     @staticmethod
-    def get_all(category=None, featured_only=False):
-        """Retrieve projects with optional category and featured filtering."""
+    def get_all():
+        """Retrieve all projects ordered by ID."""
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        query = "SELECT * FROM projects WHERE 1=1"
-        params = []
-
-        if category and category.lower() != "all":
-            query += " AND category = ?"
-            params.append(category.lower())
-
-        if featured_only:
-            query += " AND featured = 1"
-
-        query += " ORDER BY featured DESC, id ASC"
-
-        cursor.execute(query, params)
+        cursor.execute("SELECT * FROM projects ORDER BY id ASC")
         rows = cursor.fetchall()
         conn.close()
 
         results = []
         for row in rows:
             p = dict(row)
-            # Split comma-separated tech stack into an array for easy frontend rendering
-            p["tech_list"] = [t.strip() for t in p["tech_stack"].split(",") if t.strip()]
+            # Parse technologies into list for clean JSON delivery
+            tech_str = p.get("technologies") or p.get("tech_stack") or ""
+            p["technologies"] = tech_str
+            p["tech_list"] = [t.strip() for t in tech_str.split(",") if t.strip()]
+            if "live_demo_url" not in p or p["live_demo_url"] is None:
+                p["live_demo_url"] = p.get("live_url") or ""
             results.append(p)
         return results
 
@@ -100,20 +90,96 @@ class Project:
         if not row:
             return None
         p = dict(row)
-        p["tech_list"] = [t.strip() for t in p["tech_stack"].split(",") if t.strip()]
+        tech_str = p.get("technologies") or p.get("tech_stack") or ""
+        p["technologies"] = tech_str
+        p["tech_list"] = [t.strip() for t in tech_str.split(",") if t.strip()]
+        if "live_demo_url" not in p or p["live_demo_url"] is None:
+            p["live_demo_url"] = p.get("live_url") or ""
         return p
 
     @staticmethod
-    def get_by_slug(slug):
-        """Retrieve a specific project by slug."""
+    def create(title, description, technologies, github_url="", live_demo_url=""):
+        """Create a new project record."""
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM projects WHERE slug = ?", (slug,))
-        row = cursor.fetchone()
+        cursor.execute("""
+            INSERT INTO projects (title, description, technologies, github_url, live_demo_url)
+            VALUES (?, ?, ?, ?, ?)
+        """, (
+            title.strip(),
+            description.strip(),
+            technologies.strip(),
+            github_url.strip() if github_url else "",
+            live_demo_url.strip() if live_demo_url else ""
+        ))
+        conn.commit()
+        project_id = cursor.lastrowid
         conn.close()
-        if not row:
-            return None
-        p = dict(row)
-        p["tech_list"] = [t.strip() for t in p["tech_stack"].split(",") if t.strip()]
-        return p
+        return project_id
 
+    @staticmethod
+    def update(project_id, title, description, technologies, github_url="", live_demo_url=""):
+        """Update an existing project record."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE projects
+            SET title = ?, description = ?, technologies = ?, github_url = ?, live_demo_url = ?
+            WHERE id = ?
+        """, (
+            title.strip(),
+            description.strip(),
+            technologies.strip(),
+            github_url.strip() if github_url else "",
+            live_demo_url.strip() if live_demo_url else "",
+            project_id
+        ))
+        conn.commit()
+        updated = cursor.rowcount > 0
+        conn.close()
+        return updated
+
+    @staticmethod
+    def delete(project_id):
+        """Delete a project record."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM projects WHERE id = ?", (project_id,))
+        conn.commit()
+        deleted = cursor.rowcount > 0
+        conn.close()
+        return deleted
+
+
+class AdminUser:
+    """Manages admin credentials and secure authentication."""
+
+    @staticmethod
+    def verify_password(username, password):
+        """Verify username and password against SQLite hashed credentials."""
+        if not username or not password:
+            return False
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM admin_users WHERE username = ?", (username.strip(),))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user and check_password_hash(user["password_hash"], password):
+            return True
+        return False
+
+    @staticmethod
+    def create(username, password):
+        """Create a new admin user with hashed password."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        pw_hash = generate_password_hash(password)
+        cursor.execute("""
+            INSERT INTO admin_users (username, password_hash)
+            VALUES (?, ?)
+        """, (username.strip(), pw_hash))
+        conn.commit()
+        user_id = cursor.lastrowid
+        conn.close()
+        return user_id
