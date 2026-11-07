@@ -348,7 +348,7 @@ button {
    Hero Section
    ========================================================================== */
 .hero-section {
-  padding: 70px 0 60px;
+  padding: clamp(36px, 5vh, 60px) 0 clamp(30px, 4vh, 50px);
   background: radial-gradient(ellipse at 85% 30%, #fcdcd7 0%, transparent 46%),
               linear-gradient(120deg, #ffffff 10%, #fff7f5 50%, #fae2dd 100%);
   position: relative;
@@ -359,7 +359,7 @@ button {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
 }
 
 .hero-badge {
@@ -369,13 +369,13 @@ button {
   background: var(--primary-soft);
   border: 1px solid rgba(239, 89, 102, 0.2);
   border-radius: var(--radius-full);
-  padding: 8px 16px;
-  font-size: 0.75rem;
+  padding: 6px 14px;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 1.2px;
   color: var(--primary);
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .pulse-dot {
@@ -394,11 +394,11 @@ button {
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.4rem, 4.2vw, 3.8rem);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -2px;
-  margin-bottom: 12px;
+  line-height: 1.08;
+  letter-spacing: -1.8px;
+  margin-bottom: 10px;
   color: var(--text-main);
 }
 
@@ -460,19 +460,19 @@ button {
 }
 
 .hero-divider {
-  width: 70px;
+  width: 60px;
   height: 4px;
   background: var(--accent);
   border-radius: 2px;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .hero-description {
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: clamp(0.92rem, 1.05vw, 1.02rem);
+  line-height: 1.7;
   color: var(--text-body);
-  max-width: 580px;
-  margin-bottom: 30px;
+  max-width: 560px;
+  margin-bottom: 22px;
 }
 
 .hero-description strong {
@@ -483,15 +483,15 @@ button {
 .hero-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 30px;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 
 .hero-socials {
   display: flex;
   align-items: center;
-  gap: 20px;
-  font-size: 0.85rem;
+  gap: 18px;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
@@ -511,100 +511,53 @@ button {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 440px;
+  min-height: 400px;
 }
 
 .halo-ring {
   position: absolute;
-  width: 360px;
-  height: 360px;
-  border: 2px dashed rgba(255, 255, 255, 0.9);
+  width: 370px;
+  height: 370px;
+  border: 2px dashed rgba(239, 89, 102, 0.35);
   border-radius: 50%;
   pointer-events: none;
 }
 
 .dotted-pattern {
   position: absolute;
-  width: 400px;
-  height: 220px;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.7) 2px, transparent 2px);
-  background-size: 12px 12px;
+  width: 420px;
+  height: 240px;
+  background-image: radial-gradient(rgba(239, 89, 102, 0.25) 2px, transparent 2px);
+  background-size: 14px 14px;
   pointer-events: none;
 }
 
-/* Pure CSS Geometric Profile Artwork (No external image needed) */
+/* Profile Photo Framing */
 .profile-art {
-  width: 270px;
-  height: 350px;
-  border-radius: 145px 145px 24px 24px;
-  background: linear-gradient(145deg, #f4b2a8, #e86f70);
-  box-shadow: 0 25px 60px rgba(169, 78, 73, 0.28);
+  width: 285px;
+  height: 370px;
+  border-radius: 145px 145px 32px 32px;
+  background: linear-gradient(145deg, #fcdcd7, #f7b4a9);
+  box-shadow: 0 24px 50px rgba(239, 89, 102, 0.22), 0 6px 18px rgba(32, 27, 25, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 4px solid rgba(255, 255, 255, 0.85);
+  border: 4px solid #ffffff;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 }
 
-.profile-art::before,
-.profile-art::after {
-  content: "";
-  position: absolute;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 50%;
-  pointer-events: none;
+.profile-art:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px rgba(239, 89, 102, 0.3), 0 8px 24px rgba(32, 27, 25, 0.08);
 }
 
-.profile-art::before {
-  width: 240px;
-  height: 240px;
-}
-
-.profile-art::after {
-  width: 190px;
-  height: 190px;
-}
-
-.profile-initials {
-  font-family: var(--font-heading);
-  font-size: 5.5rem;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.88);
-  letter-spacing: -6px;
-  user-select: none;
-  z-index: 2;
-  text-shadow: 0 4px 20px rgba(169, 78, 73, 0.25);
-}
-
-.profile-tag {
-  position: absolute;
-  top: 24px;
-  color: #ffffff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  z-index: 2;
-}
-
-.profile-subtag {
-  position: absolute;
-  bottom: 22px;
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  z-index: 2;
-}
-
-/* Profile Photo Integration */
 .profile-art .profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center 12%;
   position: absolute;
   top: 0;
   left: 0;
@@ -613,7 +566,7 @@ button {
 }
 
 .profile-art:hover .profile-img {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .profile-art.has-img::before,
@@ -625,26 +578,10 @@ button {
   background: var(--primary-soft);
 }
 
-.profile-art.has-img .profile-tag {
-  background: rgba(38, 35, 34, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  top: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.profile-art.has-img .profile-subtag {
-  background: rgba(38, 35, 34, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.profile-art.has-img .profile-tag,
+.profile-art.has-img .profile-subtag,
+.profile-art.has-img .profile-initials {
+  display: none !important;
 }
 
 .about-visual-wrap {
@@ -658,75 +595,54 @@ button {
   right: 15px;
 }
 
-/* Floating Badges */
+/* Floating Badges Positioned Neatly Around the Photo (No overlap on face or body) */
 .floating-chip {
   position: absolute;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(240, 223, 218, 0.9);
+  padding: 8px 14px;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 24px rgba(156, 85, 67, 0.12);
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   animation: float 4s ease-in-out infinite alternate;
   z-index: 3;
+  white-space: nowrap;
 }
 
 .floating-chip b {
   font-size: 1.15rem;
   color: var(--primary);
+  line-height: 1;
 }
 
+/* Chip 1: Top-Left outside the shoulder */
 .chip-1 {
-  top: 40px;
-  left: 0;
+  top: 25px;
+  left: -36px;
 }
 
+/* Chip 2: Middle-Right outside the shoulder */
 .chip-2 {
-  top: 130px;
-  right: -10px;
+  top: 135px;
+  right: -40px;
   animation-delay: -1.5s;
 }
 
+/* Chip 3: Bottom-Left outside the lower card */
 .chip-3 {
-  bottom: 60px;
-  right: 10px;
+  bottom: 25px;
+  left: -32px;
   animation-delay: -3s;
 }
 
 .profile-quote-card {
-  position: absolute;
-  bottom: 0px;
-  left: 10px;
-  background: #ffffff;
-  padding: 12px 18px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 4;
-}
-
-.quote-icon {
-  color: #f59e0b;
-  font-size: 1.4rem;
-}
-
-.quote-text b {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.88rem;
-  color: var(--text-main);
-}
-
-.quote-text small {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  display: none;
 }
 
 @keyframes float {
@@ -738,27 +654,27 @@ button {
    Highlights / Stats Bar
    ========================================================================== */
 .highlights-bar {
-  margin-top: -30px;
+  margin-top: -24px;
   position: relative;
   z-index: 5;
-  margin-bottom: 70px;
+  margin-bottom: 50px;
 }
 
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: 16px;
 }
 
 .highlight-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 20px 22px;
+  padding: 15px 18px;
   box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   transition: var(--transition);
 }
 
@@ -2502,6 +2418,87 @@ textarea.form-control {
      - Tablet:  481px – 768px
      - Mobile:  320px – 480px
    ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   00. STANDARD LAPTOP & NOTEBOOK SCREENS (1025px – 1440px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .hero-section {
+    padding: 36px 0 28px;
+  }
+  .hero-grid {
+    gap: 32px;
+  }
+  .hero-visual {
+    min-height: 380px;
+  }
+  .profile-art {
+    width: 270px;
+    height: 350px;
+  }
+  .chip-1 {
+    left: -28px;
+    top: 20px;
+  }
+  .chip-2 {
+    right: -30px;
+    top: 125px;
+  }
+  .chip-3 {
+    left: -22px;
+    bottom: 20px;
+  }
+  .highlights-bar {
+    margin-top: -18px;
+    margin-bottom: 45px;
+  }
+  .highlight-card {
+    padding: 13px 16px;
+    gap: 12px;
+  }
+  .highlight-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.5rem;
+  }
+  .highlight-card b {
+    font-size: 0.88rem;
+  }
+  .highlight-card small {
+    font-size: 0.74rem;
+  }
+}
+
+/* Height-based adjustments for 1366x768 and 1080p scaled laptop screens */
+@media (max-height: 840px) and (min-width: 1025px) {
+  .hero-section {
+    padding: 30px 0 22px;
+  }
+  .hero-title {
+    font-size: 2.85rem;
+    margin-bottom: 6px;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  .hero-description {
+    font-size: 0.94rem;
+    line-height: 1.62;
+    margin-bottom: 18px;
+  }
+  .hero-actions {
+    margin-bottom: 18px;
+  }
+  .profile-art {
+    width: 260px;
+    height: 335px;
+  }
+  .highlights-bar {
+    margin-top: -16px;
+    margin-bottom: 40px;
+  }
+}
 
 /* --------------------------------------------------------------------------
    01. LAPTOP & COMPACT DESKTOP (769px – 1024px)

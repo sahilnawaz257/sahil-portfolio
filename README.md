@@ -13,10 +13,10 @@ A full-stack, responsive developer portfolio engineered with a **Python Flask ba
 ## 🌟 Key Highlights & Capabilities
 
 - **Modern Coral-Pink Aesthetic:** Responsive design built with CSS custom properties, fluid typography (`DM Sans` & `Manrope`), CSS illustrations, and mobile drawer navigation.
+- **Laptop & Desktop Optimized:** Tuned viewport heights and responsive breakpoints ensuring above-the-fold content and highlight metrics fit on any laptop screen.
 - **Dynamic Projects Showcase:** Fetches project records dynamically from SQLite with automatic progressive enhancement fallbacks for offline or static hosting.
-- **Persistent Inquiries Inbox:** Visitor contact form submissions are validated, sanitized against XSS, and stored in SQLite with assigned reference IDs.
-- **Protected Admin Dashboard:** Session-authenticated command center for viewing contact messages, replying via email, and performing full CRUD on portfolio projects.
-- **Defense-in-Depth Security:** CSRF protection with custom tokens, sliding window IP rate limiting, OWASP recommended HTTP security headers, PBKDF2 password hashing, and 100% parameterized SQL queries.
+- **Persistent Inquiries Storage:** Visitor contact form submissions are validated, sanitized against XSS, and stored directly in SQLite with assigned reference IDs.
+- **Defense-in-Depth Security:** Sliding window IP rate limiting, OWASP recommended HTTP security headers, and 100% parameterized SQL queries.
 
 ---
 
@@ -29,18 +29,19 @@ Sahil-Portfolio/
 │   ├── index.html          # Main landing page (Hero, About, Skills, Projects, Education, Contact, Footer)
 │   ├── about.html          # In-depth biography, academic background, and technical journey
 │   ├── projects.html       # Portfolio showcase with category filtering
-│   ├── admin.html          # Protected Admin Dashboard (Inbox & Project Management)
 │   ├── favicon.svg         # Vector favicon badge (</>)
 │   ├── css/
 │   │   └── style.css       # Responsive custom CSS (coral-pink palette, typography, animations)
-│   └── js/
-│       └── script.js       # Dynamic projects loader, scrollspy, contact API handler, mobile drawer
+│   ├── js/
+│   │   └── script.js       # Dynamic projects loader, scrollspy, contact API handler, mobile drawer
+│   └── images/
+│       └── sahil-nawaz.jpg # Profile portrait photograph
 │
 ├── backend/
 │   ├── app.py              # Flask server, security middleware, static routing, and error handlers
 │   ├── database.py         # SQLite connection manager, automated table migration, and seed logic
-│   ├── models.py           # ContactMessage, Project, and AdminUser data access models
-│   ├── routes.py           # Modular REST API endpoints with CSRF & rate limit protection
+│   ├── models.py           # ContactMessage and Project data access models
+│   ├── routes.py           # Modular REST API endpoints with rate limit protection
 │   └── requirements.txt    # Python dependencies (Flask, flask-cors, Werkzeug, gunicorn)
 │
 ├── database/
@@ -82,75 +83,52 @@ python -m venv .venv
 pip install -r backend/requirements.txt
 ```
 
-### 4. Configure Environment Variables (Optional for Local Dev)
-
-Copy the example environment file:
-```powershell
-copy .env.example .env
-```
-*(The backend defaults to safe local development values if `.env` is omitted).*
-
-### 5. Launch Application Server
+### 4. Launch Application Server
 
 ```powershell
 python backend/app.py
 ```
 
-### 6. Access in Browser
+### 5. Access in Browser
 
 - 🌐 **Portfolio Website:** [http://127.0.0.1:5000](http://127.0.0.1:5000)
-- 🔐 **Admin Dashboard:** [http://127.0.0.1:5000/admin](http://127.0.0.1:5000/admin)
 - 🔌 **API Health Status:** [http://127.0.0.1:5000/api/health](http://127.0.0.1:5000/api/health)
 - 📁 **Projects API:** [http://127.0.0.1:5000/api/projects](http://127.0.0.1:5000/api/projects)
-
-> **Default Admin Credentials (Local Verification):**
-> - **Username:** `admin`
-> - **Password:** `SahilAdmin2026!` *(Change in `.env` before production deployment)*
 
 ---
 
 ## 🔌 RESTful API Reference
 
-| Method | Endpoint | Auth Required | Description | Status Codes |
-|---|---|:---:|---|:---:|
-| `GET` | `/api/health` | No | System health check and current phase | `200` |
-| `GET` | `/api/projects` | No | Retrieve all dynamic portfolio projects from SQLite | `200`, `500` |
-| `GET` | `/api/projects/<id>` | No | Retrieve details of a single project | `200`, `404` |
-| `POST` | `/api/contact` | No (Rate Limited) | Submit contact inquiry to SQLite database | `201`, `400`, `429` |
-| `POST` | `/api/admin/login` | No (Rate Limited) | Verify admin credentials; issues session & CSRF token | `200`, `400`, `401`, `429` |
-| `POST` | `/api/admin/logout` | Yes | Invalidate admin session and clear CSRF token | `200` |
-| `GET` | `/api/admin/status` | No | Check active authentication status and retrieve CSRF token | `200` |
-| `GET` | `/api/admin/messages` | Yes | Retrieve all contact messages stored in SQLite | `200`, `401` |
-| `DELETE` | `/api/admin/messages/<id>` | Yes + CSRF | Permanently delete a contact message | `200`, `401`, `403`, `404` |
-| `POST` | `/api/admin/projects` | Yes + CSRF | Add a new project to the database | `201`, `400`, `401`, `403` |
-| `PUT` | `/api/admin/projects/<id>` | Yes + CSRF | Update an existing project record | `200`, `400`, `401`, `403`, `404` |
-| `DELETE` | `/api/admin/projects/<id>` | Yes + CSRF | Remove a project from the database | `200`, `401`, `403`, `404` |
+| Method | Endpoint | Description | Status Codes |
+|---|---|---|:---:|
+| `GET` | `/api/health` | System health check and current status | `200` |
+| `GET` | `/api/projects` | Retrieve all dynamic portfolio projects from SQLite | `200`, `500` |
+| `GET` | `/api/projects/<id>` | Retrieve details of a single project | `200`, `404` |
+| `POST` | `/api/contact` | Submit contact inquiry to SQLite database (Rate Limited) | `201`, `400`, `429` |
 
 ---
 
-## 🛡️ Security & Architecture (Phase 3)
+## 🛡️ Security & Architecture
 
 The application implements enterprise-grade security practices aligned with the **OWASP Top 10**:
 
 1. **SQL Injection Prevention:**
    All SQLite queries in [`database.py`](file:///c:/Users/Adil%20nawaz/Music/Protiflio/backend/database.py) and [`models.py`](file:///c:/Users/Adil%20nawaz/Music/Protiflio/backend/models.py) use 100% parameterized binding (`?`). Zero dynamic string concatenation.
-2. **Cross-Site Request Forgery (CSRF) Protection:**
-   State-mutating administrative actions (`POST`, `PUT`, `DELETE`) require a cryptographically generated anti-CSRF token delivered in the `X-CSRF-Token` header and verified with `secrets.compare_digest()`.
-3. **Session Cookie Hardening:**
-   Session cookies are configured with `HttpOnly=True` (mitigates XSS cookie theft), `SameSite=Lax`, and `Secure=True` when running under HTTPS.
-4. **Brute Force & Spam Throttling:**
-   In-memory sliding window rate limiters restrict `/api/contact` to 8 submissions/min and `/api/admin/login` to 5 attempts/min per IP address.
-5. **Cross-Site Scripting (XSS) Sanitization:**
-   All user submissions from contact forms and project administration are HTML-escaped using Python's `html.escape()` prior to storage and rendering.
-6. **OWASP HTTP Security Headers:**
+2. **Session Cookie Hardening:**
+   Cookies are configured with `HttpOnly=True` (mitigates XSS cookie theft), `SameSite=Lax`, and `Secure=True` when running under HTTPS.
+3. **Spam & Flooding Throttling:**
+   In-memory sliding window rate limiters restrict `/api/contact` to 8 submissions/min per IP address.
+4. **Cross-Site Scripting (XSS) Sanitization:**
+   All user submissions from contact forms are HTML-escaped using Python's `html.escape()` prior to storage and rendering.
+5. **OWASP HTTP Security Headers:**
    Every HTTP response is fortified with:
    - `X-Content-Type-Options: nosniff`
    - `X-Frame-Options: SAMEORIGIN`
    - `X-XSS-Protection: 1; mode=block`
    - `Referrer-Policy: strict-origin-when-cross-origin`
    - `Content-Security-Policy`
-7. **Safe Error Handling:**
-   Standardized JSON error handlers (400, 401, 403, 404, 405, 429, 500) prevent internal Python stack traces from leaking to clients.
+6. **Safe Error Handling:**
+   Standardized JSON error handlers (400, 404, 405, 429, 500) prevent internal Python stack traces from leaking to clients.
 
 ---
 
@@ -164,8 +142,6 @@ The application implements enterprise-grade security practices aligned with the 
    - **Start Command:** `gunicorn --chdir backend app:app -b 0.0.0.0:$PORT`
 4. Set Environment Variables in dashboard:
    - `SECRET_KEY`: A random 32-character string
-   - `ADMIN_USERNAME`: Your custom admin username
-   - `ADMIN_PASSWORD`: Your strong admin password
    - `FLASK_ENV`: `production`
    - `ENABLE_HTTPS`: `true`
 

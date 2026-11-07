@@ -162,11 +162,6 @@ def serve_about():
 def serve_projects():
     return send_from_directory(FRONTEND_DIR, "projects.html")
 
-@app.route("/admin")
-@app.route("/admin.html")
-def serve_admin():
-    return send_from_directory(FRONTEND_DIR, "admin.html")
-
 @app.route("/favicon.ico")
 @app.route("/favicon.svg")
 def serve_favicon():
@@ -188,9 +183,8 @@ if __name__ == "__main__":
     debug = not IS_PRODUCTION
 
     print("=" * 65)
-    print("  🚀 Sahil Nawaz Portfolio — Production Backend (Phase 3)")
+    print("  🚀 Sahil Nawaz Portfolio — Production Backend")
     print(f"  🌐 Website:        http://{host}:{port}")
-    print(f"  🔐 Admin Center:   http://{host}:{port}/admin")
     print(f"  🔌 Health API:     http://{host}:{port}/api/health")
     print(f"  📁 Projects API:   http://{host}:{port}/api/projects")
     print(f"  ✉️ Contact API:    http://{host}:{port}/api/contact")
