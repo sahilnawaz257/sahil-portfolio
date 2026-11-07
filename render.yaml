@@ -17,3 +17,4 @@ services:
         sync: false
       - key: NOTIFICATION_EMAIL
         value: sahilnawaz257@gmail.com
+
