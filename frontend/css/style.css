@@ -599,6 +599,54 @@ button {
   z-index: 2;
 }
 
+/* Profile Photo Integration */
+.profile-art .profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-art:hover .profile-img {
+  transform: scale(1.05);
+}
+
+.profile-art.has-img::before,
+.profile-art.has-img::after {
+  display: none;
+}
+
+.profile-art.has-img {
+  background: var(--primary-soft);
+}
+
+.profile-art.has-img .profile-tag {
+  background: rgba(38, 35, 34, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  top: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-art.has-img .profile-subtag {
+  background: rgba(38, 35, 34, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .about-visual-wrap {
   position: relative;
   display: grid;
