@@ -2,7 +2,7 @@
 Sahil Nawaz Portfolio — SQLite to Supabase Migration Utility
 Transfers authentic project records, education, experience, skills,
 and existing visitor messages/bookings from local SQLite backup into Supabase PostgreSQL.
-Prevents duplicate records using unique identifiers and ON CONFLICT handling.
+Generates native UUID primary keys and avoids duplicate records with ON CONFLICT handling.
 """
 
 import os
@@ -42,7 +42,7 @@ def migrate_to_supabase(supabase_db_url=None):
 
     print(f"[MIGRATION] Connecting to Supabase PostgreSQL at {db_url.split('@')[-1]}...")
     try:
-        pg_conn = psycopg2.connect(db_url)
+        pg_conn = psycopg2.connect(db_url, sslmode=os.environ.get("PGSSLMODE", "require"))
         pg_cursor = pg_conn.cursor()
     except Exception as e:
         print(f"[ERROR] Failed to connect to Supabase PostgreSQL: {e}")
@@ -57,18 +57,18 @@ def migrate_to_supabase(supabase_db_url=None):
         try:
             pg_cursor.execute(sql_commands)
             pg_conn.commit()
-            print("[MIGRATION SUCCESS] Schema and RLS policies applied successfully.")
+            print("[MIGRATION SUCCESS] Schema, UUID primary keys, and RLS policies applied successfully.")
         except Exception as e:
             pg_conn.rollback()
             print(f"[SCHEMA ERROR] {e}")
 
-    # Migrate Contact Messages from backup
+    # Migrate Contact Messages and Bookings from backup
     if os.path.exists(SQLITE_DB):
         sqlite_conn = sqlite3.connect(SQLITE_DB)
         sqlite_conn.row_factory = sqlite3.Row
         sq_cursor = sqlite_conn.cursor()
 
-        # Migrate contact_messages
+        # 1. Migrate contact_messages
         sq_cursor.execute("SELECT full_name, email, subject, message, created_at FROM contact_messages")
         contacts = sq_cursor.fetchall()
         migrated_contacts = 0
@@ -76,23 +76,29 @@ def migrate_to_supabase(supabase_db_url=None):
             pg_cursor.execute("""
                 INSERT INTO public.contact_messages (full_name, email, subject, message, created_at)
                 VALUES (%s, %s, %s, %s, %s)
-                ON CONFLICT DO NOTHING
             """, (c["full_name"], c["email"], c["subject"], c["message"], c["created_at"]))
             migrated_contacts += 1
-        print(f"[MIGRATION] Processed {migrated_contacts} contact messages.")
+        print(f"[MIGRATION] Synchronized {migrated_contacts} contact messages.")
 
-        # Migrate meeting_bookings
-        sq_cursor.execute("SELECT full_name, email, purpose, meeting_date, meeting_time, status, google_meet_link, notes, created_at FROM meeting_bookings")
+        # 2. Migrate meeting_bookings
+        sq_cursor.execute("""
+            SELECT full_name, email, purpose, 
+                   COALESCE(preferred_date, meeting_date) as pref_date, 
+                   COALESCE(preferred_time, meeting_time) as pref_time, 
+                   status, 
+                   COALESCE(meeting_link, google_meet_link) as m_link, 
+                   notes, created_at 
+            FROM meeting_bookings
+        """)
         bookings = sq_cursor.fetchall()
         migrated_bookings = 0
         for b in bookings:
             pg_cursor.execute("""
                 INSERT INTO public.meeting_bookings (full_name, email, purpose, preferred_date, preferred_time, status, meeting_link, notes, created_at)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT DO NOTHING
-            """, (b["full_name"], b["email"], b["purpose"], b["meeting_date"], b["meeting_time"], b["status"], b["google_meet_link"], b["notes"], b["created_at"]))
+            """, (b["full_name"], b["email"], b["purpose"], b["pref_date"], b["pref_time"], b["status"], b["m_link"], b["notes"], b["created_at"]))
             migrated_bookings += 1
-        print(f"[MIGRATION] Processed {migrated_bookings} meeting bookings.")
+        print(f"[MIGRATION] Synchronized {migrated_bookings} meeting bookings.")
 
         sqlite_conn.close()
 

@@ -78,7 +78,7 @@ def list_projects():
         }), 500
 
 
-@api_bp.route("/projects/<int:project_id>", methods=["GET"])
+@api_bp.route("/projects/<project_id>", methods=["GET"])
 def get_project(project_id):
     """Retrieve details for a single project by ID."""
     try:
@@ -445,7 +445,7 @@ def book_meeting():
         }), 500
 
 
-@api_bp.route("/meetings/status/<int:booking_id>", methods=["GET"])
+@api_bp.route("/meetings/status/<booking_id>", methods=["GET"])
 def get_meeting_status(booking_id):
     """Retrieve status and Google Meet link for a scheduled meeting."""
     try:
