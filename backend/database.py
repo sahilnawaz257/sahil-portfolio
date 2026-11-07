@@ -17,10 +17,16 @@ import logging
 from contextlib import contextmanager
 import supabase_client
 
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+DATABASE_DIR = os.path.join(PROJECT_ROOT, "database")
+SQLITE_DB_PATH = os.path.join(DATABASE_DIR, "portfolio.db")
+
 # Try loading environment variables from .env
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(os.path.join(BACKEND_DIR, ".env"), override=False)
+    load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
 except ImportError:
     pass
 
@@ -31,11 +37,6 @@ if not logger.handlers:
     handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] [DB] %(message)s"))
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
-
-BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
-DATABASE_DIR = os.path.join(PROJECT_ROOT, "database")
-SQLITE_DB_PATH = os.path.join(DATABASE_DIR, "portfolio.db")
 
 # ------------------------------------------------------------------------------
 # 01. Supabase PostgreSQL Configuration & Credentials

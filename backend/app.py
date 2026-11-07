@@ -16,6 +16,13 @@ BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(BACKEND_DIR, ".env"), override=False)
+    load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
+except ImportError:
+    pass
+
 if BACKEND_DIR not in sys.path:
     sys.path.insert(0, BACKEND_DIR)
 

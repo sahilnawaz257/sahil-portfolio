@@ -23,12 +23,18 @@ import sys
 import logging
 from datetime import datetime, timezone
 
-# Try loading environment variables
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+
+def load_environment():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(os.path.join(BACKEND_DIR, ".env"), override=False)
+        load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
+    except ImportError:
+        pass
+
+load_environment()
 
 logger = logging.getLogger("portfolio.supabase")
 if not logger.handlers:
@@ -40,18 +46,25 @@ if not logger.handlers:
 # ------------------------------------------------------------------------------
 # 01. Credentials Configuration
 # ------------------------------------------------------------------------------
-SUPABASE_URL = (os.environ.get("SUPABASE_URL") or "").strip()
-SUPABASE_PUBLISHABLE_KEY = (
-    os.environ.get("SUPABASE_PUBLISHABLE_KEY") or
-    os.environ.get("SUPABASE_ANON_KEY") or
-    ""
-).strip()
-SUPABASE_SECRET_KEY = (
-    os.environ.get("SUPABASE_SECRET_KEY") or
-    os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or
-    os.environ.get("SUPABASE_KEY") or
-    ""
-).strip()
+def get_supabase_credentials():
+    """Retrieve Supabase credentials dynamically from environment variables."""
+    load_environment()
+    url = (os.environ.get("SUPABASE_URL") or "").strip()
+    pub = (
+        os.environ.get("SUPABASE_PUBLISHABLE_KEY") or
+        os.environ.get("SUPABASE_ANON_KEY") or
+        ""
+    ).strip()
+    sec = (
+        os.environ.get("SUPABASE_SECRET_KEY") or
+        os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or
+        os.environ.get("SUPABASE_KEY") or
+        ""
+    ).strip()
+    return url, pub, sec
+
+# Module-level references for backward compatibility
+SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY = get_supabase_credentials()
 
 _SUPABASE_CLIENT = None
 _SUPABASE_INIT_ATTEMPTED = False
@@ -67,11 +80,12 @@ def is_supabase_configured():
     """
     Return True only if valid (non-placeholder) SUPABASE_URL and SECRET/PUBLISHABLE keys are defined.
     """
-    if not SUPABASE_URL or not (SUPABASE_SECRET_KEY or SUPABASE_PUBLISHABLE_KEY):
+    url, pub, sec = get_supabase_credentials()
+    if not url or not (sec or pub):
         return False
-    if is_placeholder(SUPABASE_URL):
+    if is_placeholder(url):
         return False
-    active_key = SUPABASE_SECRET_KEY or SUPABASE_PUBLISHABLE_KEY
+    active_key = sec or pub
     if is_placeholder(active_key):
         return False
     return True
@@ -89,22 +103,18 @@ def get_supabase_client():
     if not is_supabase_configured():
         return None
 
-    if _SUPABASE_INIT_ATTEMPTED and _SUPABASE_CLIENT is None:
-        return None
-
-    _SUPABASE_INIT_ATTEMPTED = True
-
+    url, pub, sec = get_supabase_credentials()
     try:
         from supabase import create_client, Client
 
         # Prioritize SECRET_KEY for server-side operations (bypasses RLS for secure backend processing)
-        api_key = SUPABASE_SECRET_KEY if SUPABASE_SECRET_KEY and not is_placeholder(SUPABASE_SECRET_KEY) else SUPABASE_PUBLISHABLE_KEY
+        api_key = sec if sec and not is_placeholder(sec) else pub
 
         # Safe logging without exposing keys
-        masked_url = SUPABASE_URL.split("//")[-1]
+        masked_url = url.split("//")[-1]
         logger.info(f"Initializing official Supabase Python SDK client for {masked_url}...")
 
-        _SUPABASE_CLIENT = create_client(SUPABASE_URL, api_key)
+        _SUPABASE_CLIENT = create_client(url, api_key)
         logger.info("Supabase Python SDK client successfully initialized.")
         return _SUPABASE_CLIENT
 
@@ -118,6 +128,7 @@ def check_supabase_connection():
     Perform a safe health check against the Supabase PostgREST Data API.
     Returns: {"connected": bool, "engine": "supabase" | "sqlite_fallback", "message": str}
     """
+    url, pub, sec = get_supabase_credentials()
     client = get_supabase_client()
     if not client:
         return {
@@ -133,7 +144,7 @@ def check_supabase_connection():
             "connected": True,
             "engine": "supabase",
             "status": "healthy",
-            "message": f"Successfully connected to Supabase Data API ({SUPABASE_URL.split('//')[-1]})."
+            "message": f"Successfully connected to Supabase Data API ({url.split('//')[-1]})."
         }
     except Exception as e:
         err_msg = str(e).splitlines()[0] if str(e) else "Connection failed"
