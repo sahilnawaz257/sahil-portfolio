@@ -1373,17 +1373,28 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
+  margin: 0 0 22px 0;
+  padding: 0;
+  list-style: none;
 }
 
-.project-tech span {
+.project-tech span,
+.project-tech li {
   background: var(--bg-subtle);
   border: 1px solid var(--border);
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: var(--radius-full);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-body);
+  transition: all 0.2s ease;
+}
+
+.project-tech li:hover,
+.project-tech span:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .project-links {
@@ -1391,19 +1402,30 @@ button {
   gap: 12px;
   border-top: 1px solid var(--border);
   padding-top: 16px;
+  margin-top: auto;
 }
 
 .project-link-btn {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--primary);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 7px 16px;
+  background: var(--primary-soft);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(239, 89, 102, 0.25);
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none;
 }
 
 .project-link-btn:hover {
-  text-decoration: underline;
+  background: var(--primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(239, 89, 102, 0.3);
+  text-decoration: none;
 }
 
 /* ==========================================================================
