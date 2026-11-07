@@ -3181,3 +3181,909 @@ textarea.form-control {
     justify-content: center;
   }
 }
+
+/* =============================================================================
+   SECTION-WISE NAVIGATION SYSTEM (SPA)
+   ============================================================================= */
+.portfolio-section {
+  display: none;
+}
+
+.portfolio-section.active-section {
+  display: block;
+  animation: sectionReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero Section When Inside Active Section */
+.hero-section.portfolio-section.active-section {
+  display: block;
+}
+
+/* =============================================================================
+   EDUCATION SECTION: TWO DISTINCT RECORDS (JBIET & THE OPEN UNIVERSITY)
+   ============================================================================= */
+.education-records-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin-top: 36px;
+  margin-bottom: 36px;
+}
+
+.edu-card-premium {
+  background: #ffffff;
+  border: 1px solid rgba(243, 181, 170, 0.6);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(156, 85, 67, 0.06);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.edu-card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(223, 117, 104, 0.15);
+  border-color: var(--primary);
+}
+
+.edu-card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.edu-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+}
+
+.edu-badge-tag.uni-badge {
+  color: #3b6b91;
+  background: #edf5fa;
+}
+
+.edu-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+}
+
+.edu-status-pill.active-pill {
+  background: #e6f9f0;
+  color: #0c8a55;
+  border: 1px solid #b8ebd4;
+}
+
+.edu-status-pill.enrolled-pill {
+  background: #fdf2f0;
+  color: var(--primary);
+  border: 1px solid rgba(243, 181, 170, 0.7);
+}
+
+.edu-institution-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(240, 223, 218, 0.6);
+}
+
+.edu-logo-box {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 6px;
+  border: 1px solid rgba(243, 181, 170, 0.5);
+  box-shadow: 0 4px 14px rgba(156, 85, 67, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edu-institution-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.edu-institution-info {
+  flex: 1;
+}
+
+.edu-institution-name {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.3;
+  margin: 0 0 4px 0;
+}
+
+.edu-affiliation {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.edu-linkedin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #0a66c2;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.edu-linkedin-badge:hover {
+  text-decoration: underline;
+}
+
+.edu-degree-content {
+  margin-bottom: 20px;
+}
+
+.edu-degree-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+
+.edu-degree-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+}
+
+.edu-branch-spec {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: var(--text-body);
+  margin-bottom: 10px;
+}
+
+.edu-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.edu-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edu-summary-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-body);
+  margin-bottom: 18px;
+}
+
+.edu-skills-section {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(240, 223, 218, 0.8);
+}
+
+.edu-skills-title {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.edu-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.edu-skills-tags li {
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--bg-soft);
+  color: var(--text-dark);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(240, 223, 218, 0.7);
+}
+
+.edu-skills-tags li.tag-highlight {
+  background: #fdf0ee;
+  color: var(--primary);
+  border-color: rgba(223, 117, 104, 0.35);
+  font-weight: 700;
+}
+
+.edu-card-footer {
+  margin-top: 18px;
+  padding-top: 12px;
+}
+
+.edu-official-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.edu-official-link:hover {
+  color: var(--primary-dark);
+  transform: translateX(2px);
+}
+
+/* Professional Roadmap Card */
+.journey-roadmap-wrapper {
+  margin-top: 36px;
+}
+
+.journey-roadmap-card {
+  background: linear-gradient(135deg, rgba(255, 245, 243, 0.8) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border: 1px solid rgba(243, 181, 170, 0.6);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  box-shadow: 0 8px 24px rgba(156, 85, 67, 0.05);
+}
+
+.roadmap-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.roadmap-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.roadmap-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0 0 2px 0;
+}
+
+.roadmap-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.roadmap-item {
+  display: flex;
+  gap: 12px;
+}
+
+.roadmap-bullet {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 0.82rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.roadmap-item b {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.roadmap-item p {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =============================================================================
+   WHATSAPP FLOATING WIDGET & CHAT POPUP
+   ============================================================================= */
+.whatsapp-floating-widget {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 990;
+}
+
+.whatsapp-trigger-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 26px rgba(37, 211, 102, 0.45), 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  position: relative;
+  outline: none;
+}
+
+.whatsapp-trigger-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-trigger-btn:active {
+  transform: scale(0.96);
+}
+
+.wa-badge-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: waPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes waPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* WhatsApp Chat Popup Card */
+.whatsapp-popup {
+  position: absolute;
+  bottom: 74px;
+  right: 0;
+  width: 340px;
+  max-width: calc(100vw - 36px);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: none;
+  overflow: hidden;
+  transform-origin: bottom right;
+}
+
+.whatsapp-popup.is-open {
+  display: block;
+  animation: waPopupAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes waPopupAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.wa-popup-header {
+  background: #075E54;
+  color: #ffffff;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wa-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wa-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.wa-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+}
+
+.wa-online-status {
+  width: 11px;
+  height: 11px;
+  background: #25D366;
+  border: 2px solid #075E54;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+}
+
+.wa-profile-name {
+  font-size: 0.98rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.wa-reply-status {
+  font-size: 0.72rem;
+  opacity: 0.88;
+  display: block;
+}
+
+.wa-close-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.wa-close-btn:hover {
+  opacity: 1;
+}
+
+.wa-popup-body {
+  background: #f0f2f5;
+  background-image: radial-gradient(#dfdcd6 1px, transparent 1px);
+  background-size: 12px 12px;
+  padding: 20px 16px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wa-message-bubble {
+  background: #ffffff;
+  padding: 12px 14px;
+  border-radius: 12px 12px 12px 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  max-width: 90%;
+  position: relative;
+}
+
+.wa-message-bubble p {
+  margin: 0 0 6px 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #111b21;
+}
+
+.wa-message-bubble p:last-of-type {
+  margin-bottom: 4px;
+}
+
+.wa-msg-time {
+  display: block;
+  font-size: 0.65rem;
+  color: #8696a0;
+  text-align: right;
+}
+
+.wa-popup-footer {
+  background: #ffffff;
+  padding: 14px 16px;
+  border-top: 1px solid #e9edef;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wa-input-row {
+  width: 100%;
+}
+
+.wa-input-field {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  border: 1px solid #d1d7db;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.wa-input-field:focus {
+  border-color: #25D366;
+}
+
+.wa-send-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25D366;
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 11px 16px;
+  border-radius: 10px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+.wa-send-action-btn:hover {
+  background: #20ba59;
+  transform: translateY(-1px);
+}
+
+/* =============================================================================
+   GOOGLE MEET BOOKING MODAL
+   ============================================================================= */
+.meet-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 20, 18, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.meet-modal-backdrop.is-open {
+  display: grid;
+  animation: modalBackdropFade 0.25s ease forwards;
+}
+
+@keyframes modalBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.meet-modal-card {
+  background: #ffffff;
+  border: 1px solid rgba(243, 181, 170, 0.6);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 580px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  padding: 32px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalCardSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalCardSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.meet-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(240, 223, 218, 0.8);
+}
+
+.meet-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.meet-header-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.meet-modal-title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.meet-modal-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.meet-modal-close {
+  background: var(--bg-soft);
+  border: 1px solid rgba(240, 223, 218, 0.8);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.meet-modal-close:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.meet-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.meet-field-group {
+  margin-bottom: 16px;
+}
+
+.meet-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.meet-label .required {
+  color: var(--primary);
+}
+
+.meet-label .optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.meet-input {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: var(--text-dark);
+  background: var(--bg-white);
+  border: 1px solid rgba(240, 223, 218, 0.9);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meet-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(223, 117, 104, 0.2);
+}
+
+.meet-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23df7568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px 16px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.meet-textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+
+.meet-field-error {
+  display: block;
+  font-size: 0.74rem;
+  color: #dc3545;
+  margin-top: 4px;
+}
+
+.meet-modal-status {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.meet-modal-status.status-success {
+  background: #e6f9f0;
+  color: #0c8a55;
+  border: 1px solid #b8ebd4;
+}
+
+.meet-modal-status.status-error {
+  background: #fdf0ee;
+  color: #c93b2b;
+  border: 1px solid #f5c2bc;
+}
+
+.meet-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Contact Channel Extensions for Meet & WhatsApp */
+.contact-channel-meet-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(243, 181, 170, 0.8);
+  background: linear-gradient(135deg, rgba(255, 248, 246, 0.9) 0%, #ffffff 100%);
+  cursor: pointer;
+}
+
+.contact-channel-meet-card:hover {
+  border-color: var(--primary);
+  background: #ffffff;
+}
+
+.channel-icon-badge.meet-badge {
+  background: #fdf0ee;
+  color: var(--primary);
+}
+
+.contact-channel-wa-card {
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.7) 0%, #ffffff 100%);
+}
+
+.contact-channel-wa-card:hover {
+  border-color: #25D366;
+}
+
+.channel-icon-badge.wa-badge {
+  background: #e6f9f0;
+  color: #25D366;
+}
+
+/* =============================================================================
+   LAPTOP & HIGH-DPI SCREEN RESPONSIVE REFINEMENTS (1024px to 1440px)
+   ============================================================================= */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .hero-grid {
+    gap: 32px;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+  }
+
+  .hero-visual {
+    min-height: 380px;
+  }
+
+  .profile-art {
+    width: 260px;
+    height: 340px;
+  }
+
+  .chip-1 {
+    top: 20px;
+    left: -20px;
+  }
+
+  .chip-2 {
+    top: 130px;
+    right: -24px;
+  }
+
+  .chip-3 {
+    bottom: 20px;
+    left: -20px;
+  }
+
+  .education-records-grid {
+    gap: 22px;
+  }
+
+  .edu-card-premium {
+    padding: 24px;
+  }
+}
+
+/* Mobile & Tablet Adjustments for Education, WhatsApp, and Modal */
+@media (max-width: 900px) {
+  .education-records-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .meet-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .whatsapp-popup {
+    width: calc(100vw - 32px);
+    right: -8px;
+  }
+}
+

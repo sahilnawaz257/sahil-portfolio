@@ -83,3 +83,70 @@ class Project:
         if "live_demo_url" not in p or p["live_demo_url"] is None:
             p["live_demo_url"] = p.get("live_url") or ""
         return p
+
+
+class MeetingBooking:
+    """Manages Google Meet scheduling appointments in SQLite."""
+
+    @staticmethod
+    def create(full_name, email, purpose, meeting_date, meeting_time, notes=""):
+        """Insert a new meeting booking request into SQLite."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO meeting_bookings (full_name, email, purpose, meeting_date, meeting_time, status, notes)
+            VALUES (?, ?, ?, ?, ?, 'Pending', ?)
+        """, (full_name.strip(), email.strip(), purpose.strip(), meeting_date.strip(), meeting_time.strip(), notes.strip() if notes else ""))
+        conn.commit()
+        booking_id = cursor.lastrowid
+        conn.close()
+        return booking_id
+
+    @staticmethod
+    def check_duplicate(email, meeting_date, meeting_time):
+        """Check if an active booking exists for this email or slot."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT * FROM meeting_bookings
+            WHERE email = ? AND meeting_date = ? AND meeting_time = ? AND status != 'Rejected'
+        """, (email.strip(), meeting_date.strip(), meeting_time.strip()))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    @staticmethod
+    def get_by_id(booking_id):
+        """Retrieve booking details by ID."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM meeting_bookings WHERE id = ?", (booking_id,))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    @staticmethod
+    def get_all(limit=100):
+        """Retrieve all meeting bookings sorted by newest first."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM meeting_bookings ORDER BY created_at DESC LIMIT ?", (limit,))
+        rows = cursor.fetchall()
+        conn.close()
+        return [dict(row) for row in rows]
+
+    @staticmethod
+    def update_status(booking_id, status, google_meet_link="", notes=""):
+        """Update the status and Google Meet link of a booking."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE meeting_bookings
+            SET status = ?, google_meet_link = ?, notes = COALESCE(NULLIF(?, ''), notes)
+            WHERE id = ?
+        """, (status.strip(), google_meet_link.strip(), notes.strip(), booking_id))
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
+

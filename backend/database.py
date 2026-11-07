@@ -57,6 +57,22 @@ def init_db():
         )
     """)
 
+    # Table 3: Meeting Bookings (Google Meet Scheduling)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS meeting_bookings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            purpose TEXT NOT NULL,
+            meeting_date TEXT NOT NULL,
+            meeting_time TEXT NOT NULL,
+            status TEXT DEFAULT 'Pending',
+            google_meet_link TEXT DEFAULT '',
+            notes TEXT DEFAULT '',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     # Seed Authentic Projects if table is empty
     cursor.execute("SELECT COUNT(*) FROM projects")
     if cursor.fetchone()[0] == 0:

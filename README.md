@@ -104,7 +104,11 @@ python backend/app.py
 | `GET` | `/api/health` | System health check and current status | `200` |
 | `GET` | `/api/projects` | Retrieve all dynamic portfolio projects from SQLite | `200`, `500` |
 | `GET` | `/api/projects/<id>` | Retrieve details of a single project | `200`, `404` |
-| `POST` | `/api/contact` | Submit contact inquiry to SQLite database (Rate Limited) | `201`, `400`, `429` |
+| `POST` | `/api/contact` | Submit contact inquiry to SQLite database & email notification | `201`, `400`, `429` |
+| `POST` | `/api/meetings/book` | Schedule Google Meet session in SQLite (with duplicate & past-date checks) | `201`, `400`, `409`, `429` |
+| `GET` | `/api/meetings/status/<id>` | Retrieve real-time meeting approval status and Google Meet link | `200`, `404` |
+| `POST` | `/api/meetings/<id>/action` | Approve/Reject meeting and generate Google Meet link | `200`, `400`, `404` |
+| `GET` | `/api/meetings` | Retrieve all scheduled meetings | `200`, `500` |
 
 ---
 

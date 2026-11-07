@@ -89,7 +89,7 @@
     <!-- ====================================================================
          01. HOME / HERO SECTION
          ==================================================================== -->
-    <section class="hero-section" id="home" aria-labelledby="hero-title">
+    <section class="hero-section portfolio-section active-section" id="home" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <!-- Hero Introduction Text -->
         <div class="hero-content">
@@ -106,8 +106,11 @@
 
           <!-- Primary Action Links -->
           <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary">⌘ &nbsp; View My Projects <span aria-hidden="true">→</span></a>
-            <a href="#contact" class="btn btn-secondary">✉ &nbsp; Contact Me</a>
+            <a href="#projects" class="btn btn-primary nav-action-btn">⌘ &nbsp; View My Projects <span aria-hidden="true">→</span></a>
+            <a href="#contact" class="btn btn-secondary nav-action-btn">✉ &nbsp; Contact Me</a>
+            <button type="button" class="btn btn-outline open-meet-modal-trigger" id="hero-meet-cta" aria-haspopup="dialog">
+              📅 &nbsp; Schedule a Meet
+            </button>
           </div>
 
           <!-- Direct Social Channels -->
@@ -147,46 +150,46 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Key Quick Highlights Bar -->
-    <div class="highlights-bar" aria-label="Career Highlights">
-      <div class="container highlights-grid">
-        <div class="highlight-card">
-          <span class="highlight-icon" aria-hidden="true">🎓</span>
-          <div class="highlight-text">
-            <b>Education</b>
-            <small>B.Tech · CSE at JBIET</small>
+      <!-- Key Quick Highlights Bar -->
+      <div class="highlights-bar" aria-label="Career Highlights">
+        <div class="container highlights-grid">
+          <div class="highlight-card">
+            <span class="highlight-icon" aria-hidden="true">🎓</span>
+            <div class="highlight-text">
+              <b>Education</b>
+              <small>B.Tech · CSE at JBIET</small>
+            </div>
           </div>
-        </div>
-        <div class="highlight-card">
-          <span class="highlight-icon" aria-hidden="true">⚡</span>
-          <div class="highlight-text">
-            <b>Technical Core</b>
-            <small>Python · C/C++ · Web · SQL</small>
+          <div class="highlight-card">
+            <span class="highlight-icon" aria-hidden="true">⚡</span>
+            <div class="highlight-text">
+              <b>Technical Core</b>
+              <small>Python · C/C++ · Web · SQL</small>
+            </div>
           </div>
-        </div>
-        <div class="highlight-card">
-          <span class="highlight-icon" aria-hidden="true">👁️</span>
-          <div class="highlight-text">
-            <b>Computer Vision</b>
-            <small>YOLOv8 Crowd & Anomaly AI</small>
+          <div class="highlight-card">
+            <span class="highlight-icon" aria-hidden="true">👁️</span>
+            <div class="highlight-text">
+              <b>Computer Vision</b>
+              <small>YOLOv8 Crowd & Anomaly AI</small>
+            </div>
           </div>
-        </div>
-        <div class="highlight-card">
-          <span class="highlight-icon" aria-hidden="true">🚀</span>
-          <div class="highlight-text">
-            <b>Career Goal</b>
-            <small>Forward Deployed Developer</small>
+          <div class="highlight-card">
+            <span class="highlight-icon" aria-hidden="true">🚀</span>
+            <div class="highlight-text">
+              <b>Career Goal</b>
+              <small>Forward Deployed Developer</small>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- ====================================================================
          02. ABOUT ME SECTION (Step 04 — Premium Two-Column Layout)
          ==================================================================== -->
-    <section class="section-wrapper about-section" id="about" aria-labelledby="about-heading">
+    <section class="section-wrapper about-section portfolio-section" id="about" aria-labelledby="about-heading">
       <div class="container">
         <div class="about-grid">
           
@@ -287,7 +290,7 @@
     <!-- ====================================================================
          03. TECHNICAL SKILLS SECTION (Step 05 — Premium Categorized Showcase)
          ==================================================================== -->
-    <section class="section-wrapper section-alt skills-section" id="skills" aria-labelledby="skills-heading">
+    <section class="section-wrapper section-alt skills-section portfolio-section" id="skills" aria-labelledby="skills-heading">
       <div class="container">
         <div class="section-label">MY EXPERTISE <span>02</span></div>
         <h2 class="section-heading" id="skills-heading">Technical Skills & <em>Technologies.</em></h2>
@@ -415,7 +418,7 @@
     <!-- ====================================================================
          04. SELECTED PROJECTS SECTION (Step 06 — Premium Projects Showcase)
          ==================================================================== -->
-    <section class="section-wrapper projects-section" id="projects" aria-labelledby="projects-heading">
+    <section class="section-wrapper projects-section portfolio-section" id="projects" aria-labelledby="projects-heading">
       <div class="container">
         <div class="projects-header">
           <div>
@@ -528,96 +531,179 @@
     <!-- ====================================================================
          05. EDUCATION & EXPERIENCE SECTION (Step 07 — Premium Academic & Journey)
          ==================================================================== -->
-    <section class="section-wrapper education-section" id="education" aria-labelledby="education-heading">
+    <section class="section-wrapper education-section portfolio-section" id="education" aria-labelledby="education-heading">
       <div class="container">
         <div class="section-label">ACADEMIC & JOURNEY <span>04</span></div>
-        <h2 class="section-heading" id="education-heading">Education & <em>Professional Journey.</em></h2>
-        <p class="section-subtext">My formal academic grounding in Computer Science and Engineering, alongside my active development journey as an aspiring Forward Deployed Developer.</p>
+        <h2 class="section-heading" id="education-heading">Education & <em>Academic Credentials.</em></h2>
+        <p class="section-subtext">My formal academic grounding in Computer Science and Engineering, alongside advanced specialized studies in AI, Data Analysis, and LangChain RAG architectures.</p>
 
-        <div class="education-experience-grid">
+        <!-- Two Distinct Education Records Grid -->
+        <div class="education-records-grid">
 
-          <!-- 01. Academic Education Card -->
-          <article class="edu-journey-card academic-card">
-            <div class="card-header-flex">
-              <div class="card-title-group">
-                <span class="card-icon-badge" aria-hidden="true">🎓</span>
-                <div>
-                  <h3>Formal Education</h3>
-                </div>
+          <!-- ============================================================
+               EDUCATION RECORD 1: J.B. Institute of Engineering and Technology
+               ============================================================ -->
+          <article class="edu-card-premium" id="edu-jbiet">
+            <div class="edu-card-topbar">
+              <div class="edu-badge-tag">
+                <span class="edu-badge-icon" aria-hidden="true">🏛️</span>
+                <span>Formal Undergraduate Degree</span>
               </div>
-              <span class="card-status-pill">Current Degree</span>
+              <span class="edu-status-pill active-pill">
+                <span class="pulse-indicator" aria-hidden="true"></span>
+                Current · 2nd Year
+              </span>
             </div>
 
-            <h4 class="degree-title">Bachelor of Technology (B.Tech)</h4>
-            <div class="degree-branch">Computer Science and Engineering (CSE)</div>
-
-            <div class="institution-block">
-              <span aria-hidden="true">🏛️</span>
-              <div>
-                <strong>J.B. Institute of Engineering and Technology</strong>
-                <small style="display: block; color: var(--text-muted); font-size: 0.76rem;">Current Standing: 2nd Year</small>
+            <div class="edu-institution-header">
+              <div class="edu-logo-box">
+                <img src="images/jbiet-logo-crest.jpg" alt="J.B. Institute of Engineering and Technology Official Crest Logo" class="edu-institution-logo" width="64" height="64" loading="lazy">
+              </div>
+              <div class="edu-institution-info">
+                <h3 class="edu-institution-name">J.B. Institute of Engineering and Technology</h3>
+                <span class="edu-affiliation">Autonomous Institute · Affiliated to JNTUH · Hyderabad, India</span>
               </div>
             </div>
 
-            <ul class="academic-details-list" aria-label="Core Academic Highlights">
-              <li>Core studies in Data Structures, Object-Oriented Software Engineering (Python, C, C++), and Database Management Systems (SQL).</li>
-              <li>Hands-on laboratory work focused on algorithmic problem solving, software system architecture, and computational foundations.</li>
-              <li>Actively applying classroom concepts directly into practical computer vision and full-stack project implementations.</li>
-            </ul>
+            <div class="edu-degree-content">
+              <div class="edu-degree-badge">Degree Program</div>
+              <h4 class="edu-degree-name">Bachelor of Technology (B.Tech)</h4>
+              <div class="edu-branch-spec">
+                <span class="branch-icon" aria-hidden="true">💻</span>
+                <span>Branch: <strong>Computer Science and Engineering (CSE)</strong></span>
+              </div>
+              <div class="edu-meta-row">
+                <span class="edu-meta-item">
+                  <span class="meta-icon" aria-hidden="true">📅</span>
+                  <span>Academic Standing: <strong>Current Year — 2nd Year</strong> (2024 – 2028)</span>
+                </span>
+              </div>
+              <p class="edu-summary-desc">
+                Rigorous computer science curriculum emphasizing foundational algorithms, data structures, object-oriented systems, and relational databases. Translating laboratory engineering into real-world computer vision and AI projects.
+              </p>
+            </div>
+
+            <div class="edu-skills-section">
+              <span class="edu-skills-title">Core Academic Competencies:</span>
+              <ul class="edu-skills-tags" aria-label="Key skills from JBIET">
+                <li>Python</li>
+                <li>C / C++</li>
+                <li>Data Structures & Algorithms</li>
+                <li>Database Management (SQL)</li>
+                <li>Computer Vision (YOLOv8)</li>
+              </ul>
+            </div>
           </article>
 
-          <!-- 02. Professional Journey Card -->
-          <article class="edu-journey-card journey-card">
-            <div class="card-header-flex">
-              <div class="card-title-group">
-                <span class="card-icon-badge" aria-hidden="true">🚀</span>
-                <div>
-                  <h3>Professional Journey</h3>
-                </div>
+          <!-- ============================================================
+               EDUCATION RECORD 2: The Open University
+               ============================================================ -->
+          <article class="edu-card-premium open-uni-card" id="edu-open-university">
+            <div class="edu-card-topbar">
+              <div class="edu-badge-tag uni-badge">
+                <span class="edu-badge-icon" aria-hidden="true">🌐</span>
+                <span>Online Degree & Specialization</span>
               </div>
-              <span class="card-status-pill"><span class="pulse-indicator" aria-hidden="true"></span> Open to Opportunities</span>
+              <span class="edu-status-pill enrolled-pill">
+                <span class="calendar-pill-icon" aria-hidden="true">📅</span>
+                June 2026 – July 2029
+              </span>
             </div>
 
-            <h4 class="journey-headline">Building, Learning & Forward Deploying</h4>
-            <p class="journey-desc">
-              Currently in my 2nd year of B.Tech CSE, combining disciplined academic coursework with self-directed software development to build real-world AI and product solutions.
-            </p>
-
-            <div class="journey-milestones">
-              <div class="journey-milestone-item">
-                <span class="milestone-icon" aria-hidden="true">🌱</span>
-                <div class="milestone-content">
-                  <b>Continuous Technical Growth</b>
-                  <p>Strengthening programming logic in Python and C++, while advancing skills in frontend engineering, data analysis, and machine learning.</p>
-                </div>
+            <div class="edu-institution-header">
+              <div class="edu-logo-box">
+                <img src="images/the-open-university-logo.png" alt="The Open University Official Logo" class="edu-institution-logo" width="64" height="64" loading="lazy">
               </div>
-
-              <div class="journey-milestone-item">
-                <span class="milestone-icon" aria-hidden="true">💻</span>
-                <div class="milestone-content">
-                  <b>Project-Driven Engineering</b>
-                  <p>Translating theoretical knowledge into production prototypes, including Crowd Density Counting, StudentSync Library Management, and Design Audit utilities.</p>
-                </div>
+              <div class="edu-institution-info">
+                <h3 class="edu-institution-name">The Open University</h3>
+                <a href="https://www.linkedin.com/school/6128/" target="_blank" rel="noopener noreferrer" class="edu-linkedin-badge" aria-label="The Open University on LinkedIn">
+                  <span aria-hidden="true">💼</span> LinkedIn School ID: 6128 ↗
+                </a>
               </div>
+            </div>
 
-              <div class="journey-milestone-item">
-                <span class="milestone-icon" aria-hidden="true">🤝</span>
-                <div class="milestone-content">
-                  <b>Future Collaborations & Internships</b>
-                  <p>Preparing to contribute to forward-deployed engineering teams, real-world industry projects, and high-impact technology internships.</p>
-                </div>
+            <div class="edu-degree-content">
+              <div class="edu-degree-badge uni-degree-badge">Specialized Program</div>
+              <h4 class="edu-degree-name">Data Analyst Online, Computer Science</h4>
+              <div class="edu-branch-spec">
+                <span class="branch-icon" aria-hidden="true">🤖</span>
+                <span>Focus: <strong>AI & LangChain (Retrieval-Augmented Generation)</strong></span>
               </div>
+              <div class="edu-meta-row">
+                <span class="edu-meta-item">
+                  <span class="meta-icon" aria-hidden="true">⏱️</span>
+                  <span>Duration: <strong>June 2026 – July 2029</strong></span>
+                </span>
+              </div>
+              <p class="edu-summary-desc">
+                Data Analyst focused on AI and LangChain (RAG). In-depth program covering retrieval-augmented generation pipelines, large language model orchestrations, vector databases, and scalable data intelligence.
+              </p>
+            </div>
+
+            <div class="edu-skills-section">
+              <span class="edu-skills-title">Associated Skills & Specializations:</span>
+              <ul class="edu-skills-tags" aria-label="Skills from The Open University">
+                <li class="tag-highlight">LangChain</li>
+                <li class="tag-highlight">Retrieval-Augmented Generation (RAG)</li>
+                <li>Data Analytics</li>
+                <li>Vector Databases</li>
+                <li>AI Agent Orchestration</li>
+              </ul>
+            </div>
+
+            <div class="edu-card-footer">
+              <a href="https://www.linkedin.com/school/6128/" target="_blank" rel="noopener noreferrer" class="edu-official-link">
+                <span>View Official University Profile on LinkedIn</span>
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
             </div>
           </article>
 
         </div>
+
+        <!-- Professional Journey & Roadmap Below Academic Records -->
+        <div class="journey-roadmap-wrapper">
+          <div class="journey-roadmap-card">
+            <div class="roadmap-header">
+              <span class="roadmap-icon" aria-hidden="true">🚀</span>
+              <div>
+                <h3>Professional Development & Forward Deployment Journey</h3>
+                <p>Synthesizing academic rigor with hands-on forward deployment engineering.</p>
+              </div>
+            </div>
+            <div class="roadmap-grid">
+              <div class="roadmap-item">
+                <span class="roadmap-bullet" aria-hidden="true">1</span>
+                <div>
+                  <b>Undergraduate Foundations (JBIET)</b>
+                  <p>Mastering core computer science principles, algorithmic problem solving, and building full-stack applications.</p>
+                </div>
+              </div>
+              <div class="roadmap-item">
+                <span class="roadmap-bullet" aria-hidden="true">2</span>
+                <div>
+                  <b>Applied AI & Data Analytics (The Open University)</b>
+                  <p>Expanding into state-of-the-art LangChain, RAG architecture, and production-grade data engineering.</p>
+                </div>
+              </div>
+              <div class="roadmap-item">
+                <span class="roadmap-bullet" aria-hidden="true">3</span>
+                <div>
+                  <b>Forward Deployed Engineering</b>
+                  <p>Deploying AI and software solutions to solve real business challenges with direct client engagement.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <!-- ====================================================================
          06. CONTACT SECTION (Step 08 — Premium Contact & Form)
          ==================================================================== -->
-    <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+    <section class="contact-section portfolio-section" id="contact" aria-labelledby="contact-heading">
       <div class="container">
         <div class="contact-grid">
           <!-- Contact Introduction & Direct Channels -->
@@ -625,10 +711,30 @@
             <div class="section-label">GET IN TOUCH <span>05</span></div>
             <h2 class="section-heading" id="contact-heading">Let's <em>Connect.</em></h2>
             <p>
-              Have an exciting project idea, AI/ML challenge, product engineering opportunity, or wish to discuss forward-deployed software development? I’m always open to new technical conversations and collaborations. Reach out directly or leave a message below!
+              Have an exciting project idea, AI/ML challenge, product engineering opportunity, or wish to discuss forward-deployed software development? I’m always open to new technical conversations and collaborations. Reach out directly, schedule a Google Meet, or leave a message below!
             </p>
 
             <div class="contact-channel-list">
+              <!-- Google Meet Booking Card -->
+              <button type="button" class="contact-channel-card contact-channel-meet-card open-meet-modal-trigger" aria-label="Schedule a Google Meet with Sahil">
+                <div class="channel-icon-badge meet-badge" aria-hidden="true">📅</div>
+                <div class="channel-meta">
+                  <small>Live Video Call</small>
+                  <b>Schedule a Google Meet</b>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">↗</span>
+              </button>
+
+              <!-- WhatsApp Chat Card (No raw phone number text) -->
+              <a href="https://wa.me/917323018308?text=Hi%20Sahil!%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20an%20opportunity%20/%20project." target="_blank" rel="noopener noreferrer" class="contact-channel-card contact-channel-wa-card" aria-label="Chat on WhatsApp">
+                <div class="channel-icon-badge wa-badge" aria-hidden="true">💬</div>
+                <div class="channel-meta">
+                  <small>Instant Messaging</small>
+                  <b>Chat on WhatsApp</b>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">↗</span>
+              </a>
+
               <!-- Email Card -->
               <a href="mailto:sahilnawaz257@gmail.com" class="contact-channel-card" aria-label="Send direct email to Sahil Nawaz">
                 <div class="channel-icon-badge" aria-hidden="true">✉️</div>
@@ -851,6 +957,146 @@
       </div>
     </div>
   </footer>
+
+  <!-- ======================================================================
+       FLOATING WHATSAPP CHAT WIDGET
+       ====================================================================== -->
+  <div class="whatsapp-floating-widget" id="whatsapp-widget">
+    <!-- WhatsApp Chat Popup Modal -->
+    <div class="whatsapp-popup" id="whatsapp-popup" role="dialog" aria-labelledby="wa-popup-title" aria-hidden="true">
+      <div class="wa-popup-header">
+        <div class="wa-profile-info">
+          <div class="wa-avatar-wrap">
+            <img src="images/sahil-nawaz.jpg" alt="Sahil Nawaz" class="wa-avatar-img">
+            <span class="wa-online-status" aria-label="Online"></span>
+          </div>
+          <div class="wa-profile-details">
+            <h4 class="wa-profile-name" id="wa-popup-title">Sahil Nawaz</h4>
+            <span class="wa-reply-status">Typically replies in a few minutes</span>
+          </div>
+        </div>
+        <button type="button" class="wa-close-btn" id="wa-close-btn" aria-label="Close WhatsApp chat">✕</button>
+      </div>
+
+      <div class="wa-popup-body">
+        <div class="wa-message-bubble incoming">
+          <p>Hi there! 👋 Welcome to my portfolio.</p>
+          <p>I’m Sahil, a Forward Deployed Developer. How can I help you today? Let’s chat about AI solutions, projects, or opportunities.</p>
+          <span class="wa-msg-time" id="wa-time-stamp">Just now</span>
+        </div>
+      </div>
+
+      <div class="wa-popup-footer">
+        <label for="wa-custom-msg" class="sr-only">Type a message</label>
+        <div class="wa-input-row">
+          <input type="text" id="wa-custom-msg" class="wa-input-field" value="Hi Sahil! I came across your portfolio and would like to discuss an opportunity / project." placeholder="Type your message...">
+        </div>
+        <a href="https://wa.me/917323018308?text=Hi%20Sahil!%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20an%20opportunity%20/%20project." id="wa-send-btn" class="wa-send-action-btn" target="_blank" rel="noopener noreferrer">
+          <svg class="wa-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+          </svg>
+          <span>Start WhatsApp Chat ↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button type="button" class="whatsapp-trigger-btn" id="wa-trigger-btn" aria-label="Chat with Sahil on WhatsApp" aria-expanded="false">
+      <svg class="wa-fab-icon" viewBox="0 0 24 24" width="30" height="30" fill="#ffffff" aria-hidden="true">
+        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.554 1.834.813 2.796.813 3.183 0 5.769-2.588 5.77-5.768 0-3.182-2.587-5.768-5.77-5.768zm3.376 8.212c-.144.405-.837.774-1.17.824-.312.045-.715.068-2.313-.594-1.92-1.036-3.14-3.003-3.235-3.13-.095-.128-.778-1.034-.778-1.972 0-.938.491-1.399.665-1.59.174-.191.381-.239.508-.239.127 0 .254.001.365.007.119.006.277-.045.433.329.16.383.547 1.336.595 1.433.048.096.08.209.016.336-.064.128-.096.208-.191.319-.096.112-.202.249-.289.335-.096.096-.197.2-.084.393.113.192.502.827 1.077 1.341.741.662 1.365.867 1.558.963.192.096.304.08.417-.048.113-.128.484-.563.612-.756.128-.192.257-.16.434-.096.177.064 1.121.528 1.313.624.192.096.321.144.368.225.048.08.048.468-.096.873z"/>
+      </svg>
+      <span class="wa-badge-pulse" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- ======================================================================
+       GOOGLE MEET BOOKING MODAL
+       ====================================================================== -->
+  <div class="meet-modal-backdrop" id="meet-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="meet-modal-title" aria-hidden="true">
+    <div class="meet-modal-card">
+      <div class="meet-modal-header">
+        <div class="meet-header-title-wrap">
+          <span class="meet-header-icon" aria-hidden="true">📅</span>
+          <div>
+            <h3 id="meet-modal-title" class="meet-modal-title">Schedule a Google Meet with Sahil</h3>
+            <p class="meet-modal-subtitle">Pick a convenient slot to discuss engineering roles, AI, or project collaboration.</p>
+          </div>
+        </div>
+        <button type="button" class="meet-modal-close" id="meet-modal-close-btn" aria-label="Close scheduling modal">✕</button>
+      </div>
+
+      <form id="meet-booking-form" class="meet-booking-form" novalidate>
+        <div class="meet-form-grid">
+          <!-- Full Name -->
+          <div class="meet-field-group">
+            <label for="meet-name" class="meet-label">Full Name <span class="required">*</span></label>
+            <input type="text" id="meet-name" name="full_name" class="meet-input" placeholder="e.g. Alex Johnson" required minlength="2" maxlength="100">
+            <span class="meet-field-error" id="meet-name-error"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="meet-field-group">
+            <label for="meet-email" class="meet-label">Email Address <span class="required">*</span></label>
+            <input type="email" id="meet-email" name="email" class="meet-input" placeholder="e.g. alex@example.com" required maxlength="120">
+            <span class="meet-field-error" id="meet-email-error"></span>
+          </div>
+        </div>
+
+        <!-- Meeting Purpose -->
+        <div class="meet-field-group">
+          <label for="meet-purpose" class="meet-label">Discussion Topic / Purpose <span class="required">*</span></label>
+          <select id="meet-purpose" name="purpose" class="meet-input meet-select" required>
+            <option value="" disabled selected>Select discussion topic...</option>
+            <option value="Forward Deployed Opportunity">Forward Deployed Engineering Role / Opportunity</option>
+            <option value="AI / Computer Vision Project">AI & Computer Vision Collaboration (YOLOv8 / RAG)</option>
+            <option value="Full-Stack Web Engineering">Full-Stack Development Collaboration</option>
+            <option value="Technical Mentorship / Chat">Technical Chat / Mentorship</option>
+            <option value="General Inquiry">General Project Inquiry</option>
+          </select>
+          <span class="meet-field-error" id="meet-purpose-error"></span>
+        </div>
+
+        <div class="meet-form-grid">
+          <!-- Date (min set dynamically to today via JS) -->
+          <div class="meet-field-group">
+            <label for="meet-date" class="meet-label">Preferred Date <span class="required">*</span></label>
+            <input type="date" id="meet-date" name="meeting_date" class="meet-input" required>
+            <span class="meet-field-error" id="meet-date-error"></span>
+          </div>
+
+          <!-- Time Slot Selection -->
+          <div class="meet-field-group">
+            <label for="meet-slot" class="meet-label">Preferred Time Slot (IST) <span class="required">*</span></label>
+            <select id="meet-slot" name="meeting_time" class="meet-input meet-select" required>
+              <option value="" disabled selected>Choose a 30-min window...</option>
+              <option value="10:00 AM - 10:30 AM">10:00 AM – 10:30 AM (IST)</option>
+              <option value="02:00 PM - 02:30 PM">02:00 PM – 02:30 PM (IST)</option>
+              <option value="04:30 PM - 05:00 PM">04:30 PM – 05:00 PM (IST)</option>
+              <option value="07:00 PM - 07:30 PM">07:00 PM – 07:30 PM (IST)</option>
+            </select>
+            <span class="meet-field-error" id="meet-slot-error"></span>
+          </div>
+        </div>
+
+        <!-- Agenda / Notes -->
+        <div class="meet-field-group">
+          <label for="meet-notes" class="meet-label">Brief Agenda / Notes <span class="optional">(Optional)</span></label>
+          <textarea id="meet-notes" name="notes" class="meet-input meet-textarea" rows="3" placeholder="Share any specific discussion points or links..."></textarea>
+        </div>
+
+        <!-- Alert / Status message container -->
+        <div id="meet-modal-status" class="meet-modal-status" style="display: none;"></div>
+
+        <div class="meet-modal-actions">
+          <button type="button" class="btn btn-outline" id="meet-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="meet-submit-btn">
+            <span class="btn-text">Confirm & Request Google Meet</span>
+            <span class="btn-spinner" aria-hidden="true" style="display: none;">⏳</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- External JavaScript File (Step 03 will handle interactivity) -->
   <script src="js/script.js"></script>
