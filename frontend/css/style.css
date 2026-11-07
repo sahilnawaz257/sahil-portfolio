@@ -2113,28 +2113,38 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   Footer
+   Footer (Step 09 — Premium Multi-Column Responsive Footer)
    ========================================================================== */
 .site-footer {
-  background-color: #171312;
-  border-top: 1px solid #2d2624;
-  padding: 30px 0;
+  background-color: #151110;
+  border-top: 1px solid #2a2321;
+  padding: 70px 0 35px;
   color: var(--text-light);
-  font-size: 0.85rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.footer-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1.3fr;
+  gap: 48px;
+  margin-bottom: 45px;
+}
+
+/* Col 1: Brand & Role */
+.footer-brand {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
 }
 
 .footer-brand b {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  color: #ffffff;
+  font-weight: 800;
 }
 
 .footer-brand em {
@@ -2142,15 +2152,208 @@ textarea.form-control {
   color: var(--primary);
 }
 
-.footer-back-to-top {
+.footer-role-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+  background: rgba(239, 89, 102, 0.12);
+  border: 1px solid rgba(239, 89, 102, 0.25);
   color: var(--accent);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
   font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
-.footer-back-to-top:hover {
+.footer-bio-text {
+  max-width: 380px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #9e9490;
+  margin-bottom: 20px;
+}
+
+.footer-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  background: #201b19;
+  border: 1px solid #332b29;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.footer-email-link:hover {
+  border-color: var(--primary);
+  background-color: #2b2321;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer-email-link .email-icon {
+  font-size: 1rem;
+}
+
+/* Col 2: Quick Navigation */
+.footer-col-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.footer-col-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-link {
+  color: #a89e9a;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+/* Col 3: Social Profiles */
+.footer-social-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-social-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #201b19;
+  border: 1px solid #332b29;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: #ffffff;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-social-pill:hover {
+  border-color: var(--primary);
+  background-color: #2b2321;
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+.footer-social-pill .social-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.footer-social-pill .social-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-social-pill .social-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.footer-social-pill .social-handle {
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+.footer-social-pill .pill-arrow {
+  color: #796e69;
+  font-size: 0.88rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-social-pill:hover .pill-arrow {
+  color: var(--primary);
+  transform: translate(2px, -2px);
+}
+
+/* Bottom Bar */
+.footer-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+  border-top: 1px solid #28211f;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copy p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #8f837f;
+}
+
+.back-to-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: rgba(239, 89, 102, 0.12);
+  border: 1px solid rgba(239, 89, 102, 0.25);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.back-to-top-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(239, 89, 102, 0.35);
+  text-decoration: none;
+}
+
+.back-to-top-btn .arrow-up {
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+
+.back-to-top-btn:hover .arrow-up {
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -2206,6 +2409,15 @@ textarea.form-control {
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+
+  .footer-brand-col {
+    grid-column: span 2;
   }
 }
 
@@ -2448,6 +2660,76 @@ textarea.form-control {
   }
 
   .preview-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Education & Journey Mobile Optimizations (Step 07) */
+  .education-experience-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .edu-journey-card {
+    padding: 24px 20px;
+  }
+
+  .card-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* Contact Section Mobile Optimizations (Step 08) */
+  .contact-form-box {
+    padding: 24px 18px;
+  }
+
+  .contact-channel-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .channel-icon-badge {
+    width: 38px;
+    height: 38px;
+    font-size: 1.15rem;
+  }
+
+  .channel-meta b {
+    font-size: 0.86rem;
+  }
+
+  .preview-box {
+    padding: 18px 14px;
+  }
+
+  .preview-actions {
+    flex-direction: column;
+  }
+
+  .preview-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Footer Mobile Optimizations (Step 09) */
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-brand-col {
+    grid-column: span 1;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .back-to-top-btn {
     width: 100%;
     justify-content: center;
   }

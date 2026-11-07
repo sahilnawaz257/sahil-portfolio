@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initActiveNavLink();
   initHeaderScroll();
   initCopyrightYear();
+  initBackToTop();
   initContactForm();
   initProjectFilters();
 });
@@ -130,6 +131,22 @@ function initCopyrightYear() {
   if (yearElement) {
     yearElement.textContent = new Date().getFullYear();
   }
+}
+
+/**
+ * Step 09: Smooth Back to Top Scroll
+ */
+function initBackToTop() {
+  const backToTopBtn = document.getElementById("back-to-top");
+  if (!backToTopBtn) return;
+
+  backToTopBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
 }
 
 /**
