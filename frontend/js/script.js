@@ -413,29 +413,91 @@ function initContactForm() {
       return;
     }
 
-    // Display Success-Style Preview Box
-    if (previewBox) {
-      if (previewSender) previewSender.textContent = name;
-      if (previewEmail) previewEmail.textContent = email;
-      if (previewSubject) previewSubject.textContent = subject || "Forward Deployed Opportunity / Project Collaboration";
-      if (previewMessage) previewMessage.textContent = message;
+    // Configure API base URL (configurable for local live server, static file, or Flask port 5000)
+    const API_BASE_URL = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
+      ? ""
+      : "http://127.0.0.1:5000";
+    const endpoint = `${API_BASE_URL}/api/contact`;
 
-      // Configure direct email mailto fallback link
-      if (previewDirectMail) {
-        const mailSubject = encodeURIComponent(subject || `Inquiry from ${name} (Portfolio)`);
-        const mailBody = encodeURIComponent(`${message}\n\n---\nSent by: ${name} (${email})`);
-        previewDirectMail.href = `mailto:sahilnawaz257@gmail.com?subject=${mailSubject}&body=${mailBody}`;
-      }
+    // Set loading state on submit button
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Sending to Flask Backend...</span>`;
 
-      previewBox.style.display = "block";
-      previewBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+    const payload = { name, email, subject, message };
 
-    // Inform user of successful validation and pending backend status
-    showAlert(
-      `✔ <strong>Validation Successful!</strong> Your message details have been verified locally. Notice: The Flask backend is pending integration, so no live email has been dispatched yet.`,
-      "success"
-    );
+    fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(async (response) => {
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.success) {
+          // Success Response from Flask Backend
+          showAlert(
+            `✔ <strong>Message Received by Flask Backend!</strong> ${result.message || "Your message was successfully received."} <br><small style="opacity: 0.85;">(Note: Backend received & verified the payload. SQLite persistence will be connected in Phase 2.)</small>`,
+            "success"
+          );
+
+          if (previewBox) {
+            if (previewSender) previewSender.textContent = name;
+            if (previewEmail) previewEmail.textContent = email;
+            if (previewSubject) previewSubject.textContent = subject || "Forward Deployed Opportunity / Project Collaboration";
+            if (previewMessage) previewMessage.textContent = message;
+
+            if (previewDirectMail) {
+              const mailSubject = encodeURIComponent(subject || `Inquiry from ${name} (Portfolio)`);
+              const mailBody = encodeURIComponent(`${message}\n\n---\nSent by: ${name} (${email})`);
+              previewDirectMail.href = `mailto:sahilnawaz257@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+            }
+
+            previewBox.style.display = "block";
+            previewBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+
+          contactForm.reset();
+          if (charCount) charCount.textContent = "0 / 1000";
+        } else {
+          // Server returned validation error (400)
+          const errorMsg = result.error || "Failed to process message on backend.";
+          if (result.field) {
+            const fieldEl = document.getElementById(`contact-${result.field}`);
+            const errEl = document.getElementById(`${result.field}-error`);
+            setFieldError(fieldEl, errEl, errorMsg);
+            if (fieldEl) fieldEl.focus();
+          }
+          showAlert(`⚠️ ${errorMsg}`, "error");
+        }
+      })
+      .catch((err) => {
+        console.warn("Backend API request failed or offline:", err);
+        const mailtoLink = `mailto:sahilnawaz257@gmail.com?subject=${encodeURIComponent(subject || 'Inquiry from ' + name)}&body=${encodeURIComponent(message + '\n\n---\nSent by: ' + name + ' (' + email + ')')}`;
+
+        showAlert(
+          `⚠️ <strong>Flask Backend is currently offline</strong> (expected if server is not running on <code>http://127.0.0.1:5000</code>). Your details were verified on the frontend. <a href="${mailtoLink}" style="color: inherit; text-decoration: underline; font-weight: bold;">Click here to send directly via Email client</a> instead.`,
+          "error"
+        );
+
+        if (previewBox) {
+          if (previewSender) previewSender.textContent = name;
+          if (previewEmail) previewEmail.textContent = email;
+          if (previewSubject) previewSubject.textContent = subject || "Forward Deployed Opportunity / Project Collaboration";
+          if (previewMessage) previewMessage.textContent = message;
+          if (previewDirectMail) previewDirectMail.href = mailtoLink;
+
+          previewBox.style.display = "block";
+          previewBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      });
   });
 
   // Reset / Write Another Message button inside preview
