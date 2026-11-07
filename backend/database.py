@@ -22,10 +22,15 @@ def get_db_connection():
 def init_db():
     """
     Initialize SQLite database tables and seed authentic project records.
+    Clean up any legacy unused admin tables.
     """
     os.makedirs(DATABASE_DIR, exist_ok=True)
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    # Permanently remove any legacy admin or unused tables
+    cursor.execute("DROP TABLE IF EXISTS admin_users")
+    cursor.execute("DROP TABLE IF EXISTS contacts")
 
     # Table 1: Contact Messages
     cursor.execute("""

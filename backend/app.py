@@ -1,15 +1,15 @@
 """
-Sahil Nawaz Portfolio — Production-Ready Flask Application (Phase 3)
+Sahil Nawaz Portfolio — Production-Ready Flask Application
+Personal Developer Portfolio (No Admin System Required)
 Features:
-- Secure Session Cookies & OWASP Security Headers
-- Configurable Origin Filtering (CORS) & CSRF Protection
-- SQLite Database Initializer with Automated Seed Management
+- Configurable Origin Filtering (CORS) & OWASP Security Headers
+- SQLite Database Initializer with Automated Authentic Project Seed Management
+- Public REST APIs: Projects, Health, Contact, Google Meet Booking
 - Static Frontend Routing, SEO Assets, and Error Handling
 """
 
 import os
 import sys
-from datetime import timedelta
 
 # Resolve directory paths and ensure backend modules are importable from any CWD
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,22 +26,16 @@ from routes import api_bp
 app = Flask(__name__, static_folder=FRONTEND_DIR)
 
 # ------------------------------------------------------------------------------
-# 01. Security & Session Configuration
+# 01. Security & Environment Configuration
 # ------------------------------------------------------------------------------
 IS_PRODUCTION = os.environ.get("FLASK_ENV") == "production" or os.environ.get("PRODUCTION", "").lower() == "true"
 ENABLE_HTTPS = os.environ.get("ENABLE_HTTPS", "false").lower() == "true"
 
-# Secret key for signing session cookies
+# Secret key for CSRF and signing
 app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY",
     "sahil-portfolio-dev-secret-key-2026-production-ready"
 )
-
-# Secure Session Cookie Flags
-app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-app.config["SESSION_COOKIE_SECURE"] = ENABLE_HTTPS  # True when served over HTTPS
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=8)
 
 # Trusted origins for CORS
 DEFAULT_ORIGINS = "http://127.0.0.1:5000,http://localhost:5000,http://127.0.0.1:5500,http://localhost:3000,http://localhost:8080"
@@ -173,6 +167,8 @@ def serve_favicon():
 
 @app.route("/<path:path>")
 def serve_static(path):
+    if path.startswith("api/"):
+        return jsonify({"success": False, "error": "API endpoint not found"}), 404
     file_path = os.path.join(FRONTEND_DIR, path)
     if os.path.exists(file_path) and os.path.isfile(file_path):
         return send_from_directory(FRONTEND_DIR, path)

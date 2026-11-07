@@ -125,28 +125,3 @@ class MeetingBooking:
         conn.close()
         return dict(row) if row else None
 
-    @staticmethod
-    def get_all(limit=100):
-        """Retrieve all meeting bookings sorted by newest first."""
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM meeting_bookings ORDER BY created_at DESC LIMIT ?", (limit,))
-        rows = cursor.fetchall()
-        conn.close()
-        return [dict(row) for row in rows]
-
-    @staticmethod
-    def update_status(booking_id, status, google_meet_link="", notes=""):
-        """Update the status and Google Meet link of a booking."""
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE meeting_bookings
-            SET status = ?, google_meet_link = ?, notes = COALESCE(NULLIF(?, ''), notes)
-            WHERE id = ?
-        """, (status.strip(), google_meet_link.strip(), notes.strip(), booking_id))
-        conn.commit()
-        affected = cursor.rowcount
-        conn.close()
-        return affected > 0
-
