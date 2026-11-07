@@ -32,20 +32,37 @@ if BACKEND_DIR not in sys.path:
     sys.path.insert(0, BACKEND_DIR)
 
 # Load environment variables
-try:
-    from dotenv import load_dotenv
-    load_dotenv(os.path.join(BACKEND_DIR, ".env"), override=False)
-    load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
-except ImportError:
-    pass
-
-import supabase_client
-
 def is_placeholder(val):
     if not val:
         return True
     lower = str(val).lower()
-    return any(p in lower for p in ["your_", "your-", "example.com", "placeholder", "[your"])
+    return any(p in lower for p in ["your_", "your-", "example.com", "placeholder", "[your", "aapka", "..."])
+
+try:
+    from dotenv import dotenv_values, load_dotenv
+    root_env = os.path.join(PROJECT_ROOT, ".env")
+    backend_env = os.path.join(BACKEND_DIR, ".env")
+
+    r_vals = dotenv_values(root_env) if os.path.exists(root_env) else {}
+    b_vals = dotenv_values(backend_env) if os.path.exists(backend_env) else {}
+
+    for k in ["SUPABASE_URL", "SUPABASE_PUBLISHABLE_KEY", "SUPABASE_SECRET_KEY"]:
+        r_v = r_vals.get(k)
+        b_v = b_vals.get(k)
+        chosen = None
+        if r_v and not is_placeholder(r_v):
+            chosen = r_v
+        elif b_v and not is_placeholder(b_v):
+            chosen = b_v
+        if chosen:
+            os.environ[k] = chosen
+
+    load_dotenv(backend_env, override=False)
+    load_dotenv(root_env, override=False)
+except Exception:
+    pass
+
+import supabase_client
 
 def run_diagnostics():
     print("=" * 70)
@@ -206,3 +223,4 @@ def run_diagnostics():
 if __name__ == "__main__":
     success = run_diagnostics()
     sys.exit(0 if success else 1)
+

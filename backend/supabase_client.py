@@ -26,12 +26,40 @@ from datetime import datetime, timezone
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 
+def is_placeholder(val):
+    """Check if value is a placeholder string."""
+    if not val:
+        return True
+    lower = str(val).lower()
+    return any(p in lower for p in ["your_", "your-", "example.com", "placeholder", "[your", "aapka", "..."])
+
 def load_environment():
     try:
-        from dotenv import load_dotenv
-        load_dotenv(os.path.join(BACKEND_DIR, ".env"), override=False)
-        load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
-    except ImportError:
+        from dotenv import dotenv_values, load_dotenv
+        root_env = os.path.join(PROJECT_ROOT, ".env")
+        backend_env = os.path.join(BACKEND_DIR, ".env")
+
+        # Read both files
+        r_vals = dotenv_values(root_env) if os.path.exists(root_env) else {}
+        b_vals = dotenv_values(backend_env) if os.path.exists(backend_env) else {}
+
+        # Merge, prioritizing non-placeholder values
+        combined = {**b_vals, **r_vals}
+        for k in ["SUPABASE_URL", "SUPABASE_PUBLISHABLE_KEY", "SUPABASE_SECRET_KEY"]:
+            r_v = r_vals.get(k)
+            b_v = b_vals.get(k)
+            chosen = None
+            if r_v and not is_placeholder(r_v):
+                chosen = r_v
+            elif b_v and not is_placeholder(b_v):
+                chosen = b_v
+            if chosen:
+                os.environ[k] = chosen
+
+        # Load remaining
+        load_dotenv(backend_env, override=False)
+        load_dotenv(root_env, override=False)
+    except Exception:
         pass
 
 load_environment()
