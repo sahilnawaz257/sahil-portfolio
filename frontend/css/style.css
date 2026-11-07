@@ -416,6 +416,49 @@ button {
   margin-bottom: 18px;
 }
 
+.typing-cursor {
+  display: inline-block;
+  color: var(--primary);
+  font-weight: 300;
+  margin-left: 2px;
+  animation: blinkCursor 0.9s infinite;
+}
+
+@keyframes blinkCursor {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Scroll Reveal Animations (Step 11 — Progressive Enhancement)
+   ========================================================================== */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .typing-cursor {
+    animation: none !important;
+  }
+}
+
 .hero-divider {
   width: 70px;
   height: 4px;
@@ -2496,6 +2539,15 @@ textarea.form-control {
   .footer-brand-col {
     grid-column: span 2;
   }
+
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+
+  .footer-brand-col {
+    grid-column: span 2;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -3061,5 +3113,26 @@ textarea.form-control {
     width: 100%;
     justify-content: center;
     min-height: 44px;
+  }
+
+  /* Footer Mobile Optimizations (Step 09) */
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-brand-col {
+    grid-column: span 1;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .back-to-top-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

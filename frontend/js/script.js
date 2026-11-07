@@ -1,20 +1,61 @@
 /**
- * Sahil Nawaz Portfolio — Frontend Script
- * Step 02: Premium Responsive Navbar & Interactivity
+ * Sahil Nawaz Portfolio — Vanilla JavaScript Interactivity
+ * Step 11: Complete Interactions, Animations, and Frontend Validation
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  initMobileMenu();
-  initActiveNavLink();
-  initHeaderScroll();
-  initCopyrightYear();
-  initBackToTop();
-  initContactForm();
-  initProjectFilters();
+  try {
+    initSmoothScroll();
+    initMobileMenu();
+    initActiveNavLink();
+    initHeaderScroll();
+    initBackToTop();
+    initRoleTypingAnimation();
+    initScrollReveal();
+    initContactForm();
+    initProjectFilters();
+    initCopyrightYear();
+  } catch (err) {
+    console.error("Initialization error in portfolio scripts:", err);
+  }
 });
 
 /**
- * Mobile Navigation Menu Toggle with Accessibility
+ * 01. Smooth Scrolling for Internal Navigation Links with Sticky Header Offset
+ */
+function initSmoothScroll() {
+  const scrollLinks = document.querySelectorAll('a[href^="#"]');
+
+  scrollLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const targetId = link.getAttribute("href");
+      if (!targetId || targetId === "#") return;
+
+      const targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        const headerHeight = 78;
+        const elementPosition = targetEl.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+
+        // Update URL hash cleanly without instant jump
+        if (history.pushState) {
+          history.pushState(null, null, targetId);
+        } else {
+          window.location.hash = targetId;
+        }
+      }
+    });
+  });
+}
+
+/**
+ * 02. Mobile Navigation Menu Toggle with Full Accessibility
  */
 function initMobileMenu() {
   const menuToggle = document.querySelector(".menu-toggle");
@@ -23,11 +64,8 @@ function initMobileMenu() {
 
   if (!menuToggle || !siteNav) return;
 
-  function toggleMenu(forceClose = false) {
-    const isCurrentlyOpen = siteNav.classList.contains("open");
-    const nextState = forceClose ? false : !isCurrentlyOpen;
-
-    if (nextState) {
+  function setMenuState(open) {
+    if (open) {
       siteNav.classList.add("open");
       menuToggle.setAttribute("aria-expanded", "true");
       if (menuIcon) menuIcon.textContent = "✕";
@@ -41,20 +79,21 @@ function initMobileMenu() {
   // Toggle button click
   menuToggle.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleMenu();
+    const isCurrentlyOpen = siteNav.classList.contains("open");
+    setMenuState(!isCurrentlyOpen);
   });
 
   // Close menu when clicking outside
   document.addEventListener("click", (e) => {
     if (siteNav.classList.contains("open") && !siteNav.contains(e.target) && !menuToggle.contains(e.target)) {
-      toggleMenu(true);
+      setMenuState(false);
     }
   });
 
   // Close menu on Escape key press
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && siteNav.classList.contains("open")) {
-      toggleMenu(true);
+      setMenuState(false);
       menuToggle.focus();
     }
   });
@@ -62,13 +101,67 @@ function initMobileMenu() {
   // Close menu when any nav link is tapped
   siteNav.querySelectorAll(".nav-link").forEach((link) => {
     link.addEventListener("click", () => {
-      toggleMenu(true);
+      setMenuState(false);
     });
+  });
+
+  // Auto-close menu if viewport resized to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768 && siteNav.classList.contains("open")) {
+      setMenuState(false);
+    }
   });
 }
 
 /**
- * Sticky Header Scroll Effect
+ * 03. ScrollSpy & Active Navigation Link Tracking
+ */
+function initActiveNavLink() {
+  const navLinks = document.querySelectorAll(".site-nav .nav-link");
+  const sections = document.querySelectorAll("section[id]");
+
+  if (!sections.length || !navLinks.length) return;
+
+  let isTicking = false;
+
+  const updateActiveLink = () => {
+    let currentSectionId = "";
+    const scrollPosition = window.scrollY + 130;
+
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        currentSectionId = section.getAttribute("id");
+      }
+    });
+
+    if (currentSectionId) {
+      navLinks.forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href === `#${currentSectionId}`) {
+          link.classList.add("active");
+        } else if (href && href.startsWith("#")) {
+          link.classList.remove("active");
+        }
+      });
+    }
+
+    isTicking = false;
+  };
+
+  window.addEventListener("scroll", () => {
+    if (!isTicking) {
+      window.requestAnimationFrame(updateActiveLink);
+      isTicking = true;
+    }
+  }, { passive: true });
+
+  updateActiveLink();
+}
+
+/**
+ * 04. Sticky Header Elevation on Scroll
  */
 function initHeaderScroll() {
   const header = document.querySelector(".site-header");
@@ -87,54 +180,7 @@ function initHeaderScroll() {
 }
 
 /**
- * ScrollSpy & Active Navigation Link Tracking
- */
-function initActiveNavLink() {
-  const navLinks = document.querySelectorAll(".site-nav .nav-link");
-  const sections = document.querySelectorAll("section[id]");
-
-  if (!sections.length || !navLinks.length) return;
-
-  const updateActiveLink = () => {
-    let currentSectionId = "";
-    const scrollPosition = window.scrollY + 120; // Offset for header height
-
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPosition >= top && scrollPosition < top + height) {
-        currentSectionId = section.getAttribute("id");
-      }
-    });
-
-    if (currentSectionId) {
-      navLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (href === `#${currentSectionId}`) {
-          link.classList.add("active");
-        } else if (href.startsWith("#")) {
-          link.classList.remove("active");
-        }
-      });
-    }
-  };
-
-  window.addEventListener("scroll", updateActiveLink, { passive: true });
-  updateActiveLink();
-}
-
-/**
- * Set dynamic copyright year in footer
- */
-function initCopyrightYear() {
-  const yearElement = document.getElementById("current-year");
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-  }
-}
-
-/**
- * Step 09: Smooth Back to Top Scroll
+ * 05. Back to Top Button
  */
 function initBackToTop() {
   const backToTopBtn = document.getElementById("back-to-top");
@@ -150,9 +196,94 @@ function initBackToTop() {
 }
 
 /**
- * Contact Form — Step 08: Premium Frontend Validation & Success Preview
- * Features strict validation, real-time feedback, character counter,
- * and a verified preview container prepared for Flask backend integration.
+ * 06. Typing Animation for Professional Role in Hero Section
+ */
+function initRoleTypingAnimation() {
+  const typedEl = document.getElementById("typed-role");
+  if (!typedEl) return;
+
+  // Respect user preference for reduced motion
+  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) return;
+
+  const roles = [
+    "Forward Deployed Developer",
+    "AI & ML Solutions Builder",
+    "Frontend & Product Developer",
+    "B.Tech CSE Undergrad · JBIET"
+  ];
+
+  let roleIdx = 0;
+  let charIdx = roles[0].length;
+  let isDeleting = true; // Start by deleting default pre-rendered text after a pause
+  let pauseDuration = 2200;
+
+  function typeTick() {
+    const currentRole = roles[roleIdx];
+
+    if (isDeleting) {
+      charIdx--;
+      typedEl.textContent = currentRole.substring(0, charIdx);
+      if (charIdx === 0) {
+        isDeleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        setTimeout(typeTick, 350);
+        return;
+      }
+      setTimeout(typeTick, 40);
+    } else {
+      charIdx++;
+      typedEl.textContent = currentRole.substring(0, charIdx);
+      if (charIdx === currentRole.length) {
+        isDeleting = true;
+        setTimeout(typeTick, pauseDuration);
+        return;
+      }
+      setTimeout(typeTick, 70);
+    }
+  }
+
+  // Initial delay before first deletion cycle
+  setTimeout(typeTick, 2000);
+}
+
+/**
+ * 07. Subtle Scroll Reveal Animations using IntersectionObserver
+ */
+function initScrollReveal() {
+  if (!("IntersectionObserver" in window)) return;
+
+  // Respect reduced motion
+  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) return;
+
+  const targets = document.querySelectorAll(
+    ".section-wrapper, .highlights-bar, .skill-category-card, .project-card, .edu-journey-card, .contact-channel-card, .contact-form-box"
+  );
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-active");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px"
+    }
+  );
+
+  targets.forEach((target) => {
+    target.classList.add("reveal-init");
+    observer.observe(target);
+  });
+}
+
+/**
+ * 08. Contact Form — Frontend Validation & Success Preview
  */
 function initContactForm() {
   const contactForm = document.getElementById("contact-form");
@@ -193,7 +324,7 @@ function initContactForm() {
     });
   }
 
-  // Clear errors dynamically on input
+  // Clear field errors dynamically on keystroke
   [nameInput, emailInput, subjectInput, messageInput].forEach((input) => {
     if (!input) return;
     input.addEventListener("input", () => {
@@ -282,14 +413,6 @@ function initContactForm() {
       return;
     }
 
-    // =========================================================================
-    // STEP 08 SPECIFICATION:
-    // 1. Frontend validation only.
-    // 2. Do not claim messages are sent or stored.
-    // 3. Keep form ready for future Flask backend integration.
-    // 4. Show clear success-style preview message stating backend is pending.
-    // =========================================================================
-
     // Display Success-Style Preview Box
     if (previewBox) {
       if (previewSender) previewSender.textContent = name;
@@ -297,7 +420,7 @@ function initContactForm() {
       if (previewSubject) previewSubject.textContent = subject || "Forward Deployed Opportunity / Project Collaboration";
       if (previewMessage) previewMessage.textContent = message;
 
-      // Configure direct email mailto client fallback link
+      // Configure direct email mailto fallback link
       if (previewDirectMail) {
         const mailSubject = encodeURIComponent(subject || `Inquiry from ${name} (Portfolio)`);
         const mailBody = encodeURIComponent(`${message}\n\n---\nSent by: ${name} (${email})`);
@@ -313,18 +436,6 @@ function initContactForm() {
       `✔ <strong>Validation Successful!</strong> Your message details have been verified locally. Notice: The Flask backend is pending integration, so no live email has been dispatched yet.`,
       "success"
     );
-
-    // =========================================================================
-    // [READY FOR FLASK INTEGRATION]:
-    // In future backend integration phase, replace the local preview block with:
-    //
-    // const payload = { name, email, subject, message };
-    // const response = await fetch('/api/contact', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(payload)
-    // });
-    // =========================================================================
   });
 
   // Reset / Write Another Message button inside preview
@@ -381,7 +492,17 @@ function initContactForm() {
 }
 
 /**
- * Filter projects by category on the Projects page
+ * 09. Dynamic Copyright Year in Footer
+ */
+function initCopyrightYear() {
+  const yearElement = document.getElementById("current-year");
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+}
+
+/**
+ * 10. Filter Projects by Category (Projects page / showcase)
  */
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll(".filter-btn");
@@ -391,7 +512,6 @@ function initProjectFilters() {
 
   filterButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // Update active button state
       filterButtons.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
@@ -417,4 +537,3 @@ function initProjectFilters() {
     });
   });
 }
-
