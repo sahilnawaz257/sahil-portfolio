@@ -133,77 +133,220 @@ function initCopyrightYear() {
 }
 
 /**
- * Contact Form Submission with API integration & Fallback
+ * Contact Form — Step 08: Premium Frontend Validation & Success Preview
+ * Features strict validation, real-time feedback, character counter,
+ * and a verified preview container prepared for Flask backend integration.
  */
 function initContactForm() {
   const contactForm = document.getElementById("contact-form");
   const formAlert = document.getElementById("form-alert");
   const submitBtn = document.getElementById("submit-btn");
 
+  const nameInput = document.getElementById("contact-name");
+  const emailInput = document.getElementById("contact-email");
+  const subjectInput = document.getElementById("contact-subject");
+  const messageInput = document.getElementById("contact-message");
+
+  const nameError = document.getElementById("name-error");
+  const emailError = document.getElementById("email-error");
+  const subjectError = document.getElementById("subject-error");
+  const messageError = document.getElementById("message-error");
+
+  const charCount = document.getElementById("char-count");
+  const previewBox = document.getElementById("preview-box");
+  const previewSender = document.getElementById("preview-sender");
+  const previewEmail = document.getElementById("preview-email");
+  const previewSubject = document.getElementById("preview-subject");
+  const previewMessage = document.getElementById("preview-message");
+  const previewDirectMail = document.getElementById("preview-direct-mail");
+  const previewResetBtn = document.getElementById("preview-reset-btn");
+
   if (!contactForm) return;
 
-  contactForm.addEventListener("submit", async (e) => {
+  // Real-time character counter for textarea
+  if (messageInput && charCount) {
+    messageInput.addEventListener("input", () => {
+      const currentLen = messageInput.value.length;
+      charCount.textContent = `${currentLen} / 1000`;
+      if (currentLen > 1000) {
+        charCount.style.color = "#f87171";
+      } else {
+        charCount.style.color = "#8f837f";
+      }
+    });
+  }
+
+  // Clear errors dynamically on input
+  [nameInput, emailInput, subjectInput, messageInput].forEach((input) => {
+    if (!input) return;
+    input.addEventListener("input", () => {
+      if (input.classList.contains("is-invalid")) {
+        input.classList.remove("is-invalid");
+      }
+      const errEl = document.getElementById(`${input.name}-error`);
+      if (errEl) {
+        errEl.textContent = "";
+        errEl.classList.remove("visible");
+      }
+      if (formAlert && formAlert.classList.contains("error")) {
+        showAlert("", "");
+      }
+    });
+  });
+
+  // Handle Form Submission
+  contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Clear previous alert
+    // Reset previous feedback
     showAlert("", "");
+    clearFieldErrors();
+    if (previewBox) previewBox.style.display = "none";
 
-    const name = document.getElementById("contact-name").value.trim();
-    const email = document.getElementById("contact-email").value.trim();
-    const subject = document.getElementById("contact-subject") ? document.getElementById("contact-subject").value.trim() : "";
-    const message = document.getElementById("contact-message").value.trim();
+    const name = nameInput ? nameInput.value.trim() : "";
+    const email = emailInput ? emailInput.value.trim() : "";
+    const subject = subjectInput ? subjectInput.value.trim() : "";
+    const message = messageInput ? messageInput.value.trim() : "";
 
-    if (!name || !email || !message) {
-      showAlert("Please fill in all required fields (Name, Email, Message).", "error");
+    let hasErrors = false;
+    let firstInvalidInput = null;
+
+    // Validate Full Name
+    if (!name) {
+      setFieldError(nameInput, nameError, "Full Name is required.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = nameInput;
+    } else if (name.length < 2) {
+      setFieldError(nameInput, nameError, "Name must be at least 2 characters.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = nameInput;
+    }
+
+    // Validate Email Address
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setFieldError(emailInput, emailError, "Email address is required.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = emailInput;
+    } else if (!emailRegex.test(email)) {
+      setFieldError(emailInput, emailError, "Please enter a valid email address (e.g., sahil@example.com).");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = emailInput;
+    }
+
+    // Validate Subject (Optional, max 150 chars)
+    if (subject && subject.length > 150) {
+      setFieldError(subjectInput, subjectError, "Subject must not exceed 150 characters.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = subjectInput;
+    }
+
+    // Validate Message
+    if (!message) {
+      setFieldError(messageInput, messageError, "Message is required.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = messageInput;
+    } else if (message.length < 10) {
+      setFieldError(messageInput, messageError, "Please provide at least 10 characters so I can understand your inquiry.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = messageInput;
+    } else if (message.length > 1000) {
+      setFieldError(messageInput, messageError, "Message cannot exceed 1000 characters.");
+      hasErrors = true;
+      if (!firstInvalidInput) firstInvalidInput = messageInput;
+    }
+
+    // If validation fails, alert user and focus first error field
+    if (hasErrors) {
+      showAlert("Please review and fix the highlighted fields above.", "error");
+      if (firstInvalidInput) {
+        firstInvalidInput.focus();
+      }
       return;
     }
 
-    // Set loading state
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>Sending...</span>`;
+    // =========================================================================
+    // STEP 08 SPECIFICATION:
+    // 1. Frontend validation only.
+    // 2. Do not claim messages are sent or stored.
+    // 3. Keep form ready for future Flask backend integration.
+    // 4. Show clear success-style preview message stating backend is pending.
+    // =========================================================================
 
-    const payload = { name, email, subject, message };
+    // Display Success-Style Preview Box
+    if (previewBox) {
+      if (previewSender) previewSender.textContent = name;
+      if (previewEmail) previewEmail.textContent = email;
+      if (previewSubject) previewSubject.textContent = subject || "Forward Deployed Opportunity / Project Collaboration";
+      if (previewMessage) previewMessage.textContent = message;
 
-    // Determine target API endpoint
-    // If served via Flask, use relative path "/api/contact"
-    // If opened via file:// or another port (Live Server 5500), point to 127.0.0.1:5000
-    const apiUrl = window.location.origin.includes("5000") 
-      ? "/api/contact" 
-      : "http://127.0.0.1:5000/api/contact";
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        showAlert(`✨ ${data.message || "Message sent successfully! Sahil will be in touch soon."}`, "success");
-        contactForm.reset();
-      } else {
-        throw new Error(data.error || "Failed to submit message.");
+      // Configure direct email mailto client fallback link
+      if (previewDirectMail) {
+        const mailSubject = encodeURIComponent(subject || `Inquiry from ${name} (Portfolio)`);
+        const mailBody = encodeURIComponent(`${message}\n\n---\nSent by: ${name} (${email})`);
+        previewDirectMail.href = `mailto:sahilnawaz257@gmail.com?subject=${mailSubject}&body=${mailBody}`;
       }
-    } catch (err) {
-      console.warn("API request failed:", err);
-      // Helpful fallback message with direct mailto
-      const mailtoLink = `mailto:sahilnawaz257@gmail.com?subject=${encodeURIComponent(subject || "Portfolio Inquiry from " + name)}&body=${encodeURIComponent(message + "\n\nFrom: " + name + " (" + email + ")")}`;
-      
-      showAlert(
-        `Backend server is offline or unreachable. <a href="${mailtoLink}" style="color: inherit; text-decoration: underline; font-weight: bold;">Click here to send directly via Email client</a> instead.`,
-        "error"
-      );
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
+
+      previewBox.style.display = "block";
+      previewBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
+
+    // Inform user of successful validation and pending backend status
+    showAlert(
+      `✔ <strong>Validation Successful!</strong> Your message details have been verified locally. Notice: The Flask backend is pending integration, so no live email has been dispatched yet.`,
+      "success"
+    );
+
+    // =========================================================================
+    // [READY FOR FLASK INTEGRATION]:
+    // In future backend integration phase, replace the local preview block with:
+    //
+    // const payload = { name, email, subject, message };
+    // const response = await fetch('/api/contact', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(payload)
+    // });
+    // =========================================================================
   });
+
+  // Reset / Write Another Message button inside preview
+  if (previewResetBtn) {
+    previewResetBtn.addEventListener("click", () => {
+      contactForm.reset();
+      clearFieldErrors();
+      showAlert("", "");
+      if (previewBox) previewBox.style.display = "none";
+      if (charCount) charCount.textContent = "0 / 1000";
+      if (nameInput) nameInput.focus();
+    });
+  }
+
+  function setFieldError(inputEl, errorEl, msg) {
+    if (inputEl) {
+      inputEl.classList.add("is-invalid");
+      inputEl.setAttribute("aria-invalid", "true");
+    }
+    if (errorEl) {
+      errorEl.textContent = msg;
+      errorEl.classList.add("visible");
+    }
+  }
+
+  function clearFieldErrors() {
+    [nameInput, emailInput, subjectInput, messageInput].forEach((input) => {
+      if (input) {
+        input.classList.remove("is-invalid");
+        input.removeAttribute("aria-invalid");
+      }
+    });
+    [nameError, emailError, subjectError, messageError].forEach((err) => {
+      if (err) {
+        err.textContent = "";
+        err.classList.remove("visible");
+      }
+    });
+  }
 
   function showAlert(msg, type) {
     if (!formAlert) return;
@@ -217,7 +360,6 @@ function initContactForm() {
     formAlert.className = `form-alert ${type}`;
     formAlert.innerHTML = msg;
     formAlert.style.display = "block";
-    formAlert.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 }
 
