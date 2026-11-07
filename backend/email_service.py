@@ -191,3 +191,4 @@ def send_booking_confirmation_to_visitor(booking):
         """
 
     return _dispatch_email(to_email, email_subj, text_body, html_body)
+
