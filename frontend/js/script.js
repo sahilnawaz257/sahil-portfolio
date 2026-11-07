@@ -694,8 +694,12 @@ function initContactForm() {
   if (subjectInput) subjectInput.addEventListener("blur", () => validateField("subject"));
   if (messageInput) messageInput.addEventListener("blur", () => validateField("message"));
 
+  let isSubmitting = false;
+
   contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     clearFieldErrors();
     showAlert("", "");
 
@@ -706,12 +710,14 @@ function initContactForm() {
     }
 
     const payload = {
+      full_name: nameInput.value.trim(),
       name: nameInput.value.trim(),
       email: emailInput.value.trim(),
       subject: (subjectInput?.value || "").trim() || "Forward Deployed Opportunity / Project Collaboration",
       message: messageInput.value.trim()
     };
 
+    isSubmitting = true;
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<span>Saving to Database...</span> <span class="btn-spinner" aria-hidden="true">⏳</span>`;
@@ -739,13 +745,18 @@ function initContactForm() {
         showAlert(`✓ <strong>Success:</strong> ${escapeHtml(data.message)}`, "alert-success");
 
         if (previewBox) {
-          if (previewSender) previewSender.textContent = payload.name;
+          if (previewSender) previewSender.textContent = payload.full_name;
           if (previewEmail) previewEmail.textContent = payload.email;
           if (previewSubject) previewSubject.textContent = payload.subject;
           if (previewMessage) previewMessage.textContent = payload.message;
 
+          const previewIdBadge = document.getElementById("preview-id-badge");
+          if (previewIdBadge && data.contact_id) {
+            previewIdBadge.textContent = `Ref: #${String(data.contact_id).slice(0, 8)}`;
+          }
+
           if (previewMailto) {
-            const mailtoUrl = `mailto:sahilnawaz257@gmail.com?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent("From: " + payload.name + " (" + payload.email + ")\n\n" + payload.message)}`;
+            const mailtoUrl = `mailto:sahilnawaz257@gmail.com?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent("From: " + payload.full_name + " (" + payload.email + ")\n\n" + payload.message)}`;
             previewMailto.setAttribute("href", mailtoUrl);
           }
 
@@ -757,11 +768,14 @@ function initContactForm() {
         if (charCount) charCount.textContent = "0 / 1000";
       })
       .catch((err) => {
-        showAlert(`⚠️ <strong>Submission Note:</strong> ${escapeHtml(err.message)}`, "alert-danger");
+        showAlert(`⚠️ <strong>Submission Notice:</strong> ${escapeHtml(err.message)}`, "alert-danger");
       })
       .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+        setTimeout(() => {
+          isSubmitting = false;
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }, 1200);
       });
   });
 
@@ -821,7 +835,8 @@ function initContactForm() {
       formAlert.innerHTML = "";
       return;
     }
-    formAlert.className = `form-alert ${type}`;
+    const isSuccess = (type || "").includes("success");
+    formAlert.className = isSuccess ? "form-alert success alert-success" : "form-alert error alert-danger";
     formAlert.innerHTML = msg;
     formAlert.style.display = "block";
   }

@@ -1604,14 +1604,14 @@
             </div>
           </div>
 
-          <!-- Working Contact Form Box (Persisting to SQLite Database) -->
+          <!-- Contact Form Box (Persisting to Supabase PostgreSQL) -->
           <div class="contact-form-box">
             <div class="form-header-badge">
               <span class="badge-dot" aria-hidden="true"></span>
-              <span>MESSAGE PORTAL</span>
+              <span>SUPABASE MESSAGE PORTAL</span>
             </div>
             <h3>Send a Direct Message</h3>
-            <p>Fill out the form below. Messages are securely stored and dispatches notifications.</p>
+            <p>Fill out the form below. Messages are securely saved to the database and dispatch automated notifications.</p>
 
             <!-- Alert Container for Feedback Messages -->
             <div id="form-alert" class="form-alert" role="alert" aria-live="polite"></div>
@@ -1619,7 +1619,7 @@
             <form id="contact-form" action="/api/contact" method="POST" novalidate>
               <div class="form-group">
                 <label for="contact-name" class="form-label">FULL NAME <span class="required-indicator" aria-hidden="true">*</span></label>
-                <input type="text" id="contact-name" name="name" class="form-control" placeholder="Sahil Nawaz" required autocomplete="name">
+                <input type="text" id="contact-name" name="full_name" class="form-control" placeholder="Sahil Nawaz" required autocomplete="name">
                 <span class="field-error-msg" id="name-error" aria-live="polite"></span>
               </div>
 
@@ -1655,12 +1655,15 @@
               <div class="preview-status-banner">
                 <span class="preview-badge-check" aria-hidden="true">✓</span>
                 <div>
-                  <strong>Inquiry Recorded in SQLite Database!</strong>
-                  <p>Your message has been assigned a database reference ID.</p>
+                  <strong>Inquiry Recorded in Database!</strong>
+                  <p id="preview-db-status">Your message has been assigned a database reference ID.</p>
                 </div>
               </div>
               <div class="preview-content-card">
-                <h4 class="preview-card-title">Message Summary</h4>
+                <div class="preview-card-header">
+                  <h4 class="preview-card-title">Message Summary</h4>
+                  <span class="preview-badge-id" id="preview-id-badge"></span>
+                </div>
                 <div class="preview-field-row">
                   <span class="preview-label">From:</span>
                   <span class="preview-val" id="preview-sender"></span>

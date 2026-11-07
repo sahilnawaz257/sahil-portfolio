@@ -13,6 +13,7 @@ Zero Admin Functionality: Dedicated strictly to visitor form submissions and pub
 
 from database import (
     save_contact_message,
+    check_duplicate_contact,
     save_meeting_booking,
     check_duplicate_booking,
     get_meeting_booking_by_id,
@@ -36,6 +37,11 @@ class ContactMessage:
             subject=subject,
             message=message
         )
+
+    @staticmethod
+    def check_duplicate(email, message, window_seconds=60):
+        """Check for recently submitted identical message."""
+        return check_duplicate_contact(email, message, window_seconds=window_seconds)
 
     @staticmethod
     def get_by_id(msg_id):

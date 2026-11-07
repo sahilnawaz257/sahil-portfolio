@@ -98,6 +98,68 @@ def send_contact_notification(name, email, subject, message):
     """
     return _dispatch_email(NOTIFICATION_EMAIL, email_subj, text_body, html_body)
 
+def send_contact_confirmation_to_visitor(name, email, subject, message):
+    """Send an automated confirmation receipt to the visitor."""
+    email_subj = f"Message Received: Thank you for contacting Sahil Nawaz — {subject}"
+    text_body = (
+        f"Hi {name},\n\n"
+        f"Thank you for reaching out through my portfolio website!\n\n"
+        f"I have received your message regarding: \"{subject}\".\n"
+        f"I will review your inquiry and get back to you shortly.\n\n"
+        f"Your message copy:\n"
+        f"{message}\n\n"
+        f"Best regards,\n"
+        f"Sahil Nawaz\n"
+        f"Forward Deployed Developer\n"
+        f"https://github.com/sahilnawaz257"
+    )
+    html_body = f"""
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #39312e; max-width: 600px; padding: 24px; border: 1px solid #f3b5aa; border-radius: 10px; background: #ffffff;">
+        <h2 style="color: #df7568; margin-top: 0;">Thank You for Reaching Out!</h2>
+        <p>Hi {name},</p>
+        <p>I have received your message regarding <strong>"{subject}"</strong> and will get back to you as soon as possible.</p>
+        <div style="background: #fff5f3; padding: 16px; border-radius: 8px; border-left: 4px solid #df7568; margin: 20px 0;">
+            <p style="margin: 0 0 8px 0; font-size: 12px; color: #7a6e69; text-transform: uppercase; font-weight: bold;">Your Message:</p>
+            <p style="margin: 0; white-space: pre-wrap; color: #201a19;">{message}</p>
+        </div>
+        <p style="margin-top: 24px; font-size: 14px; color: #53433f;">
+            Best regards,<br>
+            <strong>Sahil Nawaz</strong><br>
+            <span style="color: #df7568; font-size: 13px;">Forward Deployed Developer</span>
+        </p>
+    </div>
+    """
+    return _dispatch_email(email, email_subj, text_body, html_body)
+
+def dispatch_contact_emails(name, email, subject, message):
+    """
+    Dispatch owner alert (to sahilnawaz257@gmail.com) and visitor confirmation receipt.
+    Tracks delivery status for each recipient separately.
+    Returns summary dict with granular delivery states.
+    """
+    owner_res = send_contact_notification(name, email, subject, message)
+    visitor_res = send_contact_confirmation_to_visitor(name, email, subject, message)
+
+    owner_ok = bool(owner_res and owner_res.get("success"))
+    visitor_ok = bool(visitor_res and visitor_res.get("success"))
+
+    if not is_smtp_configured():
+        overall_status = "unconfigured"
+    elif owner_ok and visitor_ok:
+        overall_status = "delivered"
+    elif owner_ok or visitor_ok:
+        overall_status = "partial"
+    else:
+        overall_status = "failed"
+
+    return {
+        "status": overall_status,
+        "owner_notified": owner_ok,
+        "owner_details": owner_res,
+        "visitor_confirmed": visitor_ok,
+        "visitor_details": visitor_res
+    }
+
 def send_meeting_notification(booking):
     """Notify Sahil when a new meeting is requested."""
     name = booking.get("full_name")

@@ -243,6 +243,44 @@ def save_contact_message(full_name, email, subject, message):
         message.strip()
     ), id_col="id")
 
+def check_duplicate_contact(email, message, window_seconds=60):
+    """
+    Check if an identical message was submitted by this email address recently.
+    Prevents accidental duplicate form submissions and spam attacks.
+    """
+    clean_email = email.strip()
+    clean_msg = message.strip()
+    if is_postgres():
+        sql = """
+            SELECT id, created_at FROM contact_messages
+            WHERE email = %s AND message = %s
+              AND created_at > (now() - INTERVAL '60 seconds')
+            LIMIT 1
+        """
+        return execute_query(sql, (clean_email, clean_msg), fetch="one")
+    else:
+        sql = """
+            SELECT id, created_at FROM contact_messages
+            WHERE email = %s AND message = %s
+            ORDER BY id DESC LIMIT 1
+        """
+        row = execute_query(sql, (clean_email, clean_msg), fetch="one")
+        if not row:
+            return None
+        raw_created = row.get("created_at")
+        if raw_created:
+            try:
+                from datetime import datetime, timezone
+                if isinstance(raw_created, str):
+                    clean_ts = raw_created.replace("T", " ").split(".")[0]
+                    created_dt = datetime.strptime(clean_ts, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+                    now_dt = datetime.now(timezone.utc)
+                    if (now_dt - created_dt).total_seconds() < window_seconds:
+                        return row
+            except Exception:
+                return row
+        return None
+
 def save_meeting_booking(full_name, email, purpose, preferred_date, preferred_time, notes=""):
     """
     Persist visitor Google Meet scheduling request using parameterized query.

@@ -162,9 +162,9 @@ def submit_contact():
     Accept, validate, sanitize, and store contact form submissions into SQLite.
     Protected with sliding-window rate limiting and strict server-side validation.
     """
-    # Rate limit check: Max 8 submissions per minute per IP
+    # Rate limit check: Max 25 submissions per minute per IP
     client_ip = get_client_ip()
-    if not check_rate_limit(f"contact:{client_ip}", limit=8, window=60):
+    if not check_rate_limit(f"contact:{client_ip}", limit=25, window=60):
         return jsonify({
             "success": False,
             "error": "Rate limit exceeded. Please wait a minute before submitting again."
@@ -252,13 +252,23 @@ def submit_contact():
             "field": "message"
         }), 400
 
-    # Sanitize inputs to prevent stored XSS
+    # Check for rapid duplicate submission (spam / accidental double submit prevention)
+    duplicate_msg = ContactMessage.check_duplicate(email=raw_email, message=raw_message, window_seconds=60)
+    if duplicate_msg:
+        return jsonify({
+            "success": False,
+            "error": "Duplicate submission detected. Your message has already been received. Please wait before sending again.",
+            "duplicate": True,
+            "field": "message"
+        }), 429
+
+    # Sanitize inputs to prevent stored XSS attacks
     full_name = html.escape(raw_name)
     email = html.escape(raw_email)
     subject = html.escape(raw_subject) if raw_subject else "Forward Deployed Opportunity / Project Collaboration"
     message = html.escape(raw_message)
 
-    # Save to SQLite Database
+    # Save to Supabase PostgreSQL (or fallback SQLite engine)
     try:
         msg_id = ContactMessage.create(
             full_name=full_name,
@@ -266,35 +276,42 @@ def submit_contact():
             subject=subject,
             message=message
         )
+    except Exception as db_err:
+        # Safe logging without exposing DB credentials
+        return jsonify({
+            "success": False,
+            "error": "Database error while recording your message. Please try again or email directly to sahilnawaz257@gmail.com."
+        }), 500
 
-        # Dispatch Email Notification to Sahil Nawaz (falls back safely if SMTP not configured)
-        email_result = email_service.send_contact_notification(
+    # Dispatch Email Notifications (Owner alert to sahilnawaz257@gmail.com + Visitor confirmation receipt)
+    try:
+        email_result = email_service.dispatch_contact_emails(
             name=raw_name,
             email=raw_email,
             subject=raw_subject or "Portfolio Inquiry",
             message=raw_message
         )
+    except Exception as email_err:
+        email_result = {
+            "status": "failed",
+            "owner_notified": False,
+            "visitor_confirmed": False,
+            "error": "Notification dispatch encountered an internal transport error."
+        }
 
-        return jsonify({
-            "success": True,
-            "message": f"Thank you, {raw_name}! Your message has been received and securely stored.",
-            "contact_id": msg_id,
-            "email_notification": email_result,
-            "stored_data": {
-                "id": msg_id,
-                "full_name": full_name,
-                "email": email,
-                "subject": subject,
-                "timestamp": datetime.utcnow().isoformat() + "Z"
-            }
-        }), 201
-
-    except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": "Database error while saving message. Please try again or email directly.",
-            "details": str(e)
-        }), 500
+    return jsonify({
+        "success": True,
+        "message": f"Thank you, {raw_name}! Your message has been received and securely stored.",
+        "contact_id": msg_id,
+        "email_notification": email_result,
+        "stored_data": {
+            "id": msg_id,
+            "full_name": full_name,
+            "email": email,
+            "subject": subject,
+            "timestamp": datetime.utcnow().isoformat() + "Z"
+        }
+    }), 201
 
 
 # ==============================================================================
