@@ -102,13 +102,55 @@ python backend/app.py
 | Method | Endpoint | Description | Status Codes |
 |---|---|---|:---:|
 | `GET` | `/api/health` | System health check and current status | `200` |
-| `GET` | `/api/projects` | Retrieve all dynamic portfolio projects from SQLite | `200`, `500` |
+| `GET` | `/api/projects` | Retrieve all dynamic portfolio projects | `200`, `500` |
 | `GET` | `/api/projects/<id>` | Retrieve details of a single project | `200`, `404` |
-| `POST` | `/api/contact` | Submit contact inquiry to SQLite database & email notification | `201`, `400`, `429` |
-| `POST` | `/api/meetings/book` | Schedule Google Meet session in SQLite (with duplicate & past-date checks) | `201`, `400`, `409`, `429` |
-| `GET` | `/api/meetings/status/<id>` | Retrieve real-time meeting approval status and Google Meet link | `200`, `404` |
-| `POST` | `/api/meetings/<id>/action` | Approve/Reject meeting and generate Google Meet link | `200`, `400`, `404` |
-| `GET` | `/api/meetings` | Retrieve all scheduled meetings | `200`, `500` |
+| `GET` | `/api/education` | Retrieve formal academic background records | `200`, `500` |
+| `GET` | `/api/experience` | Retrieve professional venture & leadership records | `200`, `500` |
+| `GET` | `/api/skills` | Retrieve technical & business skill inventory | `200`, `500` |
+| `POST` | `/api/contact` | Submit contact inquiry to database & trigger email alert | `201`, `400`, `429` |
+| `POST` | `/api/meetings/book` | Schedule Google Meet appointment (duplicate & past-date validation) | `201`, `400`, `409`, `429` |
+| `GET` | `/api/meetings/status/<id>` | Retrieve real-time meeting booking status and Google Meet link | `200`, `404` |
+
+---
+
+## 🗄️ Supabase PostgreSQL Integration & Migration
+
+The portfolio supports a **dual-engine database architecture**:
+- **Production:** Supabase PostgreSQL with automated TLS/SSL encryption and Row Level Security (RLS).
+- **Development / Fallback:** Local SQLite (`database/portfolio.db`) ensuring immediate out-of-the-box local execution if remote credentials are not set.
+
+### 1. Database Tables Overview
+The following 6 tables are managed in Supabase PostgreSQL:
+1. **`contact_messages`**: Visitor inquiries with full name, email, subject, message, and timestamp.
+2. **`meeting_bookings`**: Google Meet appointment scheduling with name, email, purpose, preferred date, preferred time, status, and meeting link.
+3. **`projects`**: Authentic production AI, vision, and full-stack software systems.
+4. **`education`**: Verified academic credentials (JBIT Dehradun & The Open University).
+5. **`experience`**: Venture track record (Founder — Gymsewa, Powered by Bytewave Innovation).
+6. **`skills`**: Categorized technical, analytical, and product/business capabilities.
+
+### 2. Row Level Security (RLS) Configuration
+Strict visitor privacy and zero-admin exposure policies:
+- **`contact_messages`**: Public visitors can `INSERT` only. Public `SELECT` is blocked to prevent data scraping.
+- **`meeting_bookings`**: Public visitors can `INSERT` only. Public scraping is blocked.
+- **`projects`, `education`, `experience`, `skills`**: Public read access (`SELECT`) enabled for all portfolio visitors. Write permissions are restricted to the server-side `service_role`.
+
+### 3. Step-by-Step Supabase Setup
+1. Log in to your [Supabase Dashboard](https://supabase.com/dashboard) and create or select your project.
+2. Navigate to the **SQL Editor** in the left sidebar.
+3. Open [`database/supabase_schema.sql`](database/supabase_schema.sql), copy its complete contents, paste into the SQL Editor, and click **Run**.
+4. In Supabase, go to **Project Settings** -> **Database** and copy your **URI Connection string** (Transaction Pooler or Direct).
+5. Copy `.env.example` to `.env` and set:
+   ```env
+   DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
+   SUPABASE_URL=https://[YOUR-PROJECT-REF].supabase.co
+   SUPABASE_ANON_KEY=your-supabase-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+   PGSSLMODE=require
+   ```
+6. *(Optional)* To migrate existing SQLite records into your new Supabase database, run:
+   ```powershell
+   python database/supabase_migration_from_sqlite.py
+   ```
 
 ---
 

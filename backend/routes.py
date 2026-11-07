@@ -12,7 +12,7 @@ import time
 from collections import defaultdict
 from datetime import datetime, date
 from flask import Blueprint, request, jsonify
-from models import ContactMessage, Project, MeetingBooking
+from models import ContactMessage, Project, MeetingBooking, Education, Experience, Skill
 import email_service
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
@@ -97,6 +97,62 @@ def get_project(project_id):
         return jsonify({
             "success": False,
             "error": str(e)
+        }), 500
+
+
+@api_bp.route("/education", methods=["GET"])
+def list_education():
+    """Retrieve formal education records."""
+    try:
+        education = Education.get_all()
+        return jsonify({
+            "success": True,
+            "count": len(education),
+            "education": education
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": "Failed to retrieve education records.",
+            "details": str(e)
+        }), 500
+
+
+@api_bp.route("/experience", methods=["GET"])
+def list_experience():
+    """Retrieve professional experience records."""
+    try:
+        experience = Experience.get_all()
+        return jsonify({
+            "success": True,
+            "count": len(experience),
+            "experience": experience
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": "Failed to retrieve experience records.",
+            "details": str(e)
+        }), 500
+
+
+@api_bp.route("/skills", methods=["GET"])
+def list_skills():
+    """Retrieve technical and product/business skills."""
+    try:
+        skills = Skill.get_all()
+        grouped = Skill.get_grouped()
+        return jsonify({
+            "success": True,
+            "count": len(skills),
+            "skills": skills,
+            "categories": grouped
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": "Failed to retrieve skills.",
+            "details": str(e)
         }), 500
 
 
@@ -361,8 +417,11 @@ def book_meeting():
             "full_name": full_name,
             "email": email,
             "purpose": purpose,
+            "preferred_date": meeting_date,
+            "preferred_time": meeting_time,
             "meeting_date": meeting_date,
             "meeting_time": meeting_time,
+            "meeting_link": "",
             "notes": notes,
             "status": "Pending"
         }

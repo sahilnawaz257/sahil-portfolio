@@ -26,6 +26,7 @@ venv.bak/
 
 # SQLite Databases & Local Storage
 database/*.db
+database/*.db.backup
 database/*.sqlite
 database/*.sqlite3
 !database/.gitkeep
