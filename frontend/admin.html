@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Admin Specific Dashboard Layout & Styles */
@@ -645,9 +646,8 @@
       </form>
 
       <div class="auth-hint">
-        <strong>Default Verification Credentials:</strong><br>
-        Username: <code>admin</code><br>
-        Password: <code>SahilAdmin2026!</code>
+        <strong>Authorized Access Only:</strong><br>
+        Please authenticate using credentials configured in your environment variables.
       </div>
     </div>
 
@@ -776,6 +776,7 @@
 
     // Global state
     let cachedProjects = [];
+    let csrfToken = "";
 
     // Helper: Toast Notification
     function showToast(message) {
@@ -805,8 +806,10 @@
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.authenticated) {
+          csrfToken = data.csrf_token || "";
           showDashboard(data.username || "admin");
         } else {
+          csrfToken = "";
           showLoginView();
         }
       } catch (err) {
@@ -852,9 +855,11 @@
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
+          csrfToken = data.csrf_token || "";
           showToast("Authentication successful! Welcome, " + username);
           showDashboard(data.user || username);
         } else {
+          csrfToken = "";
           alertBox.className = "auth-alert error";
           alertBox.textContent = data.error || "Invalid username or password.";
           alertBox.style.display = "block";
@@ -879,6 +884,7 @@
       } catch (e) {
         console.warn("Logout request error:", e);
       }
+      csrfToken = "";
       showToast("Logged out successfully");
       showLoginView();
     });
@@ -969,6 +975,9 @@
       try {
         const res = await fetch(`${API_BASE}/api/admin/messages/${id}`, {
           method: "DELETE",
+          headers: {
+            "X-CSRF-Token": csrfToken
+          },
           credentials: "include"
         });
         const data = await res.json().catch(() => ({}));
@@ -1137,7 +1146,10 @@
 
         const res = await fetch(url, {
           method: method,
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken
+          },
           credentials: "include",
           body: JSON.stringify(payload)
         });
@@ -1166,6 +1178,9 @@
       try {
         const res = await fetch(`${API_BASE}/api/admin/projects/${id}`, {
           method: "DELETE",
+          headers: {
+            "X-CSRF-Token": csrfToken
+          },
           credentials: "include"
         });
         const data = await res.json().catch(() => ({}));

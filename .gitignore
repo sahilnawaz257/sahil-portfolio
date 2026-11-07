@@ -1,23 +1,55 @@
-# Python & Virtual Environments
+# ==============================================================================
+# Sahil Nawaz Portfolio — Git Ignore Configuration (Phase 3)
+# ==============================================================================
+
+# Python & Bytecode
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+
+# Virtual Environments
 venv/
 .venv/
 env/
+ENV/
+env.bak/
+venv.bak/
 
-# Databases
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.production
+
+# SQLite Databases & Local Storage
 database/*.db
+database/*.sqlite
 database/*.sqlite3
 !database/.gitkeep
+*.db-journal
+*.db-wal
+*.db-shm
+instance/
 
-# IDE & OS
-.vscode/
-.idea/
+# Logs & Temporary Files
+*.log
+logs/
+tmp/
+temp/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Operating System & IDE Artifacts
 .DS_Store
 Thumbs.db
-
-# Environment variables
-.env
-.env.local
-
+desktop.ini
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
