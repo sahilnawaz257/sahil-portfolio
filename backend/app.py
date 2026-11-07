@@ -5,15 +5,20 @@ and static frontend page serving.
 """
 
 import os
+import sys
+
+# Resolve directory paths and ensure backend modules are importable from any CWD
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+
 from flask import Flask, send_from_directory, request, make_response, jsonify
 from flask_cors import CORS
 from database import init_db
 from routes import api_bp
-
-# Resolve directory paths
-BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
-FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "sahil-portfolio-dev-secret-key-2026")
