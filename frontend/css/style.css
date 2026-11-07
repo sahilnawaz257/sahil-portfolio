@@ -1023,83 +1023,128 @@ button {
 }
 
 /* ==========================================================================
-   Skills Section
+   Skills Section (Step 05 — Premium Categorized Technical Skills)
    ========================================================================== */
-.skills-grid {
+.skills-categories-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
-  margin-top: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 36px;
 }
 
 .skill-category-card {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 30px;
+  padding: 24px 26px;
   box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .skill-category-card:hover {
+  border-color: var(--primary);
   box-shadow: var(--shadow-md);
-  border-color: var(--accent);
+  transform: translateY(-4px);
 }
 
-.skill-category-card h3 {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--text-main);
+.category-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
 }
 
-.skill-badges {
+.category-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 1.35rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.skill-category-card:hover .category-icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.category-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-title {
+  font-family: var(--font-heading);
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.category-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.skill-badge {
+.skill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   background: var(--bg-subtle);
   border: 1px solid var(--border);
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-body);
-  transition: var(--transition);
+  transition: all 0.25s ease;
 }
 
-.skill-badge:hover {
+.skill-item:hover {
   background: var(--primary-soft);
-  color: var(--primary);
   border-color: var(--primary);
   transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(239, 89, 102, 0.18);
 }
 
-.interest-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.interest-list li {
-  font-size: 0.88rem;
-  color: var(--text-body);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.interest-list li::before {
-  content: "✦";
+.skill-icon-badge {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: rgba(239, 89, 102, 0.12);
   color: var(--primary);
-  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.react-badge {
+  font-size: 0.85rem;
+  padding: 2px 5px;
+}
+
+.skill-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 /* ==========================================================================
@@ -1829,6 +1874,12 @@ textarea.form-control {
 
   .about-education-card {
     max-width: 100%;
+  }
+
+  /* Skills Section Mobile Optimizations */
+  .skills-categories-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
