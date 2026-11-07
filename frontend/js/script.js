@@ -408,10 +408,15 @@ function initGoogleMeetBooking() {
   const cancelBtn = document.getElementById("meet-cancel-btn");
   const form = document.getElementById("meet-booking-form");
   const dateInput = document.getElementById("meet-date");
+  const slotSelect = document.getElementById("meet-slot");
   const statusBox = document.getElementById("meet-modal-status");
   const submitBtn = document.getElementById("meet-submit-btn");
 
   if (!modalBackdrop || !form) return;
+
+  const API_BASE = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
+    ? ""
+    : "http://127.0.0.1:5000";
 
   // Set minimum date to today (past dates are physically prevented)
   if (dateInput) {
@@ -420,11 +425,50 @@ function initGoogleMeetBooking() {
     dateInput.value = todayStr;
   }
 
+  async function fetchAvailableSlots(dateVal) {
+    if (!slotSelect || !dateVal) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/meetings/available-slots?date=${encodeURIComponent(dateVal)}`);
+      const data = await res.json();
+      if (data.success && Array.isArray(data.slots)) {
+        slotSelect.innerHTML = `<option value="" disabled selected>Choose a 30-min window...</option>`;
+        let hasAvailable = false;
+        data.slots.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s.slot;
+          if (s.available) {
+            opt.textContent = `${s.slot} (Available)`;
+            hasAvailable = true;
+          } else {
+            opt.textContent = `${s.slot} — Booked`;
+            opt.disabled = true;
+          }
+          slotSelect.appendChild(opt);
+        });
+
+        if (!hasAvailable) {
+          showMeetStatus("All slots on this date are currently booked. Please choose another date.", false);
+        }
+      }
+    } catch (e) {
+      console.warn("Could not fetch slot availability:", e);
+    }
+  }
+
+  if (dateInput) {
+    dateInput.addEventListener("change", () => {
+      fetchAvailableSlots(dateInput.value);
+    });
+  }
+
   function openModal() {
     modalBackdrop.classList.add("is-open");
     modalBackdrop.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     clearMeetStatus();
+    if (dateInput && dateInput.value) {
+      fetchAvailableSlots(dateInput.value);
+    }
     const nameInput = document.getElementById("meet-name");
     if (nameInput) setTimeout(() => nameInput.focus(), 150);
   }
@@ -474,9 +518,12 @@ function initGoogleMeetBooking() {
     statusBox.className = "meet-modal-status";
   }
 
+  let isBooking = false;
+
   // Handle Form Submission
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (isBooking) return;
     clearMeetStatus();
 
     const nameVal = (document.getElementById("meet-name")?.value || "").trim();
@@ -521,23 +568,21 @@ function initGoogleMeetBooking() {
       return;
     }
 
-    // Submit payload to Flask API
+    isBooking = true;
     const payload = {
       full_name: nameVal,
       email: emailVal,
       purpose: purposeVal,
+      preferred_date: dateVal,
       meeting_date: dateVal,
+      preferred_time: timeVal,
       meeting_time: timeVal,
       notes: notesVal
     };
 
     const originalBtnHtml = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>Scheduling...</span> <span class="btn-spinner">⏳</span>`;
-
-    const API_BASE = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
-      ? ""
-      : "http://127.0.0.1:5000";
+    submitBtn.innerHTML = `<span>Recording Request...</span> <span class="btn-spinner">⏳</span>`;
 
     try {
       const response = await fetch(`${API_BASE}/api/meetings/book`, {
@@ -553,9 +598,9 @@ function initGoogleMeetBooking() {
 
       if (response.status === 201 && data.success) {
         showMeetStatus(
-          `<strong>🎉 Request Submitted Successfully! (Booking #${data.booking_id})</strong><br>` +
-          `Thank you, ${escapeHtml(nameVal)}! Your Google Meet request for <strong>${escapeHtml(dateVal)}</strong> at <strong>${escapeHtml(timeVal)}</strong> has been recorded in the database.<br>` +
-          `Sahil has been notified at <em>sahilnawaz257@gmail.com</em> and will confirm your meeting with a Google Meet link shortly.`,
+          `<strong>🎉 Request Submitted Successfully! (Ref: #${String(data.booking_id).slice(0, 8)})</strong><br>` +
+          `Thank you, ${escapeHtml(nameVal)}! Your Google Meet consultation request for <strong>${escapeHtml(dateVal)}</strong> at <strong>${escapeHtml(timeVal)}</strong> has been recorded in the database.<br>` +
+          `An automated confirmation email has been sent to <strong>${escapeHtml(emailVal)}</strong>. Sahil has been notified and will approve and send the Google Meet link shortly.`,
           true
         );
         form.reset();
@@ -563,26 +608,31 @@ function initGoogleMeetBooking() {
           const todayStr = new Date().toISOString().split("T")[0];
           dateInput.min = todayStr;
           dateInput.value = todayStr;
+          fetchAvailableSlots(todayStr);
         }
       } else if (response.status === 409) {
         showMeetStatus(
-          `<strong>⚠️ Slot Already Requested:</strong><br>${escapeHtml(data.error || "You already have an active request for this date and time.")}`,
+          `<strong>⚠️ Scheduling Conflict:</strong><br>${escapeHtml(data.error || "This time slot has already been requested.")}`,
           false
         );
+        if (dateVal) fetchAvailableSlots(dateVal);
       } else {
         showMeetStatus(
-          `<strong>Submission Failed:</strong> ${escapeHtml(data.error || "Please verify your information and try again.")}`,
+          `<strong>Submission Notice:</strong> ${escapeHtml(data.error || "Please verify your information and try again.")}`,
           false
         );
       }
     } catch (err) {
       showMeetStatus(
-        `<strong>Network Error:</strong> Unable to connect to the scheduling service (${escapeHtml(err.message)}). Please email Sahil directly at <em>sahilnawaz257@gmail.com</em>.`,
+        `<strong>Network Notice:</strong> Unable to reach scheduling service (${escapeHtml(err.message)}). Please email Sahil directly at <em>sahilnawaz257@gmail.com</em>.`,
         false
       );
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnHtml;
+      setTimeout(() => {
+        isBooking = false;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      }, 1200);
     }
   });
 }

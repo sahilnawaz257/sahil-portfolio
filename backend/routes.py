@@ -318,15 +318,73 @@ def submit_contact():
 # Google Meet Scheduling APIs
 # ==============================================================================
 
+STANDARD_MEETING_SLOTS = [
+    "10:00 AM - 10:30 AM",
+    "11:30 AM - 12:00 PM",
+    "02:00 PM - 02:30 PM",
+    "04:30 PM - 05:00 PM",
+    "07:00 PM - 07:30 PM"
+]
+
+@api_bp.route("/meetings/available-slots", methods=["GET"])
+def get_available_slots():
+    """
+    Retrieve genuinely available time slots for a specified date.
+    Cross-checks existing non-rejected reservations in meeting_bookings.
+    """
+    raw_date = request.args.get("date", "").strip()
+    if not raw_date:
+        raw_date = date.today().isoformat()
+
+    try:
+        parsed_date = datetime.strptime(raw_date, "%Y-%m-%d").date()
+        if parsed_date < date.today():
+            return jsonify({
+                "success": False,
+                "error": "Selected date is in the past. Please choose today or a future date.",
+                "date": raw_date,
+                "slots": []
+            }), 400
+    except ValueError:
+        return jsonify({
+            "success": False,
+            "error": "Invalid date format. Expected YYYY-MM-DD.",
+            "date": raw_date,
+            "slots": []
+        }), 400
+
+    booked_slots = MeetingBooking.get_booked_slots(raw_date)
+    slots_status = []
+    for s in STANDARD_MEETING_SLOTS:
+        # Check if slot is already reserved
+        is_booked = any(
+            s.lower() in str(b).lower() or str(b).lower() in s.lower()
+            for b in booked_slots
+        )
+        slots_status.append({
+            "slot": s,
+            "available": not is_booked
+        })
+
+    return jsonify({
+        "success": True,
+        "date": raw_date,
+        "slots": slots_status,
+        "available_count": sum(1 for s in slots_status if s["available"])
+    }), 200
+
+
 @api_bp.route("/meetings/book", methods=["POST"])
 def book_meeting():
     """
     Schedule a Google Meet appointment.
     Validates name, email, purpose, future date, and time slot.
-    Checks for duplicate requests and dispatches notification to sahilnawaz257@gmail.com.
+    Checks for duplicate requests, slot availability, and dispatches notifications.
     """
+    from flask import current_app
+
     client_ip = get_client_ip()
-    if not check_rate_limit(f"meeting:{client_ip}", limit=8, window=60):
+    if not check_rate_limit(f"meeting:{client_ip}", limit=25, window=60):
         return jsonify({
             "success": False,
             "error": "Rate limit exceeded. Please wait a minute before submitting again."
@@ -402,13 +460,28 @@ def book_meeting():
             "field": "meeting_time"
         }), 400
 
-    # 6. Check for duplicate booking
-    existing = MeetingBooking.check_duplicate(raw_email, raw_date, raw_time)
-    if existing:
+    # 6. Check for duplicate booking by this email
+    existing_user_booking = MeetingBooking.check_duplicate(raw_email, raw_date, raw_time)
+    if existing_user_booking:
         return jsonify({
             "success": False,
             "error": "You already have an active meeting request for this date and time slot. Please choose another slot or await confirmation.",
-            "existing_booking_id": existing["id"]
+            "existing_booking_id": existing_user_booking["id"],
+            "field": "meeting_time"
+        }), 409
+
+    # 7. Check if this time slot is already taken on this date by any user
+    booked_slots = MeetingBooking.get_booked_slots(raw_date)
+    is_slot_taken = any(
+        raw_time.lower() in str(b).lower() or str(b).lower() in raw_time.lower()
+        for b in booked_slots
+    )
+    if is_slot_taken:
+        return jsonify({
+            "success": False,
+            "error": f"The time slot '{raw_time}' has already been booked for {raw_date}. Please select another available time slot.",
+            "field": "meeting_time",
+            "conflict": True
         }), 409
 
     # Sanitize inputs
@@ -424,8 +497,8 @@ def book_meeting():
             full_name=full_name,
             email=email,
             purpose=purpose,
-            meeting_date=meeting_date,
-            meeting_time=meeting_time,
+            preferred_date=meeting_date,
+            preferred_time=meeting_time,
             notes=notes
         )
 
@@ -440,11 +513,18 @@ def book_meeting():
             "meeting_time": meeting_time,
             "meeting_link": "",
             "notes": notes,
-            "status": "Pending"
+            "status": "Pending",
+            "created_at": datetime.utcnow().isoformat() + "Z"
         }
 
-        # Dispatch email notification to Sahil
-        email_result = email_service.send_meeting_notification(booking_record)
+        # Dispatch email notification to Sahil (with signed HMAC approval link) + receipt to visitor
+        base_url = request.host_url.rstrip("/")
+        secret_key = current_app.config.get("SECRET_KEY", "sahil-meet-secure-key")
+        email_result = email_service.dispatch_meeting_booking_emails(
+            booking=booking_record,
+            base_url=base_url,
+            secret_key=secret_key
+        )
 
         return jsonify({
             "success": True,
@@ -457,9 +537,118 @@ def book_meeting():
     except Exception as e:
         return jsonify({
             "success": False,
-            "error": "Failed to record meeting request due to a database error.",
+            "error": "Failed to record meeting request due to a database error. Please try again.",
             "details": str(e)
         }), 500
+
+
+@api_bp.route("/meetings/action", methods=["GET", "POST"])
+def handle_meeting_action():
+    """
+    Secure owner-controlled approval/rejection endpoint.
+    Protected with HMAC cryptographic signature; zero admin login needed.
+    """
+    from flask import current_app, render_template_string
+    import google_calendar
+
+    data = request.get_json(silent=True) or request.args.to_dict()
+    booking_id = data.get("id")
+    action = str(data.get("action", "")).lower()
+    token = data.get("token")
+    custom_link = str(data.get("link", "")).strip()
+
+    if not booking_id or action not in ("approve", "reject"):
+        return jsonify({"success": False, "error": "Invalid action parameters."}), 400
+
+    secret_key = current_app.config.get("SECRET_KEY", "sahil-meet-secure-key")
+    if not email_service.verify_booking_token(booking_id, action, token, secret_key):
+        return jsonify({"success": False, "error": "Unauthorized or invalid action token."}), 403
+
+    booking = MeetingBooking.get_by_id(booking_id)
+    if not booking:
+        return jsonify({"success": False, "error": "Booking record not found."}), 404
+
+    if action == "approve":
+        meet_link = custom_link
+        # If no link provided and Google Calendar credentials exist, generate genuine Meet link
+        if not meet_link and google_calendar.is_google_calendar_configured():
+            cal_res = google_calendar.create_google_meet_event(
+                summary=f"Google Meet: {booking['full_name']} — {booking['purpose']}",
+                description=f"Consultation scheduled with Sahil Nawaz.\nNotes: {booking.get('notes', '')}",
+                attendee_email=booking["email"],
+                date_str=booking["meeting_date"],
+                time_slot_str=booking["meeting_time"]
+            )
+            if cal_res.get("success"):
+                meet_link = cal_res.get("meeting_link")
+
+        updated = MeetingBooking.update_status(booking_id, "Approved", meeting_link=meet_link)
+        email_service.send_booking_confirmation_to_visitor(updated)
+        status_msg = f"Meeting #{str(booking_id)[:8]} has been Approved!"
+    else:
+        updated = MeetingBooking.update_status(booking_id, "Rejected")
+        email_service.send_booking_confirmation_to_visitor(updated)
+        status_msg = f"Meeting #{str(booking_id)[:8]} has been Declined."
+
+    # Return JSON for API clients
+    if request.headers.get("Accept") == "application/json" or request.is_json:
+        return jsonify({
+            "success": True,
+            "message": status_msg,
+            "booking": updated
+        }), 200
+
+    # Return styled HTML confirmation for email clicks
+    return render_template_string("""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Booking Action — Sahil Nawaz Portfolio</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff5f3; color: #201a19; padding: 40px 20px; display: flex; justify-content: center; }
+            .card { background: #ffffff; max-width: 540px; width: 100%; border: 1px solid #f3b5aa; border-radius: 12px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+            h2 { color: #df7568; margin-top: 0; }
+            .badge { display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; }
+            .badge-approved { background: #dcfce7; color: #15803d; }
+            .badge-rejected { background: #fee2e2; color: #b91c1c; }
+            .row { margin: 12px 0; }
+            .label { color: #7a6e69; font-size: 12px; text-transform: uppercase; font-weight: bold; }
+            .val { font-size: 15px; margin-top: 3px; }
+            .link-box { background: #fff0ed; padding: 12px; border-radius: 6px; word-break: break-all; margin-top: 15px; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h2>{{ status_msg }}</h2>
+            <div class="row">
+                <div class="label">Visitor:</div>
+                <div class="val">{{ booking.full_name }} ({{ booking.email }})</div>
+            </div>
+            <div class="row">
+                <div class="label">Date & Time:</div>
+                <div class="val">{{ booking.meeting_date }} @ {{ booking.meeting_time }}</div>
+            </div>
+            <div class="row">
+                <div class="label">Purpose:</div>
+                <div class="val">{{ booking.purpose }}</div>
+            </div>
+            <div class="row">
+                <div class="label">Status:</div>
+                <div class="val"><span class="badge {{ 'badge-approved' if booking.status == 'Approved' else 'badge-rejected' }}">{{ booking.status }}</span></div>
+            </div>
+            {% if booking.meeting_link or booking.google_meet_link %}
+            <div class="link-box">
+                <strong>Google Meet Link:</strong><br>
+                <a href="{{ booking.meeting_link or booking.google_meet_link }}" target="_blank">{{ booking.meeting_link or booking.google_meet_link }}</a>
+            </div>
+            {% endif %}
+            <p style="color: #7a6e69; font-size: 13px; margin-top: 24px;">An automated confirmation update has been dispatched to {{ booking.email }}.</p>
+        </div>
+    </body>
+    </html>
+    """, status_msg=status_msg, booking=updated), 200
 
 
 @api_bp.route("/meetings/status/<booking_id>", methods=["GET"])
@@ -484,7 +673,7 @@ def get_meeting_status(booking_id):
                 "meeting_time": booking["meeting_time"],
                 "status": booking["status"],
                 "google_meet_link": booking.get("google_meet_link", ""),
-                "created_at": booking["created_at"]
+                "created_at": booking.get("created_at")
             }
         }), 200
     except Exception as e:

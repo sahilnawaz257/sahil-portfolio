@@ -347,6 +347,53 @@ def get_meeting_booking_by_id(booking_id):
     row["google_meet_link"] = row.get("meeting_link") or row.get("google_meet_link") or ""
     return row
 
+def get_booked_slots_for_date(date_str):
+    """
+    Retrieve all booked/pending time slots for a specified date.
+    Ensures that only genuinely available time slots are presented to visitors.
+    """
+    d = str(date_str).strip()
+    if is_postgres():
+        sql = """
+            SELECT preferred_time AS time_slot FROM meeting_bookings
+            WHERE preferred_date = %s AND status != 'Rejected'
+        """
+        rows = execute_query(sql, (d,), fetch="all") or []
+    else:
+        sql = """
+            SELECT COALESCE(preferred_time, meeting_time) AS time_slot FROM meeting_bookings
+            WHERE (preferred_date = %s OR meeting_date = %s) AND status != 'Rejected'
+        """
+        rows = execute_query(sql, (d, d), fetch="all") or []
+    return [r["time_slot"] for r in rows if r.get("time_slot")]
+
+def update_booking_status(booking_id, status, meeting_link=""):
+    """
+    Update booking status (Pending -> Approved / Rejected) and set meeting link.
+    Used exclusively by authorized owner approval workflow (HMAC token or backend CLI).
+    """
+    valid_statuses = ("Pending", "Approved", "Rejected")
+    if status not in valid_statuses:
+        raise ValueError(f"Invalid booking status '{status}'. Must be one of: {valid_statuses}")
+
+    sql = """
+        UPDATE meeting_bookings
+        SET status = %s, meeting_link = COALESCE(NULLIF(%s, ''), meeting_link)
+        WHERE id = %s
+    """
+    execute_query(sql, (status, meeting_link.strip(), booking_id), commit=True)
+    return get_meeting_booking_by_id(booking_id)
+
+def get_pending_bookings():
+    """Retrieve all pending booking requests for owner review."""
+    sql = "SELECT * FROM meeting_bookings WHERE status = 'Pending' ORDER BY created_at DESC" if is_postgres() else "SELECT * FROM meeting_bookings WHERE status = 'Pending' ORDER BY id DESC"
+    rows = execute_query(sql, fetch="all") or []
+    for r in rows:
+        r["meeting_date"] = r.get("preferred_date") or r.get("meeting_date")
+        r["meeting_time"] = r.get("preferred_time") or r.get("meeting_time")
+        r["google_meet_link"] = r.get("meeting_link") or r.get("google_meet_link") or ""
+    return rows
+
 def get_portfolio_projects():
     """Retrieve all public portfolio projects with parsed technology stacks."""
     sql = "SELECT * FROM projects ORDER BY created_at ASC" if is_postgres() else "SELECT * FROM projects ORDER BY id ASC"

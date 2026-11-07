@@ -17,6 +17,9 @@ from database import (
     save_meeting_booking,
     check_duplicate_booking,
     get_meeting_booking_by_id,
+    get_booked_slots_for_date,
+    update_booking_status,
+    get_pending_bookings,
     get_portfolio_projects,
     get_project_by_id,
     get_education_records,
@@ -76,6 +79,21 @@ class MeetingBooking:
     def get_by_id(booking_id):
         """Retrieve booking details by ID."""
         return get_meeting_booking_by_id(booking_id)
+
+    @staticmethod
+    def get_booked_slots(date_str):
+        """Get list of booked/pending time slots for a specific date."""
+        return get_booked_slots_for_date(date_str)
+
+    @staticmethod
+    def update_status(booking_id, status, meeting_link=""):
+        """Update booking status (Approved / Rejected) and meeting link."""
+        return update_booking_status(booking_id, status, meeting_link=meeting_link)
+
+    @staticmethod
+    def get_all_pending():
+        """Retrieve all pending bookings for owner review."""
+        return get_pending_bookings()
 
 
 class Project:

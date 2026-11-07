@@ -169,6 +169,8 @@ def serve_favicon():
 def serve_static(path):
     if path.startswith("api/"):
         return jsonify({"success": False, "error": "API endpoint not found"}), 404
+    if path.startswith("admin") or path.startswith("dashboard") or path.startswith("login"):
+        return jsonify({"success": False, "error": "No admin system or dashboard exists for this portfolio."}), 404
     file_path = os.path.join(FRONTEND_DIR, path)
     if os.path.exists(file_path) and os.path.isfile(file_path):
         return send_from_directory(FRONTEND_DIR, path)

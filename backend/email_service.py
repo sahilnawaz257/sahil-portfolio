@@ -160,43 +160,172 @@ def dispatch_contact_emails(name, email, subject, message):
         "visitor_details": visitor_res
     }
 
-def send_meeting_notification(booking):
-    """Notify Sahil when a new meeting is requested."""
+import hmac
+import hashlib
+
+def generate_booking_token(booking_id, action, secret_key):
+    """Generate a tamper-proof cryptographic token for one-click email approval."""
+    payload = f"meet:{booking_id}:{action}".encode("utf-8")
+    key = str(secret_key or "sahil-meet-secure-key").encode("utf-8")
+    return hmac.new(key, payload, hashlib.sha256).hexdigest()
+
+def verify_booking_token(booking_id, action, token, secret_key):
+    """Verify HMAC token authenticity."""
+    expected = generate_booking_token(booking_id, action, secret_key)
+    return hmac.compare_digest(str(expected), str(token or ""))
+
+def send_meeting_notification(booking, base_url="", secret_key=""):
+    """
+    Notify Sahil when a new meeting is requested.
+    Includes booking reference, status, and HMAC-signed approval/rejection links.
+    """
+    booking_id = booking.get("id")
     name = booking.get("full_name")
     email = booking.get("email")
     purpose = booking.get("purpose")
-    date = booking.get("meeting_date")
-    time_slot = booking.get("meeting_time")
+    date = booking.get("meeting_date") or booking.get("preferred_date")
+    time_slot = booking.get("meeting_time") or booking.get("preferred_time")
+    status = booking.get("status", "Pending")
     notes = booking.get("notes") or "None provided"
 
-    email_subj = f"New Google Meet Request: {name} ({date} @ {time_slot})"
+    # Generate one-click action links if base_url is available
+    action_html = ""
+    action_text = ""
+    if base_url and secret_key and booking_id:
+        approve_token = generate_booking_token(booking_id, "approve", secret_key)
+        reject_token = generate_booking_token(booking_id, "reject", secret_key)
+        approve_url = f"{base_url}/api/meetings/action?id={booking_id}&action=approve&token={approve_token}"
+        reject_url = f"{base_url}/api/meetings/action?id={booking_id}&action=reject&token={reject_token}"
+
+        action_text = (
+            f"\n--- OWNER QUICK ACTIONS ---\n"
+            f"Approve & Confirm Meeting: {approve_url}\n"
+            f"Reject Request: {reject_url}\n"
+        )
+        action_html = f"""
+        <div style="margin: 24px 0 10px 0; padding: 18px; background: #fff8f7; border: 1px solid #f3b5aa; border-radius: 8px;">
+            <p style="margin: 0 0 12px 0; font-size: 13px; font-weight: bold; color: #53433f; text-transform: uppercase;">Owner Quick Actions:</p>
+            <div style="display: flex; gap: 12px;">
+                <a href="{approve_url}" style="background: #22c55e; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; display: inline-block;">✓ Approve Meeting</a>
+                &nbsp;&nbsp;
+                <a href="{reject_url}" style="background: #ef4444; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; display: inline-block;">✕ Decline</a>
+            </div>
+            <p style="margin: 10px 0 0 0; font-size: 11px; color: #7a6e69;">Clicking Approve automatically generates/attaches a Google Meet link and confirms the visitor.</p>
+        </div>
+        """
+
+    email_subj = f"New Google Meet Request: {name} — Ref #{str(booking_id)[:8]} ({date} @ {time_slot})"
     text_body = (
         f"New Google Meet scheduling request received!\n\n"
-        f"Name: {name}\n"
+        f"Booking Reference: #{booking_id}\n"
+        f"Visitor Name: {name}\n"
         f"Email: {email}\n"
         f"Purpose: {purpose}\n"
-        f"Requested Date: {date}\n"
-        f"Requested Time Slot: {time_slot}\n"
-        f"Notes / Agenda: {notes}\n\n"
-        f"Status: Pending\n"
-        f"— Sahil Nawaz Portfolio Scheduling System"
+        f"Preferred Date: {date}\n"
+        f"Preferred Time: {time_slot}\n"
+        f"Status: {status}\n"
+        f"Notes / Agenda: {notes}\n"
+        f"{action_text}\n"
+        f"— Sahil Nawaz Portfolio Scheduling Engine"
     )
     html_body = f"""
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #39312e; max-width: 600px; padding: 20px; border: 1px solid #f3b5aa; border-radius: 8px;">
-        <h2 style="color: #df7568; margin-top: 0;">📅 New Google Meet Request</h2>
-        <p>A visitor has requested a meeting on your portfolio.</p>
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #39312e; max-width: 620px; padding: 24px; border: 1px solid #f3b5aa; border-radius: 10px; background: #ffffff;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fceae7; padding-bottom: 12px; margin-bottom: 16px;">
+            <h2 style="color: #df7568; margin: 0; font-size: 20px;">📅 New Google Meet Request</h2>
+            <span style="background: #fff0ed; color: #df7568; font-family: monospace; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">Ref: #{str(booking_id)[:8]}</span>
+        </div>
         <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
-            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Full Name:</strong></td><td>{name}</td></tr>
-            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Email:</strong></td><td><a href="mailto:{email}">{email}</a></td></tr>
-            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Purpose:</strong></td><td>{purpose}</td></tr>
-            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Date:</strong></td><td>{date}</td></tr>
-            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Time Slot:</strong></td><td>{time_slot}</td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69; width: 140px;"><strong>Visitor Name:</strong></td><td><strong>{name}</strong></td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Email Address:</strong></td><td><a href="mailto:{email}">{email}</a></td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Meeting Topic:</strong></td><td>{purpose}</td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Preferred Date:</strong></td><td>{date}</td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Preferred Time:</strong></td><td>{time_slot}</td></tr>
+            <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Booking Status:</strong></td><td><span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">{status}</span></td></tr>
             <tr><td style="padding: 6px 0; color: #7a6e69;"><strong>Agenda / Notes:</strong></td><td>{notes}</td></tr>
         </table>
-        <p style="font-size: 13px; color: #7a6e69;">Status is currently <strong>Pending</strong>. You can approve and generate a Google Meet link from your system.</p>
+        {action_html}
+        <p style="font-size: 12px; color: #8e807a; margin-top: 20px; border-top: 1px solid #f5ebe8; padding-top: 10px;">
+            This email was generated securely by your portfolio backend. Never forward action links publicly.
+        </p>
     </div>
     """
     return _dispatch_email(NOTIFICATION_EMAIL, email_subj, text_body, html_body)
+
+def send_booking_receipt_to_visitor(booking):
+    """Send an immediate acknowledgement receipt to the visitor with their booking details."""
+    to_email = booking.get("email")
+    booking_id = booking.get("id")
+    name = booking.get("full_name")
+    purpose = booking.get("purpose")
+    date = booking.get("meeting_date") or booking.get("preferred_date")
+    time_slot = booking.get("meeting_time") or booking.get("preferred_time")
+
+    email_subj = f"Google Meet Request Received: Sahil Nawaz — Ref #{str(booking_id)[:8]}"
+    text_body = (
+        f"Hi {name},\n\n"
+        f"Thank you for requesting a Google Meet session with Sahil Nawaz!\n\n"
+        f"Booking Reference: #{booking_id}\n"
+        f"Topic / Purpose: {purpose}\n"
+        f"Requested Date: {date}\n"
+        f"Requested Time Slot: {time_slot}\n"
+        f"Status: Pending Review\n\n"
+        f"Sahil has been notified and will review your request shortly.\n"
+        f"Once approved, you will receive an official confirmation email containing the Google Meet link.\n\n"
+        f"Best regards,\n"
+        f"Sahil Nawaz — Forward Deployed Developer\n"
+        f"https://github.com/sahilnawaz257"
+    )
+    html_body = f"""
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #39312e; max-width: 600px; padding: 24px; border: 1px solid #f3b5aa; border-radius: 10px; background: #ffffff;">
+        <h2 style="color: #df7568; margin-top: 0;">📅 Meeting Request Received</h2>
+        <p>Hi {name},</p>
+        <p>Thank you for requesting a Google Meet consultation. Your scheduling request has been securely recorded.</p>
+        <div style="background: #fff8f7; padding: 18px; border-radius: 8px; border-left: 4px solid #df7568; margin: 20px 0;">
+            <p style="margin: 0 0 6px 0;"><strong>Reference ID:</strong> <span style="font-family: monospace; color: #df7568;">#{str(booking_id)[:8]}</span></p>
+            <p style="margin: 0 0 6px 0;"><strong>Date:</strong> {date}</p>
+            <p style="margin: 0 0 6px 0;"><strong>Time Slot:</strong> {time_slot}</p>
+            <p style="margin: 0 0 6px 0;"><strong>Discussion Topic:</strong> {purpose}</p>
+            <p style="margin: 0;"><strong>Status:</strong> <span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">Pending Review</span></p>
+        </div>
+        <p style="font-size: 14px; color: #53433f;">
+            Sahil will review your request and send a confirmation email with the official Google Meet link to this address shortly.
+        </p>
+        <p style="margin-top: 24px; font-size: 14px; color: #53433f;">
+            Best regards,<br>
+            <strong>Sahil Nawaz</strong><br>
+            <span style="color: #df7568; font-size: 13px;">Forward Deployed Developer</span>
+        </p>
+    </div>
+    """
+    return _dispatch_email(to_email, email_subj, text_body, html_body)
+
+def dispatch_meeting_booking_emails(booking, base_url="", secret_key=""):
+    """
+    Dispatch both owner alert (with one-click HMAC action links) and visitor receipt.
+    Tracks delivery state for both recipients separately.
+    """
+    owner_res = send_meeting_notification(booking, base_url=base_url, secret_key=secret_key)
+    visitor_res = send_booking_receipt_to_visitor(booking)
+
+    owner_ok = bool(owner_res and owner_res.get("success"))
+    visitor_ok = bool(visitor_res and visitor_res.get("success"))
+
+    if not is_smtp_configured():
+        overall_status = "unconfigured"
+    elif owner_ok and visitor_ok:
+        overall_status = "delivered"
+    elif owner_ok or visitor_ok:
+        overall_status = "partial"
+    else:
+        overall_status = "failed"
+
+    return {
+        "status": overall_status,
+        "owner_notified": owner_ok,
+        "owner_details": owner_res,
+        "visitor_confirmed": visitor_ok,
+        "visitor_details": visitor_res
+    }
 
 def send_booking_confirmation_to_visitor(booking):
     """Notify visitor with meeting status and Google Meet link."""
