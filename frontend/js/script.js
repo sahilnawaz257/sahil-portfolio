@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function initSectionNavigation() {
   const sections = document.querySelectorAll(".portfolio-section");
-  const navLinks = document.querySelectorAll(".site-nav .nav-link, .footer-link");
   const validSectionIds = Array.from(sections).map((s) => s.id);
 
   if (!sections.length) return;
@@ -57,18 +56,21 @@ function initSectionNavigation() {
     });
 
     // 2. Update active states on navigation links
-    document.querySelectorAll(".site-nav .nav-link").forEach((link) => {
-      const href = link.getAttribute("href");
-      if (href === `#${activeId}`) {
+    document.querySelectorAll(".site-nav .nav-link, .footer-nav-list .footer-link").forEach((link) => {
+      const targetAttr = link.getAttribute("data-target");
+      const href = link.getAttribute("href") || "";
+      const matchesTarget = targetAttr === activeId || href === `#${activeId}`;
+
+      if (matchesTarget && link.classList.contains("nav-link")) {
         link.classList.add("active");
         link.setAttribute("aria-current", "page");
-      } else if (href && href.startsWith("#")) {
+      } else if (link.classList.contains("nav-link")) {
         link.classList.remove("active");
         link.removeAttribute("aria-current");
       }
     });
 
-    // 3. Update URL hash without jarring jump
+    // 3. Update URL hash cleanly
     if (updateHistory) {
       if (history.pushState) {
         history.pushState(null, null, `#${activeId}`);
@@ -96,14 +98,23 @@ function initSectionNavigation() {
 
   // Intercept all internal navigation clicks targeting sections
   document.addEventListener("click", (e) => {
-    const link = e.target.closest('a[href^="#"]');
-    if (!link) return;
+    const trigger = e.target.closest('a[href^="#"], [data-target]');
+    if (!trigger) return;
 
-    const href = link.getAttribute("href");
-    if (!href || href === "#") return;
+    // Check if it's an action button inside form or modal
+    if (trigger.closest("#meet-modal-backdrop") || trigger.closest("#whatsapp-widget") || trigger.type === "submit") {
+      return;
+    }
 
-    const targetSectionId = href.substring(1);
-    if (validSectionIds.includes(targetSectionId)) {
+    let targetSectionId = trigger.getAttribute("data-target");
+    if (!targetSectionId) {
+      const href = trigger.getAttribute("href");
+      if (href && href.startsWith("#") && href.length > 1) {
+        targetSectionId = href.substring(1);
+      }
+    }
+
+    if (targetSectionId && validSectionIds.includes(targetSectionId)) {
       e.preventDefault();
       switchSection(targetSectionId, true);
     }
@@ -229,7 +240,7 @@ function initRoleTypingAnimation() {
   const roles = [
     "Forward Deployed Developer",
     "AI & ML Solutions Builder",
-    "B.Tech CSE Undergrad · JBIET",
+    "B.Tech CSE · JB Group of Institutions",
     "Full-Stack Web Engineer"
   ];
 
@@ -278,7 +289,7 @@ function initScrollReveal() {
   if (prefersReducedMotion) return;
 
   const targets = document.querySelectorAll(
-    ".edu-card-premium, .skill-category-card, .project-card, .contact-channel-card, .contact-form-box, .roadmap-item"
+    ".edu-card-premium, .skill-group-card, .detailed-skill-card, .project-card-large, .contact-channel-card, .contact-form-box, .overview-card, .about-preview-card, .contact-cta-banner"
   );
 
   const observer = new IntersectionObserver(
@@ -547,7 +558,6 @@ function initGoogleMeetBooking() {
           true
         );
         form.reset();
-        // Reset min date
         if (dateInput) {
           const todayStr = new Date().toISOString().split("T")[0];
           dateInput.min = todayStr;
@@ -835,7 +845,7 @@ function initCopyrightYear() {
  */
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll(".filter-btn");
-  const projectCards = document.querySelectorAll(".project-card");
+  const projectCards = document.querySelectorAll("#project-grid .project-card-large, #project-grid .project-card");
 
   if (!filterButtons.length || !projectCards.length) return;
 
@@ -894,6 +904,7 @@ async function initDynamicProjects() {
     const data = await res.json();
     if (data && data.success && Array.isArray(data.projects) && data.projects.length > 0) {
       renderProjectCards(grid, data.projects);
+      initProjectFilters(); // Rebind filters for dynamically loaded elements
     }
   } catch (err) {
     console.info("Using static projects showcase:", err.message);
@@ -906,49 +917,54 @@ function renderProjectCards(container, projects) {
     const titleLower = (p.title || "").toLowerCase();
 
     let bannerHtml = "";
+    let category = "ai";
+
     if (titleLower.includes("crowd") || titleLower.includes("density")) {
+      category = "ai";
       bannerHtml = `
         <div class="project-banner banner-crowd" aria-hidden="true">
-          <span class="stat-number">1,248</span>
-          <span class="stat-label">Crowd Analytics Preview</span>
-          <div class="crowd-bars">
-            <span style="height: 18px;"></span>
-            <span style="height: 32px;"></span>
-            <span style="height: 24px;"></span>
+          <div class="banner-visual-stats">
+            <span class="stat-highlight">1,248</span>
+            <small>Crowd Analytics Preview</small>
+          </div>
+          <div class="crowd-visual-bars">
+            <span style="height: 25px;"></span>
             <span style="height: 48px;"></span>
-            <span style="height: 36px;"></span>
-            <span style="height: 40px;"></span>
-            <span style="height: 22px;"></span>
+            <span style="height: 32px;"></span>
+            <span style="height: 60px;"></span>
+            <span style="height: 42px;"></span>
+            <span style="height: 52px;"></span>
+            <span style="height: 30px;"></span>
           </div>
         </div>
       `;
     } else if (titleLower.includes("library")) {
+      category = "system";
       bannerHtml = `
         <div class="project-banner banner-library" aria-hidden="true">
-          <div class="library-mockup">
-            <small>LIBRARY & ATTENDANCE</small>
-            <b>Books. Records.<br>Transactions.</b>
+          <div class="library-mockup-graphic">
+            <span class="mockup-label">RELATIONAL DATABASE SYSTEM</span>
+            <b>Books · Student Records · Transactions</b>
           </div>
         </div>
       `;
     } else if (titleLower.includes("brand") || titleLower.includes("guideline") || titleLower.includes("audit")) {
+      category = "tool";
       bannerHtml = `
         <div class="project-banner banner-brand" aria-hidden="true">
-          <div class="brand-mockup">
-            <span class="brand-symbol">Aa</span>
-            <div class="brand-palette">
-              <small>AUDIT TOKENS</small>
-              <div class="palette-swatches">
-                <span style="background: #df7568;"></span>
-                <span style="background: #f3b5aa;"></span>
-                <span style="background: #e8d6c9;"></span>
-                <span style="background: #39312e;"></span>
-              </div>
+          <div class="brand-audit-graphic">
+            <span class="audit-typography">Aa</span>
+            <div class="audit-swatches">
+              <span style="background: #df7568;"></span>
+              <span style="background: #f3b5aa;"></span>
+              <span style="background: #e8d6c9;"></span>
+              <span style="background: #39312e;"></span>
             </div>
           </div>
         </div>
       `;
     } else {
+      category = "ai";
       bannerHtml = `
         <div class="project-banner banner-api" aria-hidden="true">
           <div class="code-mockup">
@@ -964,21 +980,21 @@ function renderProjectCards(container, projects) {
       .map((t) => t.trim())
       .filter(Boolean);
     const techListHtml = techItems.length > 0
-      ? techItems.map((t) => `<li>${escapeHtml(t)}</li>`).join("")
-      : `<li>Software</li>`;
+      ? techItems.map((t) => `<span class="tech-tag">${escapeHtml(t)}</span>`).join("")
+      : `<span class="tech-tag">Software</span>`;
 
     let linksHtml = "";
     if (p.github_url && p.github_url.trim()) {
       linksHtml += `
-        <a href="${escapeHtml(p.github_url)}" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View ${escapeHtml(p.title)} on GitHub">
-          <span class="btn-icon" aria-hidden="true">🐙</span> GitHub ↗
+        <a href="${escapeHtml(p.github_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="View ${escapeHtml(p.title)} on GitHub">
+          <span>🐙 GitHub Repository ↗</span>
         </a>
       `;
     }
     if (p.live_demo_url && p.live_demo_url.trim()) {
       linksHtml += `
-        <a href="${escapeHtml(p.live_demo_url)}" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="Live Demo for ${escapeHtml(p.title)}">
-          <span class="btn-icon" aria-hidden="true">🌐</span> Live Demo ↗
+        <a href="${escapeHtml(p.live_demo_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" aria-label="Live Demo for ${escapeHtml(p.title)}">
+          <span>🌐 Live Demo ↗</span>
         </a>
       `;
     }
@@ -989,16 +1005,19 @@ function renderProjectCards(container, projects) {
     const tag = `${num} / ${escapeHtml(p.title.split(' ')[0])}`;
 
     return `
-      <article class="project-card">
+      <article class="project-card-large" data-category="${category}">
         ${bannerHtml}
-        <div class="project-body">
-          <span class="project-tag">${tag}</span>
+        <div class="project-card-body">
+          <div class="project-meta-row">
+            <span class="project-badge">${tag}</span>
+            <span class="project-status-dot">Production System</span>
+          </div>
           <h3 class="project-title">${escapeHtml(p.title)}</h3>
-          <p class="project-desc">${escapeHtml(p.description)}</p>
-          <ul class="project-tech" aria-label="Technologies used">
+          <p class="project-description">${escapeHtml(p.description)}</p>
+          <div class="project-tech-group">
             ${techListHtml}
-          </ul>
-          <div class="project-links">
+          </div>
+          <div class="project-action-row">
             ${linksHtml}
           </div>
         </div>

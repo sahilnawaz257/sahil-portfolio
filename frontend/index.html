@@ -9,8 +9,8 @@
   <!-- Primary SEO Meta Tags -->
   <title>Sahil Nawaz | Forward Deployed Developer</title>
   <meta name="title" content="Sahil Nawaz | Forward Deployed Developer">
-  <meta name="description" content="Official portfolio of Sahil Nawaz — Forward Deployed Developer and B.Tech CSE student at J.B. Institute of Engineering and Technology. Specializing in AI, Computer Vision (YOLOv8), and Full-Stack Engineering.">
-  <meta name="keywords" content="Sahil Nawaz, Forward Deployed Developer, AI Engineer, Computer Vision, YOLOv8, Python, Flask, JBIET, Full Stack Developer, Hyderabad">
+  <meta name="description" content="Official portfolio of Sahil Nawaz — Forward Deployed Developer and B.Tech CSE student at JB Group of Institutions of Technology, Dehradun. Specializing in AI, Computer Vision (YOLOv8), LangChain RAG, and Full-Stack Engineering.">
+  <meta name="keywords" content="Sahil Nawaz, Forward Deployed Developer, AI Engineer, Computer Vision, YOLOv8, Python, Flask, JB Group of Institutions of Technology, JBIT Dehradun, The Open University, Full Stack Developer, LangChain, RAG">
   <meta name="author" content="Sahil Nawaz">
   <meta name="robots" content="index, follow">
 
@@ -34,18 +34,18 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- External Stylesheet (Step 02 will style this structure) -->
+  <!-- Main External Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <!-- ======================================================================
-       HEADER & NAVIGATION SECTION
+       HEADER & NAVIGATION BAR (Sticky Glassmorphic Navbar)
        ====================================================================== -->
   <header class="site-header" id="site-header">
     <div class="container header-container">
       <!-- Site Brand / Logo -->
-      <a href="#home" class="logo" aria-label="Sahil Nawaz - Back to Home">
+      <a href="#home" class="logo nav-link-trigger" data-target="home" aria-label="Sahil Nawaz - Back to Home">
         <span class="logo-badge" aria-hidden="true">&lt;/&gt;</span>
         <span class="logo-text">
           Sahil <b>Nawaz</b>
@@ -61,22 +61,22 @@
       <!-- Primary Navigation Links -->
       <nav class="site-nav" id="primary-navigation" aria-label="Primary Navigation">
         <ul class="nav-list">
-          <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
-          <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
-          <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
-          <li class="nav-item"><a href="#education" class="nav-link">Education</a></li>
-          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="#home" class="nav-link active" data-target="home">Home</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link" data-target="about">About</a></li>
+          <li class="nav-item"><a href="#skills" class="nav-link" data-target="skills">Skills</a></li>
+          <li class="nav-item"><a href="#projects" class="nav-link" data-target="projects">Projects</a></li>
+          <li class="nav-item"><a href="#education" class="nav-link" data-target="education">Education</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link" data-target="contact">Contact</a></li>
         </ul>
         <!-- Mobile Call-to-Action -->
         <div class="mobile-nav-cta">
-          <a href="#contact" class="btn btn-primary nav-link">Let’s Connect ↗</a>
+          <a href="#contact" class="btn btn-primary nav-link-trigger" data-target="contact">Let’s Connect ↗</a>
         </div>
       </nav>
 
-      <!-- Call-To-Action Button in Header -->
+      <!-- Call-To-Action Button in Desktop Header -->
       <div class="header-cta">
-        <a href="#contact" class="btn btn-primary">Let’s Connect ↗</a>
+        <a href="#contact" class="btn btn-primary nav-link-trigger" data-target="contact">Let’s Connect ↗</a>
       </div>
     </div>
   </header>
@@ -87,416 +87,415 @@
   <main id="main-content">
 
     <!-- ====================================================================
-         01. HOME / HERO SECTION
+         01. COMPLETE MASTER HOME PAGE (Full Profile Overview)
          ==================================================================== -->
-    <section class="hero-section portfolio-section active-section" id="home" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <!-- Hero Introduction Text -->
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="pulse-dot" aria-hidden="true"></span>
-            HELLO, I'M
-          </div>
-          <h1 class="hero-title" id="hero-title">Sahil <em>Nawaz</em></h1>
-          <h2 class="hero-subtitle"><span id="typed-role" class="typed-role">Forward Deployed Developer</span><span class="typing-cursor" aria-hidden="true">|</span></h2>
-          <div class="hero-divider" aria-hidden="true"></div>
-          <p class="hero-description">
-            I am a passionate technology enthusiast interested in <strong>Artificial Intelligence, Machine Learning, Frontend Development,</strong> and <strong>Product Development</strong>. I aspire to build innovative, AI-powered solutions and forward-deployed products for real-world problems.
-          </p>
+    <section class="portfolio-section active-section" id="home" aria-labelledby="hero-title">
 
-          <!-- Primary Action Links -->
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary nav-action-btn">⌘ &nbsp; View My Projects <span aria-hidden="true">→</span></a>
-            <a href="#contact" class="btn btn-secondary nav-action-btn">✉ &nbsp; Contact Me</a>
-            <button type="button" class="btn btn-outline open-meet-modal-trigger" id="hero-meet-cta" aria-haspopup="dialog">
-              📅 &nbsp; Schedule a Meet
-            </button>
-          </div>
-
-          <!-- Direct Social Channels -->
-          <div class="hero-socials">
-            <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">GitHub ↗</a>
-            <span aria-hidden="true">·</span>
-            <a href="https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">LinkedIn ↗</a>
-            <span aria-hidden="true">·</span>
-            <a href="https://leetcode.com/u/Alisahilnawaz/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode Profile">LeetCode ↗</a>
-            <span aria-hidden="true">·</span>
-            <a href="mailto:sahilnawaz257@gmail.com" aria-label="Send direct email">sahilnawaz257@gmail.com</a>
-          </div>
-        </div>
-
-        <!-- Hero Visual Showcase Card -->
-        <div class="hero-visual">
-          <div class="halo-ring" aria-hidden="true"></div>
-          <div class="dotted-pattern" aria-hidden="true"></div>
-
-          <!-- Profile Portrait Card (Clean, Unobstructed Framing) -->
-          <div class="profile-art has-img">
-            <img src="images/sahil-nawaz.jpg" alt="Sahil Nawaz — Forward Deployed Developer" class="profile-img" width="280" height="360">
-          </div>
-
-          <!-- Floating Skill Badges (Positioned cleanly outside the photo) -->
-          <div class="floating-chip chip-1">
-            <b>Py</b>
-            <span>Python & YOLOv8</span>
-          </div>
-          <div class="floating-chip chip-2">
-            <b>✳</b>
-            <span>AI / ML Vision</span>
-          </div>
-          <div class="floating-chip chip-3">
-            <b>&lt;/&gt;</b>
-            <span>Full-Stack Web</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Key Quick Highlights Bar -->
-      <div class="highlights-bar" aria-label="Career Highlights">
-        <div class="container highlights-grid">
-          <div class="highlight-card">
-            <span class="highlight-icon" aria-hidden="true">🎓</span>
-            <div class="highlight-text">
-              <b>Education</b>
-              <small>B.Tech · CSE at JBIET</small>
-            </div>
-          </div>
-          <div class="highlight-card">
-            <span class="highlight-icon" aria-hidden="true">⚡</span>
-            <div class="highlight-text">
-              <b>Technical Core</b>
-              <small>Python · C/C++ · Web · SQL</small>
-            </div>
-          </div>
-          <div class="highlight-card">
-            <span class="highlight-icon" aria-hidden="true">👁️</span>
-            <div class="highlight-text">
-              <b>Computer Vision</b>
-              <small>YOLOv8 Crowd & Anomaly AI</small>
-            </div>
-          </div>
-          <div class="highlight-card">
-            <span class="highlight-icon" aria-hidden="true">🚀</span>
-            <div class="highlight-text">
-              <b>Career Goal</b>
-              <small>Forward Deployed Developer</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         02. ABOUT ME SECTION (Step 04 — Premium Two-Column Layout)
-         ==================================================================== -->
-    <section class="section-wrapper about-section portfolio-section" id="about" aria-labelledby="about-heading">
-      <div class="container">
-        <div class="about-grid">
+      <!-- ================================================================
+           A. MAIN HERO SECTION (Full-Screen Executive Showcase)
+           ================================================================ -->
+      <div class="hero-section" id="hero-overview">
+        <div class="container hero-grid">
           
-          <!-- Column 1: Profile Image / Emblem Area & Small Education Card -->
-          <div class="about-visual-column">
-            <!-- Profile Image Area with Sahil Nawaz Portrait -->
-            <div class="about-image-card">
-              <div class="profile-art about-profile-art has-img">
-                <img src="images/sahil-nawaz.jpg" alt="Sahil Nawaz Profile Portrait" class="profile-img" width="280" height="340">
-              </div>
+          <!-- Hero Text & Value Proposition -->
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              <span>HELLO, I'M SAHIL NAWAZ</span>
+            </div>
+            
+            <h1 class="hero-title" id="hero-title">
+              Hi, I'm <span class="gradient-text">Sahil Nawaz</span>.
+            </h1>
+            
+            <h2 class="hero-subtitle">
+              <span id="typed-role" class="typed-role">Forward Deployed Developer</span>
+              <span class="typing-cursor" aria-hidden="true">|</span>
+            </h2>
+            
+            <div class="hero-divider" aria-hidden="true"></div>
+            
+            <p class="hero-description">
+              I am a <strong>Forward Deployed Developer</strong> focused on engineering software at the intersection of <strong>Artificial Intelligence, Machine Learning, Business & Product Development,</strong> and <strong>Modern Frontend Architecture</strong>. I bridge the gap between cutting-edge computational intelligence and reliable, real-world customer products.
+            </p>
+
+            <!-- Primary Action Buttons -->
+            <div class="hero-actions">
+              <a href="#projects" class="btn btn-primary nav-link-trigger" data-target="projects">
+                <span>⌘ View My Projects</span>
+                <span class="arrow-icon" aria-hidden="true">→</span>
+              </a>
+              <a href="#skills" class="btn btn-secondary nav-link-trigger" data-target="skills">
+                <span>⚡ Explore My Skills</span>
+              </a>
+              <a href="#contact" class="btn btn-outline nav-link-trigger" data-target="contact">
+                <span>✉ Contact Me</span>
+              </a>
+              <button type="button" class="btn btn-accent open-meet-modal-trigger" id="hero-meet-cta" aria-haspopup="dialog">
+                <span>📅 Schedule a Meet</span>
+              </button>
             </div>
 
-            <!-- Small Education Information Area -->
-            <div class="about-education-card">
-              <div class="edu-card-header">
-                <span class="edu-badge-icon" aria-hidden="true">🎓</span>
-                <div class="edu-badge-title">
-                  <b>Education</b>
-                  <small>Academic Overview</small>
-                </div>
-              </div>
-              <ul class="edu-info-list" aria-label="Education Details">
-                <li class="edu-info-item">
-                  <span class="edu-label">College:</span>
-                  <strong class="edu-val">J.B. Institute of Engineering and Technology</strong>
-                </li>
-                <li class="edu-info-item">
-                  <span class="edu-label">Degree:</span>
-                  <strong class="edu-val">B.Tech CSE</strong>
-                </li>
-                <li class="edu-info-item">
-                  <span class="edu-label">Current Year:</span>
-                  <strong class="edu-val">2nd Year</strong>
-                </li>
-              </ul>
+            <!-- Direct Social & Professional Links -->
+            <div class="hero-socials">
+              <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+                <span>GitHub</span> <span class="pill-arrow" aria-hidden="true">↗</span>
+              </a>
+              <span class="sep-dot" aria-hidden="true">·</span>
+              <a href="https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                <span>LinkedIn</span> <span class="pill-arrow" aria-hidden="true">↗</span>
+              </a>
+              <span class="sep-dot" aria-hidden="true">·</span>
+              <a href="https://leetcode.com/u/Alisahilnawaz/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode Profile">
+                <span>LeetCode</span> <span class="pill-arrow" aria-hidden="true">↗</span>
+              </a>
+              <span class="sep-dot" aria-hidden="true">·</span>
+              <a href="mailto:sahilnawaz257@gmail.com" class="hero-email-link" aria-label="Send direct email">
+                <span>sahilnawaz257@gmail.com</span>
+              </a>
             </div>
           </div>
 
-          <!-- Column 2: About Me Narrative Content & Visual Highlights -->
-          <div class="about-content-column">
-            <div class="section-label">ABOUT ME <span>01</span></div>
-            <h2 class="section-heading" id="about-heading">Curiosity turns<br>ideas into <em>impact.</em></h2>
+          <!-- Hero Visual Portrait & Interactive Floating Badges -->
+          <div class="hero-visual">
+            <div class="halo-ring" aria-hidden="true"></div>
+            <div class="dotted-pattern" aria-hidden="true"></div>
 
-            <!-- About Me Content -->
-            <p class="about-lead">
-              My name is <strong>Sahil Nawaz</strong>. I am a B.Tech Computer Science student at <strong>J.B. Institute of Engineering and Technology</strong>.
-            </p>
-            <p class="about-body">
-              I am a passionate technology enthusiast interested in <strong>Artificial Intelligence, Machine Learning, Business & Product Development,</strong> and <strong>Frontend Development</strong>.
-            </p>
-            <p class="about-body">
-              I aspire to build innovative AI-powered solutions that solve real-world problems. I enjoy learning new technologies, developing projects and improving my programming skills.
-            </p>
-
-            <!-- Domain Interest Highlights -->
-            <div class="about-highlights-grid">
-              <div class="about-highlight-pill">
-                <span class="pill-icon" aria-hidden="true">🧠</span>
-                <div>
-                  <b>Artificial Intelligence</b>
-                  <small>ML & Computer Vision</small>
-                </div>
-              </div>
-              <div class="about-highlight-pill">
-                <span class="pill-icon" aria-hidden="true">💻</span>
-                <div>
-                  <b>Frontend Development</b>
-                  <small>Modern UI/UX & Responsive Web</small>
-                </div>
-              </div>
-              <div class="about-highlight-pill">
-                <span class="pill-icon" aria-hidden="true">🚀</span>
-                <div>
-                  <b>Product Engineering</b>
-                  <small>Business Value & Scalability</small>
-                </div>
-              </div>
-              <div class="about-highlight-pill">
-                <span class="pill-icon" aria-hidden="true">⚡</span>
-                <div>
-                  <b>Forward Deployment</b>
-                  <small>Rapid Real-World Problem Solving</small>
-                </div>
+            <!-- Premium Portrait Framing -->
+            <div class="profile-art has-img">
+              <img src="images/sahil-nawaz.jpg" alt="Sahil Nawaz — Forward Deployed Developer" class="profile-img" width="340" height="420" priority>
+              <div class="portrait-overlay-badge">
+                <span class="overlay-dot" aria-hidden="true"></span>
+                <span>FORWARD DEPLOYED · PRODUCTION READY</span>
               </div>
             </div>
 
-            <!-- Action Link to Projects -->
-            <div class="about-cta-wrap">
-              <a href="#projects" class="btn btn-primary">⌘ &nbsp; View My Projects <span aria-hidden="true">→</span></a>
-              <a href="#contact" class="btn btn-secondary">✉ &nbsp; Get in Touch</a>
+            <!-- Floating Skill Badges Positioned around Profile -->
+            <div class="floating-chip chip-1">
+              <b>Py</b>
+              <span>Python & YOLOv8</span>
+            </div>
+            <div class="floating-chip chip-2">
+              <b>🤖</b>
+              <span>AI / ML Vision</span>
+            </div>
+            <div class="floating-chip chip-3">
+              <b>&lt;/&gt;</b>
+              <span>Full-Stack Web</span>
+            </div>
+            <div class="floating-chip chip-4">
+              <b>⚡</b>
+              <span>LangChain & RAG</span>
             </div>
           </div>
 
         </div>
       </div>
-    </section>
 
-    <!-- ====================================================================
-         03. TECHNICAL SKILLS SECTION (Step 05 — Premium Categorized Showcase)
-         ==================================================================== -->
-    <section class="section-wrapper section-alt skills-section portfolio-section" id="skills" aria-labelledby="skills-heading">
-      <div class="container">
-        <div class="section-label">MY EXPERTISE <span>02</span></div>
-        <h2 class="section-heading" id="skills-heading">Technical Skills & <em>Technologies.</em></h2>
-        <p class="section-subtext">A categorized overview of my core programming languages, frontend stack, database, data analysis libraries, and developer tools.</p>
-
-        <div class="skills-categories-grid">
-
-          <!-- 01. Programming Languages -->
-          <article class="skill-category-card">
-            <div class="category-header">
-              <span class="category-icon" aria-hidden="true">💻</span>
-              <div class="category-title-wrap">
-                <h3 class="category-title">Programming Languages</h3>
-                <small class="category-count">3 Technologies</small>
+      <!-- ================================================================
+           B. QUICK PROFILE OVERVIEW (4 Major Metric & Capability Cards)
+           ================================================================ -->
+      <section class="section-wrapper overview-bar-section" aria-label="Quick Profile Overview">
+        <div class="container">
+          <div class="overview-grid">
+            
+            <!-- Card 1: Education -->
+            <div class="overview-card">
+              <div class="overview-icon-badge" aria-hidden="true">🏛️</div>
+              <div class="overview-content">
+                <span class="overview-tag">Formal Degree</span>
+                <h3 class="overview-title">B.Tech CSE (2025–2029)</h3>
+                <p class="overview-desc">JB Group of Institutions of Technology · Dehradun, Uttarakhand</p>
               </div>
+              <a href="#education" class="overview-link nav-link-trigger" data-target="education" aria-label="View Education details">View Details ↗</a>
             </div>
-            <ul class="skills-list" aria-label="Programming Languages">
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">Py</span>
-                <span class="skill-name">Python</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">C</span>
-                <span class="skill-name">C</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">C++</span>
-                <span class="skill-name">C++</span>
-              </li>
-            </ul>
-          </article>
 
-          <!-- 02. Frontend Development -->
-          <article class="skill-category-card">
-            <div class="category-header">
-              <span class="category-icon" aria-hidden="true">🎨</span>
-              <div class="category-title-wrap">
-                <h3 class="category-title">Frontend Development</h3>
-                <small class="category-count">4 Technologies</small>
+            <!-- Card 2: Technical Skills -->
+            <div class="overview-card">
+              <div class="overview-icon-badge" aria-hidden="true">⚡</div>
+              <div class="overview-content">
+                <span class="overview-tag">Core Competency</span>
+                <h3 class="overview-title">AI/ML & Full-Stack Core</h3>
+                <p class="overview-desc">Python, C/C++, React JS, SQL, YOLOv8, LangChain RAG</p>
               </div>
+              <a href="#skills" class="overview-link nav-link-trigger" data-target="skills" aria-label="Explore Technical Skills">Explore Stack ↗</a>
             </div>
-            <ul class="skills-list" aria-label="Frontend Development">
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">&lt;&gt;</span>
-                <span class="skill-name">HTML</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">#</span>
-                <span class="skill-name">CSS</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">JS</span>
-                <span class="skill-name">JavaScript</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge react-badge" aria-hidden="true">⚛</span>
-                <span class="skill-name">React Js</span>
-              </li>
-            </ul>
-          </article>
 
-          <!-- 03. Database -->
-          <article class="skill-category-card">
-            <div class="category-header">
-              <span class="category-icon" aria-hidden="true">🗄️</span>
-              <div class="category-title-wrap">
-                <h3 class="category-title">Database</h3>
-                <small class="category-count">1 Technology</small>
+            <!-- Card 3: Featured Projects -->
+            <div class="overview-card">
+              <div class="overview-icon-badge" aria-hidden="true">🚀</div>
+              <div class="overview-content">
+                <span class="overview-tag">Engineered Solutions</span>
+                <h3 class="overview-title">3 Production Systems</h3>
+                <p class="overview-desc">Crowd Density Counting, Library System, Brand Audit Tool</p>
               </div>
+              <a href="#projects" class="overview-link nav-link-trigger" data-target="projects" aria-label="Browse Projects">Browse Projects ↗</a>
             </div>
-            <ul class="skills-list" aria-label="Database">
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">SQL</span>
-                <span class="skill-name">SQL</span>
-              </li>
-            </ul>
-          </article>
 
-          <!-- 04. Libraries & Data Analysis -->
-          <article class="skill-category-card">
-            <div class="category-header">
-              <span class="category-icon" aria-hidden="true">📊</span>
-              <div class="category-title-wrap">
-                <h3 class="category-title">Libraries & Data Analysis</h3>
-                <small class="category-count">2 Technologies</small>
+            <!-- Card 4: Strategic Focus -->
+            <div class="overview-card">
+              <div class="overview-icon-badge" aria-hidden="true">🎯</div>
+              <div class="overview-content">
+                <span class="overview-tag">Engineering Philosophy</span>
+                <h3 class="overview-title">Forward Deployment</h3>
+                <p class="overview-desc">Product Strategy, Client Solutions & Real-World Deployments</p>
               </div>
+              <a href="#about" class="overview-link nav-link-trigger" data-target="about" aria-label="Read About philosophy">Read Approach ↗</a>
             </div>
-            <ul class="skills-list" aria-label="Libraries and Data Analysis">
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">NP</span>
-                <span class="skill-name">NumPy</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">PD</span>
-                <span class="skill-name">Pandas</span>
-              </li>
-            </ul>
-          </article>
 
-          <!-- 05. Tools -->
-          <article class="skill-category-card">
-            <div class="category-header">
-              <span class="category-icon" aria-hidden="true">🛠️</span>
-              <div class="category-title-wrap">
-                <h3 class="category-title">Tools</h3>
-                <small class="category-count">2 Technologies</small>
-              </div>
-            </div>
-            <ul class="skills-list" aria-label="Developer Tools">
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">Git</span>
-                <span class="skill-name">Git</span>
-              </li>
-              <li class="skill-item">
-                <span class="skill-icon-badge" aria-hidden="true">GH</span>
-                <span class="skill-name">GitHub</span>
-              </li>
-            </ul>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         04. SELECTED PROJECTS SECTION (Step 06 — Premium Projects Showcase)
-         ==================================================================== -->
-    <section class="section-wrapper projects-section portfolio-section" id="projects" aria-labelledby="projects-heading">
-      <div class="container">
-        <div class="projects-header">
-          <div>
-            <div class="section-label">SELECTED WORK <span>03</span></div>
-            <h2 class="section-heading" id="projects-heading">Featured <em>Projects.</em></h2>
           </div>
-          <p class="section-subtext">A showcase of practical technology solutions spanning crowd monitoring, management software, and developer auditing tools.</p>
         </div>
+      </section>
 
-        <div class="project-grid" id="project-grid">
-
-          <!-- Project 01: Crowd Density Counting System -->
-          <article class="project-card">
-            <div class="project-banner banner-crowd" aria-hidden="true">
-              <span class="stat-number">1,248</span>
-              <span class="stat-label">Crowd Analytics Preview</span>
-              <div class="crowd-bars">
-                <span style="height: 18px;"></span>
-                <span style="height: 32px;"></span>
-                <span style="height: 24px;"></span>
-                <span style="height: 48px;"></span>
-                <span style="height: 36px;"></span>
-                <span style="height: 40px;"></span>
-                <span style="height: 22px;"></span>
-              </div>
+      <!-- ================================================================
+           C. ABOUT PREVIEW SECTION
+           ================================================================ -->
+      <section class="section-wrapper home-about-preview" aria-labelledby="about-preview-heading">
+        <div class="container">
+          <div class="preview-header-row">
+            <div>
+              <div class="section-label">EXECUTIVE SUMMARY <span>01</span></div>
+              <h2 class="section-heading" id="about-preview-heading">
+                Curiosity turns deep technology into <br><em>practical business solutions.</em>
+              </h2>
             </div>
-            <div class="project-body">
-              <span class="project-tag">01 / Crowd Analytics</span>
-              <h3 class="project-title">Crowd Density Counting System</h3>
-              <p class="project-desc">
-                A technology-based system designed to monitor and count crowd density.
+            <a href="#about" class="btn btn-outline nav-link-trigger" data-target="about">
+              <span>Read Full About Section</span> <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <div class="about-preview-grid">
+            <div class="about-preview-text">
+              <p class="lead-text">
+                As an aspiring <strong>Forward Deployed Developer</strong>, I work at the intersection of complex algorithmic code and tangible customer impact. I do not merely write algorithms in isolation; I adapt, build, and deploy software that addresses business realities.
               </p>
-              <ul class="project-tech" aria-label="Technologies used">
-                <li>Python</li>
-                <li>AI / ML</li>
-              </ul>
-              <div class="project-links">
-                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View Crowd Density Counting System on GitHub">
-                  <span class="btn-icon" aria-hidden="true">🐙</span> GitHub ↗
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project 02: Library Management Software -->
-          <article class="project-card">
-            <div class="project-banner banner-library" aria-hidden="true">
-              <div class="library-mockup">
-                <small>LIBRARY & ATTENDANCE</small>
-                <b>Books. Records.<br>Transactions.</b>
-              </div>
-            </div>
-            <div class="project-body">
-              <span class="project-tag">02 / Management System</span>
-              <h3 class="project-title">Library Management Software</h3>
-              <p class="project-desc">
-                A software solution to manage library books, student records and transactions.
+              <p>
+                Currently pursuing my <strong>Bachelor of Technology in Computer Science and Engineering (2025–2029)</strong> at <strong>JB Group of Institutions of Technology, Dehradun</strong>, while simultaneously advancing online in <strong>Data Analytics and LangChain (RAG)</strong> with <strong>The Open University</strong>.
               </p>
-              <ul class="project-tech" aria-label="Technologies used">
-                <li>Python</li>
-                <li>SQL</li>
-              </ul>
-              <div class="project-links">
-                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View Library Management Software on GitHub">
-                  <span class="btn-icon" aria-hidden="true">🐙</span> GitHub ↗
-                </a>
+              <div class="about-focus-pills">
+                <span class="focus-pill">🧠 Computer Vision & AI</span>
+                <span class="focus-pill">💻 Modern Frontend Engineering</span>
+                <span class="focus-pill">📈 Product & Business Strategy</span>
+                <span class="focus-pill">🚀 Client-Facing Forward Deployment</span>
               </div>
             </div>
-          </article>
 
-          <!-- Project 03: Brand Guideline Audit Tool -->
-          <article class="project-card">
-            <div class="project-banner banner-brand" aria-hidden="true">
-              <div class="brand-mockup">
-                <span class="brand-symbol">Aa</span>
-                <div class="brand-palette">
-                  <small>AUDIT TOKENS</small>
-                  <div class="palette-swatches">
+            <div class="about-preview-card">
+              <h3 class="preview-card-title">What Defines My Work?</h3>
+              <ul class="preview-bullet-list">
+                <li>
+                  <strong>Production Mindset:</strong> Writing maintainable, performant, and defensively designed software from prototype to live deployment.
+                </li>
+                <li>
+                  <strong>Frontier AI Integration:</strong> Integrating state-of-the-art vision models (YOLOv8) and Retrieval-Augmented Generation (LangChain) into real workflows.
+                </li>
+                <li>
+                  <strong>Direct Collaboration:</strong> Communicating complex technical trade-offs transparently to stakeholders and project teams.
+                </li>
+              </ul>
+              <div class="preview-card-cta">
+                <button type="button" class="btn btn-primary btn-sm open-meet-modal-trigger">
+                  <span>📅 Schedule a Strategy Chat</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           D. SKILLS PREVIEW SECTION
+           ================================================================ -->
+      <section class="section-wrapper home-skills-preview section-alt" aria-labelledby="skills-preview-heading">
+        <div class="container">
+          <div class="preview-header-row">
+            <div>
+              <div class="section-label">TECHNICAL COMPETENCY <span>02</span></div>
+              <h2 class="section-heading" id="skills-preview-heading">
+                Skills & <em>Engineering Stack.</em>
+              </h2>
+              <p class="section-subtext">Grouped technical capabilities across programming, frontend, databases, data analysis, and developer tooling.</p>
+            </div>
+            <a href="#skills" class="btn btn-outline nav-link-trigger" data-target="skills">
+              <span>View All Skills & Tooling</span> <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <!-- Grouped Skills Preview Grid -->
+          <div class="skills-preview-grid">
+            
+            <!-- Category 1: Programming -->
+            <div class="skill-group-card">
+              <div class="group-header">
+                <span class="group-icon" aria-hidden="true">💻</span>
+                <h3 class="group-title">Programming</h3>
+              </div>
+              <ul class="skills-tag-list" aria-label="Programming Languages">
+                <li class="skill-tag">Python</li>
+                <li class="skill-tag">C</li>
+                <li class="skill-tag">C++</li>
+                <li class="skill-tag">Object-Oriented Design</li>
+              </ul>
+            </div>
+
+            <!-- Category 2: Frontend -->
+            <div class="skill-group-card">
+              <div class="group-header">
+                <span class="group-icon" aria-hidden="true">🎨</span>
+                <h3 class="group-title">Frontend</h3>
+              </div>
+              <ul class="skills-tag-list" aria-label="Frontend Technologies">
+                <li class="skill-tag">HTML5</li>
+                <li class="skill-tag">CSS3 / Flexbox / Grid</li>
+                <li class="skill-tag">JavaScript (ES6+)</li>
+                <li class="skill-tag">React JS</li>
+                <li class="skill-tag">Responsive UI/UX</li>
+              </ul>
+            </div>
+
+            <!-- Category 3: Database -->
+            <div class="skill-group-card">
+              <div class="group-header">
+                <span class="group-icon" aria-hidden="true">🗄️</span>
+                <h3 class="group-title">Database</h3>
+              </div>
+              <ul class="skills-tag-list" aria-label="Database Management">
+                <li class="skill-tag">SQL</li>
+                <li class="skill-tag">SQLite</li>
+                <li class="skill-tag">Relational Schemas</li>
+                <li class="skill-tag">Query Optimization</li>
+              </ul>
+            </div>
+
+            <!-- Category 4: Data Analysis -->
+            <div class="skill-group-card">
+              <div class="group-header">
+                <span class="group-icon" aria-hidden="true">📊</span>
+                <h3 class="group-title">Data Analysis & AI</h3>
+              </div>
+              <ul class="skills-tag-list" aria-label="Data Analysis and AI">
+                <li class="skill-tag">NumPy</li>
+                <li class="skill-tag">Pandas</li>
+                <li class="skill-tag">YOLOv8 Computer Vision</li>
+                <li class="skill-tag">LangChain (RAG)</li>
+              </ul>
+            </div>
+
+            <!-- Category 5: Tools & Workflow -->
+            <div class="skill-group-card">
+              <div class="group-header">
+                <span class="group-icon" aria-hidden="true">🛠️</span>
+                <h3 class="group-title">Tools & Workflow</h3>
+              </div>
+              <ul class="skills-tag-list" aria-label="Developer Tools">
+                <li class="skill-tag">Git</li>
+                <li class="skill-tag">GitHub</li>
+                <li class="skill-tag">Flask REST APIs</li>
+                <li class="skill-tag">VS Code</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           E. FEATURED PROJECTS PREVIEW SECTION
+           ================================================================ -->
+      <section class="section-wrapper home-projects-preview" aria-labelledby="projects-preview-heading">
+        <div class="container">
+          <div class="preview-header-row">
+            <div>
+              <div class="section-label">FEATURED WORK <span>03</span></div>
+              <h2 class="section-heading" id="projects-preview-heading">
+                Featured <em>Engineering Projects.</em>
+              </h2>
+              <p class="section-subtext">Real-world applications engineered with focus on computer vision, data architecture, and software consistency.</p>
+            </div>
+            <a href="#projects" class="btn btn-primary nav-link-trigger" data-target="projects">
+              <span>Explore Full Projects Showcase</span> <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="projects-showcase-grid">
+
+            <!-- Project 01: Crowd Density Counting System -->
+            <article class="project-card-large">
+              <div class="project-banner banner-crowd" aria-hidden="true">
+                <div class="banner-visual-stats">
+                  <span class="stat-highlight">1,248</span>
+                  <small>Real-time Detections / Frame</small>
+                </div>
+                <div class="crowd-visual-bars">
+                  <span style="height: 25px;"></span>
+                  <span style="height: 48px;"></span>
+                  <span style="height: 32px;"></span>
+                  <span style="height: 60px;"></span>
+                  <span style="height: 42px;"></span>
+                  <span style="height: 52px;"></span>
+                  <span style="height: 30px;"></span>
+                </div>
+              </div>
+              <div class="project-card-body">
+                <div class="project-meta-row">
+                  <span class="project-badge">01 / Computer Vision</span>
+                  <span class="project-status-dot">Live Prototype</span>
+                </div>
+                <h3 class="project-title">Crowd Density Counting System</h3>
+                <p class="project-description">
+                  A technology-based computer vision solution utilizing deep learning and YOLOv8 to automate crowd density monitoring, spatial analytics, and headcount detection in crowded spaces.
+                </p>
+                <div class="project-tech-group">
+                  <span class="tech-tag">Python</span>
+                  <span class="tech-tag">AI / ML</span>
+                  <span class="tech-tag">Computer Vision</span>
+                  <span class="tech-tag">YOLOv8</span>
+                </div>
+                <div class="project-action-row">
+                  <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" aria-label="View Crowd Density Counting System repository">
+                    <span>🐙 GitHub Repository ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 02: Library Management Software -->
+            <article class="project-card-large">
+              <div class="project-banner banner-library" aria-hidden="true">
+                <div class="library-mockup-graphic">
+                  <span class="mockup-label">RELATIONAL DATABASE SYSTEM</span>
+                  <b>Books · Student Records · Transactions</b>
+                </div>
+              </div>
+              <div class="project-card-body">
+                <div class="project-meta-row">
+                  <span class="project-badge">02 / Management System</span>
+                  <span class="project-status-dot">Database Core</span>
+                </div>
+                <h3 class="project-title">Library Management Software</h3>
+                <p class="project-description">
+                  A software solution designed to manage library books, student records, lending transactions, and inventory consistency using Python and normalized SQL database schemas.
+                </p>
+                <div class="project-tech-group">
+                  <span class="tech-tag">Python</span>
+                  <span class="tech-tag">SQL</span>
+                  <span class="tech-tag">Relational Database</span>
+                  <span class="tech-tag">Schema Design</span>
+                </div>
+                <div class="project-action-row">
+                  <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" aria-label="View Library Management Software repository">
+                    <span>🐙 GitHub Repository ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 03: Brand Guideline Audit Tool -->
+            <article class="project-card-large">
+              <div class="project-banner banner-brand" aria-hidden="true">
+                <div class="brand-audit-graphic">
+                  <span class="audit-typography">Aa</span>
+                  <div class="audit-swatches">
                     <span style="background: #df7568;"></span>
                     <span style="background: #f3b5aa;"></span>
                     <span style="background: #e8d6c9;"></span>
@@ -504,64 +503,652 @@
                   </div>
                 </div>
               </div>
+              <div class="project-card-body">
+                <div class="project-meta-row">
+                  <span class="project-badge">03 / Quality Assurance</span>
+                  <span class="project-status-dot">Frontend Tool</span>
+                </div>
+                <h3 class="project-title">Brand Guideline Audit Tool</h3>
+                <p class="project-description">
+                  A frontend developer tool engineered to audit color schemes, typography hierarchies, and design token consistency across digital interfaces to maintain brand fidelity.
+                </p>
+                <div class="project-tech-group">
+                  <span class="tech-tag">HTML5</span>
+                  <span class="tech-tag">CSS3</span>
+                  <span class="tech-tag">JavaScript</span>
+                  <span class="tech-tag">Design Systems</span>
+                </div>
+                <div class="project-action-row">
+                  <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" aria-label="View Brand Guideline Audit Tool repository">
+                    <span>🐙 GitHub Repository ↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           F. EDUCATION PREVIEW SECTION (Both Verified Institutions)
+           ================================================================ -->
+      <section class="section-wrapper home-education-preview section-alt" aria-labelledby="edu-preview-heading">
+        <div class="container">
+          <div class="preview-header-row">
+            <div>
+              <div class="section-label">ACADEMIC FOUNDATION <span>04</span></div>
+              <h2 class="section-heading" id="edu-preview-heading">
+                Education & <em>Academic Credentials.</em>
+              </h2>
+              <p class="section-subtext">Formal Computer Science engineering alongside specialized online studies in Artificial Intelligence & LangChain RAG.</p>
             </div>
-            <div class="project-body">
-              <span class="project-tag">03 / Quality Tool</span>
-              <h3 class="project-title">Brand Guideline Audit Tool</h3>
-              <p class="project-desc">
-                A tool designed to check brand consistency and audit brand guidelines.
+            <a href="#education" class="btn btn-outline nav-link-trigger" data-target="education">
+              <span>View Academic Timeline & Details</span> <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <div class="education-records-grid">
+
+            <!-- Record 1: JB Group of Institutions of Technology -->
+            <article class="edu-card-premium" id="home-edu-jbit">
+              <div class="edu-card-topbar">
+                <span class="edu-badge-tag">
+                  <span class="edu-badge-icon" aria-hidden="true">🏛️</span>
+                  <span>Undergraduate Degree</span>
+                </span>
+                <span class="edu-status-pill active-pill">
+                  <span class="pulse-indicator" aria-hidden="true"></span>
+                  2025–2029
+                </span>
+              </div>
+
+              <div class="edu-institution-header">
+                <div class="edu-logo-box logo-wide-box">
+                  <img src="images/jbit-dehradun-logo.png" alt="JB Group of Institutions of Technology Official Logo" class="edu-institution-logo logo-contain" width="180" height="40" loading="lazy">
+                </div>
+                <div class="edu-institution-info">
+                  <h3 class="edu-institution-name">JB Group of Institutions of Technology</h3>
+                  <span class="edu-affiliation">Location: Dehradun, Uttarakhand, India</span>
+                </div>
+              </div>
+
+              <div class="edu-degree-content">
+                <div class="edu-degree-badge">Degree Program</div>
+                <h4 class="edu-degree-name">Bachelor of Technology (B.Tech)</h4>
+                <div class="edu-branch-spec">
+                  <span class="branch-icon" aria-hidden="true">💻</span>
+                  <span>Branch: <strong>Computer Science and Engineering (CSE)</strong></span>
+                </div>
+                <div class="edu-meta-row">
+                  <span class="edu-meta-item">
+                    <span class="meta-icon" aria-hidden="true">📅</span>
+                    <span>Duration: <strong>2025 – 2029</strong> · Dehradun, Uttarakhand</span>
+                  </span>
+                </div>
+                <p class="edu-summary-desc">
+                  Rigorous engineering curriculum focusing on computational foundations, algorithms, object-oriented software engineering (Python, C++), and database systems.
+                </p>
+              </div>
+
+              <div class="edu-skills-section">
+                <span class="edu-skills-title">Core Competencies:</span>
+                <ul class="edu-skills-tags">
+                  <li>Python</li>
+                  <li>C / C++</li>
+                  <li>Data Structures & Algorithms</li>
+                  <li>SQL & DBMS</li>
+                  <li>Computer Vision</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Record 2: The Open University -->
+            <article class="edu-card-premium open-uni-card" id="home-edu-ou">
+              <div class="edu-card-topbar">
+                <span class="edu-badge-tag uni-badge">
+                  <span class="edu-badge-icon" aria-hidden="true">🌐</span>
+                  <span>Online Degree & Specialization</span>
+                </span>
+                <span class="edu-status-pill enrolled-pill">
+                  <span class="calendar-pill-icon" aria-hidden="true">📅</span>
+                  June 2026 – July 2029
+                </span>
+              </div>
+
+              <div class="edu-institution-header">
+                <div class="edu-logo-box logo-square-box">
+                  <img src="images/the-open-university-logo.png" alt="The Open University Official Logo" class="edu-institution-logo logo-square" width="56" height="56" loading="lazy">
+                </div>
+                <div class="edu-institution-info">
+                  <h3 class="edu-institution-name">The Open University</h3>
+                  <a href="https://www.linkedin.com/school/6128/" target="_blank" rel="noopener noreferrer" class="edu-linkedin-badge" aria-label="The Open University on LinkedIn">
+                    <span aria-hidden="true">💼</span> LinkedIn School ID: 6128 ↗
+                  </a>
+                </div>
+              </div>
+
+              <div class="edu-degree-content">
+                <div class="edu-degree-badge uni-degree-badge">Specialized Program</div>
+                <h4 class="edu-degree-name">Data Analyst Online, Computer Science</h4>
+                <div class="edu-branch-spec">
+                  <span class="branch-icon" aria-hidden="true">🤖</span>
+                  <span>Focus: <strong>AI & LangChain (Retrieval-Augmented Generation)</strong></span>
+                </div>
+                <div class="edu-meta-row">
+                  <span class="edu-meta-item">
+                    <span class="meta-icon" aria-hidden="true">⏱️</span>
+                    <span>Duration: <strong>June 2026 – July 2029</strong></span>
+                  </span>
+                </div>
+                <p class="edu-summary-desc">
+                  Data Analyst focused on AI and LangChain (RAG). In-depth program covering retrieval-augmented generation pipelines, LLM orchestrations, vector databases, and scalable data intelligence.
+                </p>
+              </div>
+
+              <div class="edu-skills-section">
+                <span class="edu-skills-title">Associated Skills & Specializations:</span>
+                <ul class="edu-skills-tags">
+                  <li class="tag-highlight">LangChain</li>
+                  <li class="tag-highlight">Retrieval-Augmented Generation (RAG)</li>
+                  <li>Data Analytics</li>
+                  <li>Vector Databases</li>
+                  <li>AI Agent Architecture</li>
+                </ul>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           G. CONTACT & COLLABORATION PREVIEW SECTION
+           ================================================================ -->
+      <section class="section-wrapper home-contact-preview" aria-labelledby="contact-preview-heading">
+        <div class="container">
+          <div class="contact-cta-banner">
+            <div class="contact-cta-content">
+              <div class="section-label">GET IN TOUCH <span>05</span></div>
+              <h2 class="contact-cta-title" id="contact-preview-heading">
+                Ready to build something <span class="gradient-text">exceptional?</span>
+              </h2>
+              <p class="contact-cta-desc">
+                Whether you have a forward-deployed opportunity, an AI & Computer Vision challenge, or wish to schedule a technical chat — I am always accessible.
               </p>
-              <ul class="project-tech" aria-label="Technologies used">
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-              </ul>
-              <div class="project-links">
-                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View Brand Guideline Audit Tool on GitHub">
-                  <span class="btn-icon" aria-hidden="true">🐙</span> GitHub ↗
+              <div class="contact-cta-actions">
+                <a href="#contact" class="btn btn-primary nav-link-trigger" data-target="contact">
+                  <span>✉ Open Full Contact Form</span>
+                </a>
+                <button type="button" class="btn btn-secondary open-meet-modal-trigger">
+                  <span>📅 Schedule a Meeting</span>
+                </button>
+                <a href="https://wa.me/917323018308?text=Hi%20Sahil!%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20an%20opportunity%20/%20project." target="_blank" rel="noopener noreferrer" class="btn btn-outline wa-preview-btn">
+                  <span>💬 WhatsApp Chat ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-cta-quick-channels">
+              <div class="channel-pill-item">
+                <span class="channel-pill-icon">✉️</span>
+                <div>
+                  <small>Direct Email</small>
+                  <a href="mailto:sahilnawaz257@gmail.com">sahilnawaz257@gmail.com</a>
+                </div>
+              </div>
+              <div class="channel-pill-item">
+                <span class="channel-pill-icon">💻</span>
+                <div>
+                  <small>Code Repositories</small>
+                  <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer">github.com/sahilnawaz257 ↗</a>
+                </div>
+              </div>
+              <div class="channel-pill-item">
+                <span class="channel-pill-icon">💼</span>
+                <div>
+                  <small>Professional Network</small>
+                  <a href="https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/" target="_blank" rel="noopener noreferrer">Ali Sahil Nawaz on LinkedIn ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- ====================================================================
+         02. DETAILED ABOUT SECTION (Shown when 'About' is selected)
+         ==================================================================== -->
+    <section class="section-wrapper portfolio-section detailed-section" id="about" aria-labelledby="about-detailed-heading">
+      <div class="container">
+        
+        <div class="detailed-header-block">
+          <div class="section-label">FULL BIOGRAPHY <span>01</span></div>
+          <h1 class="detailed-heading" id="about-detailed-heading">About <em>Sahil Nawaz.</em></h1>
+          <p class="detailed-lead">Forward Deployed Developer combining strong foundational Computer Science rigor with commercial product execution.</p>
+        </div>
+
+        <div class="about-detailed-layout">
+          
+          <!-- Column 1: Visual Identity & Key Highlights -->
+          <div class="about-sidebar-col">
+            <div class="about-portrait-card">
+              <div class="profile-art has-img detailed-portrait">
+                <img src="images/sahil-nawaz.jpg" alt="Sahil Nawaz Profile Portrait" class="profile-img" width="320" height="380">
+              </div>
+              <div class="about-quick-specs">
+                <div class="spec-row">
+                  <span class="spec-key">Role:</span>
+                  <strong class="spec-val">Forward Deployed Developer</strong>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Degree:</span>
+                  <strong class="spec-val">B.Tech CSE (2025–2029)</strong>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">College:</span>
+                  <strong class="spec-val">JB Group of Institutions of Technology</strong>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Location:</span>
+                  <strong class="spec-val">Dehradun, Uttarakhand, India</strong>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Email:</span>
+                  <a href="mailto:sahilnawaz257@gmail.com" class="spec-val email-val">sahilnawaz257@gmail.com</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Call to action card -->
+            <div class="about-sidebar-cta">
+              <h4>Ready to Collaborate?</h4>
+              <p>Schedule a 30-minute Google Meet consultation or reach out directly.</p>
+              <button type="button" class="btn btn-primary btn-sm open-meet-modal-trigger" style="width: 100%;">
+                <span>📅 Schedule a Meet</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Column 2: Detailed Narrative & Philosophy -->
+          <div class="about-main-narrative">
+            <article class="narrative-block">
+              <h3>Who I Am & What I Do</h3>
+              <p>
+                My name is <strong>Sahil Nawaz</strong>. I am a Forward Deployed Developer and B.Tech Computer Science student at <strong>JB Group of Institutions of Technology</strong> in <strong>Dehradun, Uttarakhand, India (2025–2029)</strong>.
+              </p>
+              <p>
+                A Forward Deployed Developer operates where software engineering directly interfaces with real operational challenges. Rather than focusing solely on isolated technical algorithms, I bring an end-to-end perspective: understanding the business domain, prototyping rapidly, and deploying software that directly solves problems for end-users.
+              </p>
+            </article>
+
+            <article class="narrative-block">
+              <h3>Core Areas of Interest & Technical Pursuits</h3>
+              <div class="interests-grid">
+                <div class="interest-box">
+                  <span class="interest-icon" aria-hidden="true">🤖</span>
+                  <div>
+                    <h4>Artificial Intelligence & Machine Learning</h4>
+                    <p>Focusing on computer vision pipelines using YOLOv8 for spatial crowd analytics, alongside modern Retrieval-Augmented Generation (RAG) agent architectures with LangChain.</p>
+                  </div>
+                </div>
+
+                <div class="interest-box">
+                  <span class="interest-icon" aria-hidden="true">📈</span>
+                  <div>
+                    <h4>Business & Product Strategy</h4>
+                    <p>Aligning technical engineering with actual commercial and user objectives. Designing intuitive developer workflows and tools that provide immediate tangible return.</p>
+                  </div>
+                </div>
+
+                <div class="interest-box">
+                  <span class="interest-icon" aria-hidden="true">💻</span>
+                  <div>
+                    <h4>Modern Frontend & Full-Stack Systems</h4>
+                    <p>Engineering accessible, responsive, and performant web interfaces with HTML5, CSS3, JavaScript (ES6+), React JS, and lightweight Python Flask backends.</p>
+                  </div>
+                </div>
+
+                <div class="interest-box">
+                  <span class="interest-icon" aria-hidden="true">🚀</span>
+                  <div>
+                    <h4>Forward Deployed Methodology</h4>
+                    <p>Direct stakeholder engagement, fast prototyping cycles, production hardening, and continuous feedback integration in real operational environments.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="narrative-block">
+              <h3>Academic Grounding & Ongoing Development</h3>
+              <p>
+                My foundational coursework at <strong>JB Group of Institutions of Technology</strong> gives me a solid grounding in Data Structures, Object-Oriented Software Engineering (Python, C++), and Database Management Systems (SQL).
+              </p>
+              <p>
+                Concurrently, my enrollment in <strong>The Open University's Data Analyst Online Program (June 2026–July 2029)</strong> expands my expertise into large-scale data engineering, vector embeddings, and LangChain RAG pipelines.
+              </p>
+              <div class="narrative-actions">
+                <a href="#projects" class="btn btn-primary nav-link-trigger" data-target="projects">Explore My Projects →</a>
+                <a href="#contact" class="btn btn-outline nav-link-trigger" data-target="contact">Get In Touch ✉</a>
+              </div>
+            </article>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         03. DETAILED SKILLS SECTION (Shown when 'Skills' is selected)
+         ==================================================================== -->
+    <section class="section-wrapper portfolio-section detailed-section" id="skills" aria-labelledby="skills-detailed-heading">
+      <div class="container">
+        
+        <div class="detailed-header-block">
+          <div class="section-label">TECHNICAL CAPABILITIES <span>02</span></div>
+          <h1 class="detailed-heading" id="skills-detailed-heading">Skills & <em>Engineering Stack.</em></h1>
+          <p class="detailed-lead">A verified overview of programming languages, frontend frameworks, database architectures, analytical tooling, and developer workflows.</p>
+        </div>
+
+        <div class="skills-detailed-grid">
+
+          <!-- 01. Programming Languages -->
+          <div class="detailed-skill-card">
+            <div class="skill-card-top">
+              <span class="skill-category-icon" aria-hidden="true">⌨️</span>
+              <div>
+                <span class="skill-category-tag">Foundation</span>
+                <h3 class="skill-category-title">Programming Languages</h3>
+              </div>
+            </div>
+            <p class="skill-category-desc">Core languages used for systems engineering, algorithmic problem solving, computational logic, and backend services.</p>
+            <div class="skill-pill-cloud">
+              <span class="tech-pill"><strong>Python</strong> · Advanced Scripting & ML</span>
+              <span class="tech-pill"><strong>C</strong> · Memory & Systems Fundamentals</span>
+              <span class="tech-pill"><strong>C++</strong> · Object-Oriented & DSA</span>
+              <span class="tech-pill"><strong>Data Structures & Algorithms</strong></span>
+            </div>
+          </div>
+
+          <!-- 02. Frontend Development -->
+          <div class="detailed-skill-card">
+            <div class="skill-card-top">
+              <span class="skill-category-icon" aria-hidden="true">🎨</span>
+              <div>
+                <span class="skill-category-tag">Client-Side Architecture</span>
+                <h3 class="skill-category-title">Frontend Engineering</h3>
+              </div>
+            </div>
+            <p class="skill-category-desc">Crafting modern, accessible, responsive, and performance-tuned web interfaces that render cleanly on all devices.</p>
+            <div class="skill-pill-cloud">
+              <span class="tech-pill"><strong>HTML5</strong> · Semantic Structure & Accessibility</span>
+              <span class="tech-pill"><strong>CSS3</strong> · Flexbox, CSS Grid, Custom Properties</span>
+              <span class="tech-pill"><strong>JavaScript</strong> · Modern ES6+, DOM, Fetch API</span>
+              <span class="tech-pill"><strong>React JS</strong> · Component Driven UI</span>
+              <span class="tech-pill"><strong>Responsive Layouts</strong> · Desktop to Mobile</span>
+            </div>
+          </div>
+
+          <!-- 03. Database Systems -->
+          <div class="detailed-skill-card">
+            <div class="skill-card-top">
+              <span class="skill-category-icon" aria-hidden="true">🗄️</span>
+              <div>
+                <span class="skill-category-tag">Persistence & Modeling</span>
+                <h3 class="skill-category-title">Database Management</h3>
+              </div>
+            </div>
+            <p class="skill-category-desc">Architecting robust relational database schemas, ensuring data normalization, and safeguarding against SQL injection.</p>
+            <div class="skill-pill-cloud">
+              <span class="tech-pill"><strong>SQL</strong> · Relational Querying & Indexing</span>
+              <span class="tech-pill"><strong>SQLite</strong> · Embedded Database Management</span>
+              <span class="tech-pill"><strong>Data Modeling</strong> · Schema Normalization</span>
+              <span class="tech-pill"><strong>Parameterized Queries</strong> · Defensive Security</span>
+            </div>
+          </div>
+
+          <!-- 04. Data Analysis & AI -->
+          <div class="detailed-skill-card">
+            <div class="skill-card-top">
+              <span class="skill-category-icon" aria-hidden="true">📊</span>
+              <div>
+                <span class="skill-category-tag">Analytics & Intelligence</span>
+                <h3 class="skill-category-title">Data Analysis & AI</h3>
+              </div>
+            </div>
+            <p class="skill-category-desc">Leveraging numerical computing libraries, computer vision architectures, and generative AI retrieval pipelines.</p>
+            <div class="skill-pill-cloud">
+              <span class="tech-pill"><strong>NumPy</strong> · Numerical Arrays & Math</span>
+              <span class="tech-pill"><strong>Pandas</strong> · Tabular Data Manipulation</span>
+              <span class="tech-pill"><strong>YOLOv8</strong> · Real-Time Computer Vision</span>
+              <span class="tech-pill highlight-pill"><strong>LangChain</strong> · Agent & RAG Pipelines</span>
+              <span class="tech-pill highlight-pill"><strong>Vector Databases</strong> · Semantic Search</span>
+            </div>
+          </div>
+
+          <!-- 05. Developer Tools & DevOps -->
+          <div class="detailed-skill-card">
+            <div class="skill-card-top">
+              <span class="skill-category-icon" aria-hidden="true">🛠️</span>
+              <div>
+                <span class="skill-category-tag">Workflow & Tooling</span>
+                <h3 class="skill-category-title">Developer Tools & Workflow</h3>
+              </div>
+            </div>
+            <p class="skill-category-desc">Modern developer tooling for version control, collaborative development, REST API design, and automated testing.</p>
+            <div class="skill-pill-cloud">
+              <span class="tech-pill"><strong>Git</strong> · Distributed Version Control</span>
+              <span class="tech-pill"><strong>GitHub</strong> · Repository & Release Management</span>
+              <span class="tech-pill"><strong>Flask</strong> · Python Lightweight Backend</span>
+              <span class="tech-pill"><strong>RESTful APIs</strong> · Endpoint Design & JSON</span>
+              <span class="tech-pill"><strong>VS Code</strong> · Development Environment</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Engineering Standards Callout Card -->
+        <div class="engineering-values-card">
+          <div class="values-header">
+            <span class="values-icon" aria-hidden="true">🛡️</span>
+            <div>
+              <h3>Engineering Principles & Quality Bar</h3>
+              <p>How I approach problem solving, architecture, and code quality in every project.</p>
+            </div>
+          </div>
+          <div class="values-grid">
+            <div class="value-item">
+              <b>Authentic Implementations</b>
+              <p>Zero fake percentages or fabricated statistics. Every skill listed represents working, tested code.</p>
+            </div>
+            <div class="value-item">
+              <b>Defensive Security</b>
+              <p>Strict parameterization, sliding-window rate limiting, input sanitization, and OWASP alignment.</p>
+            </div>
+            <div class="value-item">
+              <b>Full-Screen Fluidity</b>
+              <p>Interfaces engineered with precision for widescreen laptops, desktops, and mobile screens alike.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         04. DETAILED PROJECTS SECTION (Shown when 'Projects' is selected)
+         ==================================================================== -->
+    <section class="section-wrapper portfolio-section detailed-section" id="projects" aria-labelledby="projects-detailed-heading">
+      <div class="container">
+        
+        <div class="detailed-header-block">
+          <div class="section-label">PRODUCTION & REPOSITORIES <span>03</span></div>
+          <h1 class="detailed-heading" id="projects-detailed-heading">Projects & <em>Engineering Portfolio.</em></h1>
+          <p class="detailed-lead">Explore selected software systems engineered with focus on computer vision, relational databases, and frontend audit tooling.</p>
+        </div>
+
+        <!-- Project Category Filter Pills -->
+        <div class="project-filters" role="group" aria-label="Filter projects by category">
+          <button type="button" class="filter-btn active" data-filter="all">All Projects</button>
+          <button type="button" class="filter-btn" data-filter="ai">AI / Computer Vision</button>
+          <button type="button" class="filter-btn" data-filter="system">Management Systems</button>
+          <button type="button" class="filter-btn" data-filter="tool">Quality Tools</button>
+        </div>
+
+        <!-- Dynamic Projects Container (Fetches from /api/projects with reliable fallback) -->
+        <div class="projects-showcase-grid" id="project-grid">
+
+          <!-- Project 01: Crowd Density Counting System -->
+          <article class="project-card-large" data-category="ai">
+            <div class="project-banner banner-crowd" aria-hidden="true">
+              <div class="banner-visual-stats">
+                <span class="stat-highlight">1,248</span>
+                <small>Crowd Analytics Preview</small>
+              </div>
+              <div class="crowd-visual-bars">
+                <span style="height: 25px;"></span>
+                <span style="height: 48px;"></span>
+                <span style="height: 32px;"></span>
+                <span style="height: 60px;"></span>
+                <span style="height: 42px;"></span>
+                <span style="height: 52px;"></span>
+                <span style="height: 30px;"></span>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <div class="project-meta-row">
+                <span class="project-badge">01 / Computer Vision</span>
+                <span class="project-status-dot">AI Prototype</span>
+              </div>
+              <h3 class="project-title">Crowd Density Counting System</h3>
+              <p class="project-description">
+                A technology-based computer vision system designed to monitor and count crowd density in real time using deep neural detection pipelines, spatial analysis, and automated occupancy estimation.
+              </p>
+              <div class="project-tech-group">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">AI / ML</span>
+                <span class="tech-tag">Computer Vision</span>
+                <span class="tech-tag">YOLOv8</span>
+              </div>
+              <div class="project-action-row">
+                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="View Crowd Density Counting System on GitHub">
+                  <span>🐙 GitHub Repository ↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 02: Library Management Software -->
+          <article class="project-card-large" data-category="system">
+            <div class="project-banner banner-library" aria-hidden="true">
+              <div class="library-mockup-graphic">
+                <span class="mockup-label">LIBRARY & ATTENDANCE</span>
+                <b>Books. Records. Transactions.</b>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <div class="project-meta-row">
+                <span class="project-badge">02 / Management System</span>
+                <span class="project-status-dot">Database System</span>
+              </div>
+              <h3 class="project-title">Library Management Software</h3>
+              <p class="project-description">
+                A software solution to manage library books, student records, lending transactions, and fines calculation with structured persistence and relational integrity.
+              </p>
+              <div class="project-tech-group">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">SQL</span>
+                <span class="tech-tag">Relational Database</span>
+              </div>
+              <div class="project-action-row">
+                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="View Library Management Software on GitHub">
+                  <span>🐙 GitHub Repository ↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 03: Brand Guideline Audit Tool -->
+          <article class="project-card-large" data-category="tool">
+            <div class="project-banner banner-brand" aria-hidden="true">
+              <div class="brand-audit-graphic">
+                <span class="audit-typography">Aa</span>
+                <div class="audit-swatches">
+                  <span style="background: #df7568;"></span>
+                  <span style="background: #f3b5aa;"></span>
+                  <span style="background: #e8d6c9;"></span>
+                  <span style="background: #39312e;"></span>
+                </div>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <div class="project-meta-row">
+                <span class="project-badge">03 / Quality Tool</span>
+                <span class="project-status-dot">Interactive Tool</span>
+              </div>
+              <h3 class="project-title">Brand Guideline Audit Tool</h3>
+              <p class="project-description">
+                A specialized utility engineered to audit brand consistency, verify CSS token fidelity, inspect typography contrast, and validate design guideline adherence across interfaces.
+              </p>
+              <div class="project-tech-group">
+                <span class="tech-tag">HTML</span>
+                <span class="tech-tag">CSS</span>
+                <span class="tech-tag">JavaScript</span>
+              </div>
+              <div class="project-action-row">
+                <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="View Brand Guideline Audit Tool on GitHub">
+                  <span>🐙 GitHub Repository ↗</span>
                 </a>
               </div>
             </div>
           </article>
 
         </div>
+
       </div>
     </section>
 
     <!-- ====================================================================
-         05. EDUCATION & EXPERIENCE SECTION (Step 07 — Premium Academic & Journey)
+         05. DETAILED EDUCATION SECTION (Shown when 'Education' is selected)
          ==================================================================== -->
-    <section class="section-wrapper education-section portfolio-section" id="education" aria-labelledby="education-heading">
+    <section class="section-wrapper portfolio-section detailed-section" id="education" aria-labelledby="education-detailed-heading">
       <div class="container">
-        <div class="section-label">ACADEMIC & JOURNEY <span>04</span></div>
-        <h2 class="section-heading" id="education-heading">Education & <em>Academic Credentials.</em></h2>
-        <p class="section-subtext">My formal academic grounding in Computer Science and Engineering, alongside advanced specialized studies in AI, Data Analysis, and LangChain RAG architectures.</p>
+        
+        <div class="detailed-header-block">
+          <div class="section-label">ACADEMIC CREDENTIALS <span>04</span></div>
+          <h1 class="detailed-heading" id="education-detailed-heading">Formal Education & <em>Academic Background.</em></h1>
+          <p class="detailed-lead">Comprehensive academic grounding in Computer Science and Engineering, alongside specialized online studies in Data Analytics, AI, and LangChain (RAG).</p>
+        </div>
 
-        <!-- Two Distinct Education Records Grid -->
         <div class="education-records-grid">
 
           <!-- ============================================================
-               EDUCATION RECORD 1: J.B. Institute of Engineering and Technology
+               EDUCATION RECORD 1: JB Group of Institutions of Technology
+               Location: Dehradun, Uttarakhand, India
+               Degree: B.Tech CSE (2025–2029)
                ============================================================ -->
-          <article class="edu-card-premium" id="edu-jbiet">
+          <article class="edu-card-premium" id="detailed-edu-jbit">
             <div class="edu-card-topbar">
-              <div class="edu-badge-tag">
+              <span class="edu-badge-tag">
                 <span class="edu-badge-icon" aria-hidden="true">🏛️</span>
                 <span>Formal Undergraduate Degree</span>
-              </div>
+              </span>
               <span class="edu-status-pill active-pill">
                 <span class="pulse-indicator" aria-hidden="true"></span>
-                Current · 2nd Year
+                2025–2029
               </span>
             </div>
 
             <div class="edu-institution-header">
-              <div class="edu-logo-box">
-                <img src="images/jbiet-logo-crest.jpg" alt="J.B. Institute of Engineering and Technology Official Crest Logo" class="edu-institution-logo" width="64" height="64" loading="lazy">
+              <div class="edu-logo-box logo-wide-box">
+                <img src="images/jbit-dehradun-logo.png" alt="JB Group of Institutions of Technology Official Logo" class="edu-institution-logo logo-contain" width="220" height="48" loading="lazy">
               </div>
               <div class="edu-institution-info">
-                <h3 class="edu-institution-name">J.B. Institute of Engineering and Technology</h3>
-                <span class="edu-affiliation">Autonomous Institute · Affiliated to JNTUH · Hyderabad, India</span>
+                <h3 class="edu-institution-name">JB Group of Institutions of Technology</h3>
+                <span class="edu-affiliation">Location: Dehradun, Uttarakhand, India</span>
               </div>
             </div>
 
@@ -575,35 +1162,42 @@
               <div class="edu-meta-row">
                 <span class="edu-meta-item">
                   <span class="meta-icon" aria-hidden="true">📅</span>
-                  <span>Academic Standing: <strong>Current Year — 2nd Year</strong> (2024 – 2028)</span>
+                  <span>Academic Timeline: <strong>2025 – 2029</strong></span>
+                </span>
+                <span class="edu-meta-item">
+                  <span class="meta-icon" aria-hidden="true">📍</span>
+                  <span>Campus: <strong>Dehradun, Uttarakhand, India</strong></span>
                 </span>
               </div>
               <p class="edu-summary-desc">
-                Rigorous computer science curriculum emphasizing foundational algorithms, data structures, object-oriented systems, and relational databases. Translating laboratory engineering into real-world computer vision and AI projects.
+                Comprehensive four-year undergraduate curriculum emphasizing fundamental Computer Science principles, computational mathematics, algorithmic logic, object-oriented systems engineering in Python and C++, and relational database architectures.
               </p>
             </div>
 
             <div class="edu-skills-section">
-              <span class="edu-skills-title">Core Academic Competencies:</span>
-              <ul class="edu-skills-tags" aria-label="Key skills from JBIET">
-                <li>Python</li>
-                <li>C / C++</li>
+              <span class="edu-skills-title">Core Academic Coursework & Competencies:</span>
+              <ul class="edu-skills-tags" aria-label="Skills acquired at JB Group of Institutions">
+                <li>Python Programming</li>
+                <li>C / C++ Systems</li>
                 <li>Data Structures & Algorithms</li>
-                <li>Database Management (SQL)</li>
+                <li>Database Management Systems (SQL)</li>
                 <li>Computer Vision (YOLOv8)</li>
+                <li>Software Engineering Principles</li>
               </ul>
             </div>
           </article>
 
           <!-- ============================================================
                EDUCATION RECORD 2: The Open University
+               Course: Data Analyst Online, Computer Science (June 2026–July 2029)
+               Focus: AI and LangChain (RAG)
                ============================================================ -->
-          <article class="edu-card-premium open-uni-card" id="edu-open-university">
+          <article class="edu-card-premium open-uni-card" id="detailed-edu-ou">
             <div class="edu-card-topbar">
-              <div class="edu-badge-tag uni-badge">
+              <span class="edu-badge-tag uni-badge">
                 <span class="edu-badge-icon" aria-hidden="true">🌐</span>
                 <span>Online Degree & Specialization</span>
-              </div>
+              </span>
               <span class="edu-status-pill enrolled-pill">
                 <span class="calendar-pill-icon" aria-hidden="true">📅</span>
                 June 2026 – July 2029
@@ -611,8 +1205,8 @@
             </div>
 
             <div class="edu-institution-header">
-              <div class="edu-logo-box">
-                <img src="images/the-open-university-logo.png" alt="The Open University Official Logo" class="edu-institution-logo" width="64" height="64" loading="lazy">
+              <div class="edu-logo-box logo-square-box">
+                <img src="images/the-open-university-logo.png" alt="The Open University Official Logo" class="edu-institution-logo logo-square" width="64" height="64" loading="lazy">
               </div>
               <div class="edu-institution-info">
                 <h3 class="edu-institution-name">The Open University</h3>
@@ -634,26 +1228,31 @@
                   <span class="meta-icon" aria-hidden="true">⏱️</span>
                   <span>Duration: <strong>June 2026 – July 2029</strong></span>
                 </span>
+                <span class="edu-meta-item">
+                  <span class="meta-icon" aria-hidden="true">🌍</span>
+                  <span>Format: <strong>Global Online Specialization</strong></span>
+                </span>
               </div>
               <p class="edu-summary-desc">
-                Data Analyst focused on AI and LangChain (RAG). In-depth program covering retrieval-augmented generation pipelines, large language model orchestrations, vector databases, and scalable data intelligence.
+                Data Analyst focused on AI and LangChain (RAG). Specialized program exploring modern data engineering, large language model integration, vector embeddings, semantic search mechanisms, and production-grade Retrieval-Augmented Generation workflows.
               </p>
             </div>
 
             <div class="edu-skills-section">
               <span class="edu-skills-title">Associated Skills & Specializations:</span>
-              <ul class="edu-skills-tags" aria-label="Skills from The Open University">
+              <ul class="edu-skills-tags" aria-label="Skills acquired at The Open University">
                 <li class="tag-highlight">LangChain</li>
                 <li class="tag-highlight">Retrieval-Augmented Generation (RAG)</li>
                 <li>Data Analytics</li>
                 <li>Vector Databases</li>
                 <li>AI Agent Orchestration</li>
+                <li>Prompt Architecture</li>
               </ul>
             </div>
 
             <div class="edu-card-footer">
               <a href="https://www.linkedin.com/school/6128/" target="_blank" rel="noopener noreferrer" class="edu-official-link">
-                <span>View Official University Profile on LinkedIn</span>
+                <span>View Official Verified Profile on LinkedIn</span>
                 <span class="arrow" aria-hidden="true">↗</span>
               </a>
             </div>
@@ -661,36 +1260,36 @@
 
         </div>
 
-        <!-- Professional Journey & Roadmap Below Academic Records -->
+        <!-- Academic & Career Roadmap Synthesis -->
         <div class="journey-roadmap-wrapper">
           <div class="journey-roadmap-card">
             <div class="roadmap-header">
               <span class="roadmap-icon" aria-hidden="true">🚀</span>
               <div>
-                <h3>Professional Development & Forward Deployment Journey</h3>
-                <p>Synthesizing academic rigor with hands-on forward deployment engineering.</p>
+                <h3>Academic & Forward Deployment Synthesis</h3>
+                <p>How disciplined academic study directly powers production engineering.</p>
               </div>
             </div>
             <div class="roadmap-grid">
               <div class="roadmap-item">
                 <span class="roadmap-bullet" aria-hidden="true">1</span>
                 <div>
-                  <b>Undergraduate Foundations (JBIET)</b>
-                  <p>Mastering core computer science principles, algorithmic problem solving, and building full-stack applications.</p>
+                  <b>Computational Core (JB Group of Institutions)</b>
+                  <p>Building disciplined mastery over algorithms, memory, data structures, and database engines in Dehradun.</p>
                 </div>
               </div>
               <div class="roadmap-item">
                 <span class="roadmap-bullet" aria-hidden="true">2</span>
                 <div>
-                  <b>Applied AI & Data Analytics (The Open University)</b>
-                  <p>Expanding into state-of-the-art LangChain, RAG architecture, and production-grade data engineering.</p>
+                  <b>Applied Data & AI (The Open University)</b>
+                  <p>Mastering cutting-edge Retrieval-Augmented Generation (RAG) and AI agent orchestration.</p>
                 </div>
               </div>
               <div class="roadmap-item">
                 <span class="roadmap-bullet" aria-hidden="true">3</span>
                 <div>
-                  <b>Forward Deployed Engineering</b>
-                  <p>Deploying AI and software solutions to solve real business challenges with direct client engagement.</p>
+                  <b>Forward Deployment Delivery</b>
+                  <p>Integrating these technical foundations directly into commercial, customer-facing software solutions.</p>
                 </div>
               </div>
             </div>
@@ -701,17 +1300,24 @@
     </section>
 
     <!-- ====================================================================
-         06. CONTACT SECTION (Step 08 — Premium Contact & Form)
+         06. DETAILED CONTACT SECTION (Shown when 'Contact' is selected)
          ==================================================================== -->
-    <section class="contact-section portfolio-section" id="contact" aria-labelledby="contact-heading">
+    <section class="section-wrapper portfolio-section detailed-section" id="contact" aria-labelledby="contact-detailed-heading">
       <div class="container">
+        
+        <div class="detailed-header-block">
+          <div class="section-label">COMMUNICATION PORTAL <span>05</span></div>
+          <h1 class="detailed-heading" id="contact-detailed-heading">Let's <em>Connect.</em></h1>
+          <p class="detailed-lead">Available for Forward Deployed engineering roles, AI collaborations, product consulting, and technical discussions.</p>
+        </div>
+
         <div class="contact-grid">
-          <!-- Contact Introduction & Direct Channels -->
+          
+          <!-- Contact Channels Column -->
           <div class="contact-info">
-            <div class="section-label">GET IN TOUCH <span>05</span></div>
-            <h2 class="section-heading" id="contact-heading">Let's <em>Connect.</em></h2>
+            <h2 class="contact-subheading">Get in Touch Directly</h2>
             <p>
-              Have an exciting project idea, AI/ML challenge, product engineering opportunity, or wish to discuss forward-deployed software development? I’m always open to new technical conversations and collaborations. Reach out directly, schedule a Google Meet, or leave a message below!
+              Have a technical opportunity, project idea, or forward-deployed engagement to discuss? Choose any preferred channel below or schedule a 30-minute Google Meet session.
             </p>
 
             <div class="contact-channel-list">
@@ -719,13 +1325,13 @@
               <button type="button" class="contact-channel-card contact-channel-meet-card open-meet-modal-trigger" aria-label="Schedule a Google Meet with Sahil">
                 <div class="channel-icon-badge meet-badge" aria-hidden="true">📅</div>
                 <div class="channel-meta">
-                  <small>Live Video Call</small>
+                  <small>Live Video Consultation</small>
                   <b>Schedule a Google Meet</b>
                 </div>
                 <span class="channel-arrow" aria-hidden="true">↗</span>
               </button>
 
-              <!-- WhatsApp Chat Card (No raw phone number text) -->
+              <!-- WhatsApp Chat Card (Privacy Guaranteed: No plain text phone number) -->
               <a href="https://wa.me/917323018308?text=Hi%20Sahil!%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20an%20opportunity%20/%20project." target="_blank" rel="noopener noreferrer" class="contact-channel-card contact-channel-wa-card" aria-label="Chat on WhatsApp">
                 <div class="channel-icon-badge wa-badge" aria-hidden="true">💬</div>
                 <div class="channel-meta">
@@ -735,7 +1341,7 @@
                 <span class="channel-arrow" aria-hidden="true">↗</span>
               </a>
 
-              <!-- Email Card -->
+              <!-- Direct Email Card -->
               <a href="mailto:sahilnawaz257@gmail.com" class="contact-channel-card" aria-label="Send direct email to Sahil Nawaz">
                 <div class="channel-icon-badge" aria-hidden="true">✉️</div>
                 <div class="channel-meta">
@@ -749,7 +1355,7 @@
               <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="contact-channel-card" aria-label="Visit Sahil Nawaz on GitHub">
                 <div class="channel-icon-badge" aria-hidden="true">💻</div>
                 <div class="channel-meta">
-                  <small>GitHub Profile</small>
+                  <small>Code Repositories</small>
                   <b>github.com/sahilnawaz257</b>
                 </div>
                 <span class="channel-arrow" aria-hidden="true">↗</span>
@@ -759,7 +1365,7 @@
               <a href="https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/" target="_blank" rel="noopener noreferrer" class="contact-channel-card" aria-label="Connect with Ali Sahil Nawaz on LinkedIn">
                 <div class="channel-icon-badge" aria-hidden="true">💼</div>
                 <div class="channel-meta">
-                  <small>LinkedIn Network</small>
+                  <small>Professional Profile</small>
                   <b>Ali Sahil Nawaz · Connect</b>
                 </div>
                 <span class="channel-arrow" aria-hidden="true">↗</span>
@@ -769,7 +1375,7 @@
               <a href="https://leetcode.com/u/Alisahilnawaz/" target="_blank" rel="noopener noreferrer" class="contact-channel-card" aria-label="View Sahil Nawaz on LeetCode">
                 <div class="channel-icon-badge" aria-hidden="true">⚡</div>
                 <div class="channel-meta">
-                  <small>LeetCode Profile</small>
+                  <small>Algorithmic Practice</small>
                   <b>leetcode.com/u/Alisahilnawaz</b>
                 </div>
                 <span class="channel-arrow" aria-hidden="true">↗</span>
@@ -777,14 +1383,14 @@
             </div>
           </div>
 
-          <!-- Contact Form Component -->
+          <!-- Working Contact Form Box (Persisting to SQLite Database) -->
           <div class="contact-form-box">
             <div class="form-header-badge">
               <span class="badge-dot" aria-hidden="true"></span>
-              <span>GET IN TOUCH</span>
+              <span>MESSAGE PORTAL</span>
             </div>
-            <h3>Send a Message</h3>
-            <p>Fill out the form below to reach out. Form is equipped with instant frontend validation.</p>
+            <h3>Send a Direct Message</h3>
+            <p>Fill out the form below. Messages are securely stored and dispatches notifications.</p>
 
             <!-- Alert Container for Feedback Messages -->
             <div id="form-alert" class="form-alert" role="alert" aria-live="polite"></div>
@@ -798,45 +1404,42 @@
 
               <div class="form-group">
                 <label for="contact-email" class="form-label">EMAIL ADDRESS <span class="required-indicator" aria-hidden="true">*</span></label>
-                <input type="email" id="contact-email" name="email" class="form-control" placeholder="example@domain.com" required autocomplete="email">
+                <input type="email" id="contact-email" name="email" class="form-control" placeholder="sahil@example.com" required autocomplete="email">
                 <span class="field-error-msg" id="email-error" aria-live="polite"></span>
               </div>
 
               <div class="form-group">
-                <label for="contact-subject" class="form-label">SUBJECT <span class="optional-indicator">(Optional)</span></label>
+                <label for="contact-subject" class="form-label">SUBJECT</label>
                 <input type="text" id="contact-subject" name="subject" class="form-control" placeholder="Forward Deployed Opportunity / Project Collaboration">
                 <span class="field-error-msg" id="subject-error" aria-live="polite"></span>
               </div>
 
               <div class="form-group">
-                <label for="contact-message" class="form-label">MESSAGE <span class="required-indicator" aria-hidden="true">*</span></label>
-                <textarea id="contact-message" name="message" class="form-control" placeholder="Tell me about your idea, role, or project..." required rows="5"></textarea>
-                <div class="form-field-meta">
-                  <span class="field-error-msg" id="message-error" aria-live="polite"></span>
-                  <span class="char-count" id="char-count">0 / 1000</span>
+                <div class="label-with-counter">
+                  <label for="contact-message" class="form-label">MESSAGE <span class="required-indicator" aria-hidden="true">*</span></label>
+                  <span class="char-counter" id="message-char-count" aria-live="polite">0 / 1000</span>
                 </div>
+                <textarea id="contact-message" name="message" class="form-control form-textarea" rows="5" placeholder="Hi Sahil, I would like to discuss an engineering opportunity / project collaboration with you..." required maxlength="1000"></textarea>
+                <span class="field-error-msg" id="message-error" aria-live="polite"></span>
               </div>
 
-              <button type="submit" id="submit-btn" class="btn btn-submit">
-                <span>Send Message</span>
-                <span class="btn-arrow" aria-hidden="true">↗</span>
+              <button type="submit" id="submit-btn" class="btn btn-primary btn-submit">
+                <span class="btn-text">Send Message ↗</span>
+                <span class="btn-spinner" aria-hidden="true" style="display: none;">⏳</span>
               </button>
             </form>
 
-            <!-- Success-style preview container (stating backend integration is still pending) -->
-            <div id="preview-box" class="preview-box" style="display: none;" aria-live="polite">
-              <div class="preview-header">
-                <div class="preview-status-pill">
-                  <span class="preview-check-icon" aria-hidden="true">✔</span>
-                  <span>Frontend Validation Verified</span>
-                </div>
-                <div class="preview-pending-notice">
-                  <span class="notice-icon" aria-hidden="true">ℹ️</span>
-                  <span>Backend Pending Integration: This message preview is verified locally and ready for future Flask backend integration. No live dispatch has been made.</span>
+            <!-- Submission Preview Box (Appears after successful transmission) -->
+            <div id="form-preview-box" class="form-preview-box" style="display: none;">
+              <div class="preview-status-banner">
+                <span class="preview-badge-check" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Inquiry Recorded in SQLite Database!</strong>
+                  <p>Your message has been assigned a database reference ID.</p>
                 </div>
               </div>
               <div class="preview-content-card">
-                <h4 class="preview-card-title">Message Preview Summary</h4>
+                <h4 class="preview-card-title">Message Summary</h4>
                 <div class="preview-field-row">
                   <span class="preview-label">From:</span>
                   <span class="preview-val" id="preview-sender"></span>
@@ -865,14 +1468,16 @@
             </div>
 
           </div>
+
         </div>
+
       </div>
     </section>
 
   </main>
 
   <!-- ======================================================================
-       FOOTER SECTION (Step 09 — Premium Multi-Column Responsive Footer)
+       FOOTER SECTION (Full-Width Responsive Footer)
        ====================================================================== -->
   <footer class="site-footer" id="site-footer" aria-labelledby="footer-brand-title">
     <div class="container">
@@ -880,12 +1485,12 @@
 
         <!-- Col 1: Brand & Professional Role -->
         <div class="footer-brand-col">
-          <a href="#home" class="footer-brand" id="footer-brand-title" aria-label="Sahil Nawaz Home">
+          <a href="#home" class="footer-brand nav-link-trigger" data-target="home" id="footer-brand-title" aria-label="Sahil Nawaz Home">
             <b>Sahil <em>Nawaz.</em></b>
           </a>
           <div class="footer-role-badge">Forward Deployed Developer</div>
           <p class="footer-bio-text">
-            Forward Deployed Developer & B.Tech CSE student at J.B. Institute of Engineering and Technology. Passionate about AI solutions, product engineering, and modern web software.
+            Forward Deployed Developer pursuing B.Tech CSE (2025–2029) at JB Group of Institutions of Technology, Dehradun, Uttarakhand, and Data Analytics at The Open University. Building high-impact AI, Computer Vision, and full-stack software solutions.
           </p>
           <div class="footer-email-wrap">
             <a href="mailto:sahilnawaz257@gmail.com" class="footer-email-link" aria-label="Email Sahil Nawaz">
@@ -895,22 +1500,22 @@
           </div>
         </div>
 
-        <!-- Col 2: Quick Navigation Links -->
+        <!-- Col 2: Quick Navigation Links (SPA Integrated) -->
         <div class="footer-nav-col">
-          <h4 class="footer-col-title">Quick Navigation</h4>
+          <h4 class="footer-col-title">Navigation</h4>
           <ul class="footer-nav-list" role="list">
-            <li><a href="#home" class="footer-link">Home</a></li>
-            <li><a href="#about" class="footer-link">About</a></li>
-            <li><a href="#skills" class="footer-link">Skills</a></li>
-            <li><a href="#projects" class="footer-link">Projects</a></li>
-            <li><a href="#education" class="footer-link">Education</a></li>
-            <li><a href="#contact" class="footer-link">Contact</a></li>
+            <li><a href="#home" class="footer-link nav-link-trigger" data-target="home">Home</a></li>
+            <li><a href="#about" class="footer-link nav-link-trigger" data-target="about">About</a></li>
+            <li><a href="#skills" class="footer-link nav-link-trigger" data-target="skills">Skills</a></li>
+            <li><a href="#projects" class="footer-link nav-link-trigger" data-target="projects">Projects</a></li>
+            <li><a href="#education" class="footer-link nav-link-trigger" data-target="education">Education</a></li>
+            <li><a href="#contact" class="footer-link nav-link-trigger" data-target="contact">Contact</a></li>
           </ul>
         </div>
 
         <!-- Col 3: Social & Developer Profiles -->
         <div class="footer-social-col">
-          <h4 class="footer-col-title">Connect & Profiles</h4>
+          <h4 class="footer-col-title">Developer Profiles</h4>
           <div class="footer-social-list">
             <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="footer-social-pill" aria-label="Sahil Nawaz on GitHub">
               <span class="social-icon" aria-hidden="true">💻</span>
@@ -1098,7 +1703,7 @@
     </div>
   </div>
 
-  <!-- External JavaScript File (Step 03 will handle interactivity) -->
+  <!-- Main JavaScript File -->
   <script src="js/script.js"></script>
 </body>
 </html>

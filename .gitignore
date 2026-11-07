@@ -39,6 +39,7 @@ instance/
 logs/
 tmp/
 temp/
+scratch/
 
 # Testing & Coverage
 .pytest_cache/

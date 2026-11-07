@@ -168,7 +168,7 @@ The application implements enterprise-grade security practices aligned with the 
 
 - **Name:** Sahil Nawaz
 - **Role:** Forward Deployed Developer & AI Enthusiast
-- **Education:** B.Tech in Computer Science and Engineering, J.B. Institute of Engineering & Technology (2025–Present)
+- **Education:** B.Tech in Computer Science and Engineering, JB Group of Institutions of Technology, Dehradun, Uttarakhand (2025–2029) & Data Analytics at The Open University (2026–2029)
 - **Email:** [sahilnawaz257@gmail.com](mailto:sahilnawaz257@gmail.com)
 - **GitHub:** [github.com/sahilnawaz257](https://github.com/sahilnawaz257)
 - **LinkedIn:** [Ali Sahil Nawaz](https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/)
