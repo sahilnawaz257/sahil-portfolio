@@ -192,40 +192,104 @@
     </div>
 
     <!-- ====================================================================
-         02. ABOUT ME SECTION
+         02. ABOUT ME SECTION (Step 04 — Premium Two-Column Layout)
          ==================================================================== -->
     <section class="section-wrapper about-section" id="about" aria-labelledby="about-heading">
       <div class="container">
         <div class="about-grid">
-          <div class="about-narrative">
-            <div class="section-label">ABOUT ME <span>01</span></div>
-            <h2 class="section-heading" id="about-heading">Curiosity turns<br>ideas into <em>impact.</em></h2>
-            <p class="about-lead">
-              I am a 2nd year Computer Science student at <strong>J.B. Institute of Engineering and Technology (JBIET)</strong>, passionate about building intelligent, reliable systems.
-            </p>
-            <p class="about-details">
-              My drive lies in understanding technology from the ground up — from low-level systems programming in C/C++ to deploying real-time Computer Vision models and architecting full-stack web platforms.
-            </p>
-            <p class="about-details">
-              As an aspiring Forward Deployed Developer, I focus on the intersection of deep engineering and operational reality: understanding stakeholder pain points, writing robust software, and iterating rapidly on high-value solutions.
-            </p>
+          
+          <!-- Column 1: Profile Image / Emblem Area & Small Education Card -->
+          <div class="about-visual-column">
+            <!-- Profile Image Area with Pure CSS Graceful Placeholder -->
+            <div class="about-image-card">
+              <div class="profile-art about-profile-art" aria-hidden="true">
+                <span class="profile-tag">SAHIL NAWAZ</span>
+                <div class="profile-initials">SN</div>
+                <small class="profile-subtag">FORWARD DEPLOYED DEVELOPER</small>
+              </div>
+            </div>
+
+            <!-- Small Education Information Area -->
+            <div class="about-education-card">
+              <div class="edu-card-header">
+                <span class="edu-badge-icon" aria-hidden="true">🎓</span>
+                <div class="edu-badge-title">
+                  <b>Education</b>
+                  <small>Academic Overview</small>
+                </div>
+              </div>
+              <ul class="edu-info-list" aria-label="Education Details">
+                <li class="edu-info-item">
+                  <span class="edu-label">College:</span>
+                  <strong class="edu-val">J.B. Institute of Engineering and Technology</strong>
+                </li>
+                <li class="edu-info-item">
+                  <span class="edu-label">Degree:</span>
+                  <strong class="edu-val">B.Tech CSE</strong>
+                </li>
+                <li class="edu-info-item">
+                  <span class="edu-label">Current Year:</span>
+                  <strong class="edu-val">2nd Year</strong>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <!-- About Pillars -->
-          <div class="about-pillars">
-            <article class="about-pillar-card">
-              <h3><span aria-hidden="true">💡</span> Forward Deployed Mindset</h3>
-              <p>Translating cutting-edge algorithmic capabilities into practical, production-ready tools that users love to interact with.</p>
-            </article>
-            <article class="about-pillar-card">
-              <h3><span aria-hidden="true">🔍</span> Applied AI & Computer Vision</h3>
-              <p>Hands-on experience deploying YOLOv8 models for real-time person detection, density tracking, and anomaly flagging.</p>
-            </article>
-            <article class="about-pillar-card">
-              <h3><span aria-hidden="true">⚙️</span> Full-Stack Foundations</h3>
-              <p>Architecting resilient backends with Python, Flask, and SQLite, paired with clean, accessible frontend architectures.</p>
-            </article>
+          <!-- Column 2: About Me Narrative Content & Visual Highlights -->
+          <div class="about-content-column">
+            <div class="section-label">ABOUT ME <span>01</span></div>
+            <h2 class="section-heading" id="about-heading">Curiosity turns<br>ideas into <em>impact.</em></h2>
+
+            <!-- About Me Content -->
+            <p class="about-lead">
+              My name is <strong>Sahil Nawaz</strong>. I am a B.Tech Computer Science student at <strong>J.B. Institute of Engineering and Technology</strong>.
+            </p>
+            <p class="about-body">
+              I am a passionate technology enthusiast interested in <strong>Artificial Intelligence, Machine Learning, Business & Product Development,</strong> and <strong>Frontend Development</strong>.
+            </p>
+            <p class="about-body">
+              I aspire to build innovative AI-powered solutions that solve real-world problems. I enjoy learning new technologies, developing projects and improving my programming skills.
+            </p>
+
+            <!-- Domain Interest Highlights -->
+            <div class="about-highlights-grid">
+              <div class="about-highlight-pill">
+                <span class="pill-icon" aria-hidden="true">🧠</span>
+                <div>
+                  <b>Artificial Intelligence</b>
+                  <small>ML & Computer Vision</small>
+                </div>
+              </div>
+              <div class="about-highlight-pill">
+                <span class="pill-icon" aria-hidden="true">💻</span>
+                <div>
+                  <b>Frontend Development</b>
+                  <small>Modern UI/UX & Responsive Web</small>
+                </div>
+              </div>
+              <div class="about-highlight-pill">
+                <span class="pill-icon" aria-hidden="true">🚀</span>
+                <div>
+                  <b>Product Engineering</b>
+                  <small>Business Value & Scalability</small>
+                </div>
+              </div>
+              <div class="about-highlight-pill">
+                <span class="pill-icon" aria-hidden="true">⚡</span>
+                <div>
+                  <b>Forward Deployment</b>
+                  <small>Rapid Real-World Problem Solving</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Link to Projects -->
+            <div class="about-cta-wrap">
+              <a href="#projects" class="btn btn-primary">⌘ &nbsp; View My Projects <span aria-hidden="true">→</span></a>
+              <a href="#contact" class="btn btn-secondary">✉ &nbsp; Get in Touch</a>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
