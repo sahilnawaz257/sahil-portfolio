@@ -325,8 +325,8 @@ def book_meeting():
     raw_name = str(data.get("full_name") or data.get("name") or "").strip()
     raw_email = str(data.get("email", "")).strip()
     raw_purpose = str(data.get("purpose", "")).strip()
-    raw_date = str(data.get("meeting_date") or data.get("date") or "").strip()
-    raw_time = str(data.get("meeting_time") or data.get("time") or "").strip()
+    raw_date = str(data.get("preferred_date") or data.get("meeting_date") or data.get("date") or "").strip()
+    raw_time = str(data.get("preferred_time") or data.get("meeting_time") or data.get("time") or "").strip()
     raw_notes = str(data.get("notes", "")).strip()
 
     # 1. Name validation
