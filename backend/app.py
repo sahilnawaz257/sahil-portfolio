@@ -62,6 +62,14 @@ init_db()
 # ------------------------------------------------------------------------------
 app.register_blueprint(api_bp)
 
+def is_origin_allowed(req_origin):
+    """Check if request origin is authorized."""
+    if not req_origin or not IS_PRODUCTION:
+        return True
+    if req_origin in ALLOWED_ORIGINS or req_origin.endswith(".onrender.com"):
+        return True
+    return False
+
 # ------------------------------------------------------------------------------
 # 04. CORS Preflight & Security Headers (OWASP Recommended)
 # ------------------------------------------------------------------------------
@@ -73,7 +81,7 @@ def handle_options_preflight():
         req_origin = request.headers.get("Origin")
 
         # Allow if origin is trusted or during local development
-        if not req_origin or req_origin in ALLOWED_ORIGINS or not IS_PRODUCTION:
+        if is_origin_allowed(req_origin):
             response.headers["Access-Control-Allow-Origin"] = req_origin or "*"
             response.headers["Access-Control-Allow-Credentials"] = "true"
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
@@ -87,7 +95,7 @@ def add_security_and_cors_headers(response):
     req_origin = request.headers.get("Origin")
 
     # Set CORS response headers only if trusted origin or development
-    if req_origin and (req_origin in ALLOWED_ORIGINS or not IS_PRODUCTION):
+    if req_origin and is_origin_allowed(req_origin):
         response.headers["Access-Control-Allow-Origin"] = req_origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
@@ -107,7 +115,7 @@ def add_security_and_cors_headers(response):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: https:; "
-        "connect-src 'self' http://127.0.0.1:5000 http://localhost:5000; "
+        "connect-src 'self' https: http://127.0.0.1:5000 http://localhost:5000; "
         "frame-ancestors 'self';"
     )
 
