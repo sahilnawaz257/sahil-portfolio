@@ -15,6 +15,7 @@ import re
 import sys
 import logging
 from contextlib import contextmanager
+import supabase_client
 
 # Try loading environment variables from .env
 try:
@@ -229,9 +230,15 @@ def insert_and_get_id(query, params=(), id_col="id"):
 
 def save_contact_message(full_name, email, subject, message):
     """
-    Persist visitor contact form submission using parameterized query.
+    Persist visitor contact form submission using parameterized query / Supabase SDK.
     Private: Stored securely, never readable by public API visitors.
     """
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_save_contact_message(full_name, email, subject, message)
+        except Exception as e:
+            logger.warning(f"Supabase SDK save_contact_message error: {e}. Falling back to SQLite.")
+
     sql = """
         INSERT INTO contact_messages (full_name, email, subject, message)
         VALUES (%s, %s, %s, %s)
@@ -248,6 +255,12 @@ def check_duplicate_contact(email, message, window_seconds=60):
     Check if an identical message was submitted by this email address recently.
     Prevents accidental duplicate form submissions and spam attacks.
     """
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_check_duplicate_contact(email, message, window_seconds=window_seconds)
+        except Exception as e:
+            logger.warning(f"Supabase SDK check_duplicate_contact error: {e}. Falling back to SQLite.")
+
     clean_email = email.strip()
     clean_msg = message.strip()
     if is_postgres():
@@ -283,9 +296,22 @@ def check_duplicate_contact(email, message, window_seconds=60):
 
 def save_meeting_booking(full_name, email, purpose, preferred_date, preferred_time, notes=""):
     """
-    Persist visitor Google Meet scheduling request using parameterized query.
+    Persist visitor Google Meet scheduling request using parameterized query / Supabase SDK.
     Private: Inaccessible to unauthorized public scrapers.
     """
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_save_meeting_booking(
+                full_name=full_name,
+                email=email,
+                purpose=purpose,
+                preferred_date=preferred_date,
+                preferred_time=preferred_time,
+                notes=notes
+            )
+        except Exception as e:
+            logger.warning(f"Supabase SDK save_meeting_booking error: {e}. Falling back to SQLite.")
+
     p_date = str(preferred_date).strip()
     p_time = str(preferred_time).strip()
 
@@ -321,6 +347,12 @@ def save_meeting_booking(full_name, email, purpose, preferred_date, preferred_ti
 
 def check_duplicate_booking(email, preferred_date, preferred_time):
     """Check if an active booking already exists for this email or time slot."""
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_check_duplicate_booking(email, preferred_date, preferred_time)
+        except Exception as e:
+            logger.warning(f"Supabase SDK check_duplicate_booking error: {e}. Falling back to SQLite.")
+
     sql = """
         SELECT * FROM meeting_bookings
         WHERE email = %s 
@@ -338,6 +370,12 @@ def check_duplicate_booking(email, preferred_date, preferred_time):
 
 def get_meeting_booking_by_id(booking_id):
     """Retrieve booking details by ID (used for status checking)."""
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_get_meeting_booking_by_id(booking_id)
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_meeting_booking_by_id error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM meeting_bookings WHERE id = %s"
     row = execute_query(sql, (booking_id,), fetch="one")
     if not row:
@@ -352,6 +390,12 @@ def get_booked_slots_for_date(date_str):
     Retrieve all booked/pending time slots for a specified date.
     Ensures that only genuinely available time slots are presented to visitors.
     """
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_get_booked_slots(date_str)
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_booked_slots error: {e}. Falling back to SQLite.")
+
     d = str(date_str).strip()
     if is_postgres():
         sql = """
@@ -372,6 +416,12 @@ def update_booking_status(booking_id, status, meeting_link=""):
     Update booking status (Pending -> Approved / Rejected) and set meeting link.
     Used exclusively by authorized owner approval workflow (HMAC token or backend CLI).
     """
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_update_booking_status(booking_id, status, meeting_link=meeting_link)
+        except Exception as e:
+            logger.warning(f"Supabase SDK update_booking_status error: {e}. Falling back to SQLite.")
+
     valid_statuses = ("Pending", "Approved", "Rejected")
     if status not in valid_statuses:
         raise ValueError(f"Invalid booking status '{status}'. Must be one of: {valid_statuses}")
@@ -386,6 +436,12 @@ def update_booking_status(booking_id, status, meeting_link=""):
 
 def get_pending_bookings():
     """Retrieve all pending booking requests for owner review."""
+    if supabase_client.is_supabase_configured():
+        try:
+            return supabase_client.supabase_get_pending_bookings()
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_pending_bookings error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM meeting_bookings WHERE status = 'Pending' ORDER BY created_at DESC" if is_postgres() else "SELECT * FROM meeting_bookings WHERE status = 'Pending' ORDER BY id DESC"
     rows = execute_query(sql, fetch="all") or []
     for r in rows:
@@ -396,6 +452,14 @@ def get_pending_bookings():
 
 def get_portfolio_projects():
     """Retrieve all public portfolio projects with parsed technology stacks."""
+    if supabase_client.is_supabase_configured():
+        try:
+            rows = supabase_client.supabase_get_projects()
+            if rows:
+                return rows
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_portfolio_projects error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM projects ORDER BY created_at ASC" if is_postgres() else "SELECT * FROM projects ORDER BY id ASC"
     rows = execute_query(sql, fetch="all") or []
     results = []
@@ -410,6 +474,14 @@ def get_portfolio_projects():
 
 def get_project_by_id(project_id):
     """Retrieve details for a single project by ID."""
+    if supabase_client.is_supabase_configured():
+        try:
+            p = supabase_client.supabase_get_project_by_id(project_id)
+            if p:
+                return p
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_project_by_id error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM projects WHERE id = %s"
     p = execute_query(sql, (project_id,), fetch="one")
     if not p:
@@ -423,16 +495,40 @@ def get_project_by_id(project_id):
 
 def get_education_records():
     """Retrieve formal education records for public display."""
+    if supabase_client.is_supabase_configured():
+        try:
+            rows = supabase_client.supabase_get_education()
+            if rows:
+                return rows
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_education_records error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM education ORDER BY start_date DESC" if is_postgres() else "SELECT * FROM education ORDER BY id ASC"
     return execute_query(sql, fetch="all") or []
 
 def get_experience_records():
     """Retrieve professional experience and venture leadership records for public display."""
+    if supabase_client.is_supabase_configured():
+        try:
+            rows = supabase_client.supabase_get_experience()
+            if rows:
+                return rows
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_experience_records error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM experience ORDER BY created_at DESC" if is_postgres() else "SELECT * FROM experience ORDER BY id ASC"
     return execute_query(sql, fetch="all") or []
 
 def get_skills_inventory():
     """Retrieve full skill inventory and grouped category dictionary."""
+    if supabase_client.is_supabase_configured():
+        try:
+            inv = supabase_client.supabase_get_skills()
+            if inv.get("skills"):
+                return inv
+        except Exception as e:
+            logger.warning(f"Supabase SDK get_skills_inventory error: {e}. Falling back to SQLite.")
+
     sql = "SELECT * FROM skills ORDER BY category ASC, skill_name ASC"
     skills = execute_query(sql, fetch="all") or []
     categories = {}

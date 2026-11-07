@@ -145,3 +145,4 @@ def create_google_meet_event(summary, description, attendee_email, date_str, tim
             "error": str(e),
             "message": f"Google Calendar API error: {str(e)}"
         }
+

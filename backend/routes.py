@@ -60,6 +60,26 @@ def health_check():
     }), 200
 
 
+@api_bp.route("/supabase/status", methods=["GET"])
+def supabase_status():
+    """
+    Supabase Python SDK connection health and engine mode status.
+    Exposes operational status without exposing private keys.
+    """
+    try:
+        import supabase_client
+        status_info = supabase_client.check_supabase_connection()
+        return jsonify({
+            "success": True,
+            "supabase": status_info
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 @api_bp.route("/projects", methods=["GET"])
 def list_projects():
     """Retrieve all projects dynamically from SQLite database."""
@@ -375,6 +395,7 @@ def get_available_slots():
 
 
 @api_bp.route("/meetings/book", methods=["POST"])
+@api_bp.route("/meetings/request", methods=["POST"])
 def book_meeting():
     """
     Schedule a Google Meet appointment.
