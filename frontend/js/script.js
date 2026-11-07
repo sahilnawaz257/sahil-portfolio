@@ -396,6 +396,26 @@ function initWhatsAppWidget() {
 }
 
 /**
+ * Dynamically resolves the API base URL:
+ * - When served by Flask on Render, custom domains, or local port 5000, returns "" (same-origin relative paths).
+ * - Only when running on file:// or from a separate local dev server (port 5500, 3000), routes to http://127.0.0.1:5000.
+ */
+function getApiBaseUrl() {
+  if (typeof window === "undefined" || !window.location) {
+    return "";
+  }
+  if (window.location.protocol === "file:") {
+    return "http://127.0.0.1:5000";
+  }
+  const hostname = window.location.hostname;
+  const isLocalHost = hostname === "localhost" || hostname === "127.0.0.1";
+  if (isLocalHost && window.location.port && window.location.port !== "5000") {
+    return "http://127.0.0.1:5000";
+  }
+  return "";
+}
+
+/**
  * =============================================================================
  * 08. GOOGLE MEET BOOKING SYSTEM
  * Modal scheduling interface with client-side validation, past date prevention,
@@ -414,9 +434,7 @@ function initGoogleMeetBooking() {
 
   if (!modalBackdrop || !form) return;
 
-  const API_BASE = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
-    ? ""
-    : "http://127.0.0.1:5000";
+  const API_BASE = getApiBaseUrl();
 
   // Set minimum date to today (past dates are physically prevented)
   if (dateInput) {
@@ -594,7 +612,12 @@ function initGoogleMeetBooking() {
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (_) {
+        data = { success: false, error: "Server returned status " + response.status };
+      }
 
       if (response.status === 201 && data.success) {
         showMeetStatus(
@@ -772,9 +795,7 @@ function initContactForm() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<span>Saving to Database...</span> <span class="btn-spinner" aria-hidden="true">⏳</span>`;
 
-    const API_BASE = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
-      ? ""
-      : "http://127.0.0.1:5000";
+    const API_BASE = getApiBaseUrl();
 
     fetch(`${API_BASE}/api/contact`, {
       method: "POST",
@@ -784,8 +805,14 @@ function initContactForm() {
       },
       body: JSON.stringify(payload)
     })
-      .then((res) => {
-        return res.json().then((data) => ({ status: res.status, ok: res.ok, data }));
+      .then(async (res) => {
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_) {
+          data = { success: false, error: "Server returned status " + res.status };
+        }
+        return { status: res.status, ok: res.ok, data };
       })
       .then(({ ok, data }) => {
         if (!ok || !data.success) {
@@ -952,9 +979,7 @@ async function initDynamicProjects() {
   const grid = document.getElementById("project-grid");
   if (!grid) return;
 
-  const API_BASE_URL = (window.location.origin.includes("5000") || (window.location.protocol === "http:" && window.location.port === "5000"))
-    ? ""
-    : "http://127.0.0.1:5000";
+  const API_BASE_URL = getApiBaseUrl();
   const endpoint = `${API_BASE_URL}/api/projects`;
 
   try {
