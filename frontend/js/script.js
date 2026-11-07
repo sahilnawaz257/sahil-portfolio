@@ -239,6 +239,7 @@ function initRoleTypingAnimation() {
 
   const roles = [
     "Forward Deployed Developer",
+    "Founder · Gymsewa",
     "AI & ML Solutions Builder",
     "B.Tech CSE · JB Group of Institutions",
     "Full-Stack Web Engineer"

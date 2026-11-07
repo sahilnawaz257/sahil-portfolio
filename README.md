@@ -168,7 +168,9 @@ The application implements enterprise-grade security practices aligned with the 
 
 - **Name:** Sahil Nawaz
 - **Role:** Forward Deployed Developer & AI Enthusiast
+- **Venture:** Founder, Gymsewa (Powered by Bytewave Innovation, 2024–Present)
 - **Education:** B.Tech in Computer Science and Engineering, JB Group of Institutions of Technology, Dehradun, Uttarakhand (2025–2029) & Data Analytics at The Open University (2026–2029)
+- **Skills:** Python, C, C++, HTML5, CSS3, JavaScript, React JS, SQL, SQLite, NumPy, Pandas, YOLOv8, LangChain (RAG), Product Management, Business & Entrepreneurship, Leadership & Management, Digital & Growth
 - **Email:** [sahilnawaz257@gmail.com](mailto:sahilnawaz257@gmail.com)
 - **GitHub:** [github.com/sahilnawaz257](https://github.com/sahilnawaz257)
 - **LinkedIn:** [Ali Sahil Nawaz](https://www.linkedin.com/in/ali-sahil-nawaz-622b58213/)

@@ -157,6 +157,10 @@ def serve_index():
 def serve_about():
     return send_from_directory(FRONTEND_DIR, "about.html")
 
+@app.route("/experience")
+def serve_experience():
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
 @app.route("/projects")
 @app.route("/projects.html")
 def serve_projects():
