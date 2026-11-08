@@ -341,3 +341,4 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
 
 if __name__ == "__main__":
     build_resume()
+
