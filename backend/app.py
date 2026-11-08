@@ -86,7 +86,8 @@ def handle_options_preflight():
             if req_origin and req_origin != "null":
                 response.headers["Access-Control-Allow-Credentials"] = "true"
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, Accept, X-CSRF-Token"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, Accept, X-CSRF-Token, Access-Control-Request-Private-Network"
+            response.headers["Access-Control-Allow-Private-Network"] = "true"
             response.headers["Access-Control-Max-Age"] = "3600"
         return response
 
@@ -102,6 +103,7 @@ def add_security_and_cors_headers(response):
             response.headers["Access-Control-Allow-Credentials"] = "true"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, Accept, X-CSRF-Token"
+        response.headers["Access-Control-Allow-Private-Network"] = "true"
 
     # OWASP Defense-in-Depth Headers
     response.headers["X-Content-Type-Options"] = "nosniff"
@@ -180,7 +182,7 @@ def serve_projects():
 @app.route("/favicon.ico")
 @app.route("/favicon.svg")
 def serve_favicon():
-    return send_from_directory(FRONTEND_DIR, "favicon.svg", mimetype="image/svg+xml")
+    return send_from_directory(FRONTEND_DIR, "favicon.svg", mimetype="image/svg+xml", max_age=86400)
 
 @app.route("/<path:path>")
 def serve_static(path):
@@ -190,8 +192,10 @@ def serve_static(path):
         return jsonify({"success": False, "error": "No admin system or dashboard exists for this portfolio."}), 404
     file_path = os.path.join(FRONTEND_DIR, path)
     if os.path.exists(file_path) and os.path.isfile(file_path):
-        return send_from_directory(FRONTEND_DIR, path)
-    return send_from_directory(FRONTEND_DIR, "index.html")
+        # Cache static assets (CSS, JS, images) for 24h to maximize Render performance
+        max_age = 86400 if path.endswith((".css", ".js", ".png", ".jpg", ".jpeg", ".svg", ".ico", ".woff", ".woff2")) else 0
+        return send_from_directory(FRONTEND_DIR, path, max_age=max_age)
+    return send_from_directory(FRONTEND_DIR, "index.html", max_age=0)
 
 # ------------------------------------------------------------------------------
 # Server Runner
