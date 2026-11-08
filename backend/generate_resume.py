@@ -14,32 +14,33 @@ from reportlab.platypus import (
 def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
-    # Page setup: letter (8.5 x 11 in) with 0.45 in (32.4 pt) margins
+    # Page setup: letter (8.5 x 11 in = 612 x 792 pt)
+    # Balanced margins ensuring the resume spans the entire single page gracefully top-to-bottom
     doc = SimpleDocTemplate(
         output_path,
         pagesize=letter,
         leftMargin=32.4,
         rightMargin=32.4,
-        topMargin=28.0,
-        bottomMargin=28.0
+        topMargin=25.0,
+        bottomMargin=25.0
     )
 
     styles = getSampleStyleSheet()
 
     # Color Palette: Clean white background, charcoal/black text, coral-pink accents
-    COLOR_PRIMARY = colors.HexColor("#1a1514")       # Dark Charcoal / Black
-    COLOR_SECONDARY = colors.HexColor("#4a3f3b")     # Subtle slate
+    COLOR_PRIMARY = colors.HexColor("#141110")       # Premium deep charcoal/black
+    COLOR_SECONDARY = colors.HexColor("#3d3330")     # Rich dark neutral for bullets
     COLOR_ACCENT = colors.HexColor("#df7568")        # Brand Coral-Pink
-    COLOR_BORDER = colors.HexColor("#f3b5aa")        # Soft coral border
-    COLOR_LINK = colors.HexColor("#cf6255")          # Coral-pink link
+    COLOR_BORDER = colors.HexColor("#e8998d")        # Crisp soft coral divider
+    COLOR_LINK = colors.HexColor("#cf6255")          # Coral-pink link accent
 
-    # Custom Typography Styles
+    # Custom Typography Styles — Sized for optimal single-page visual density & ATS readability
     style_name = ParagraphStyle(
         "ResumeName",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=20,
-        leading=22,
+        fontSize=23,
+        leading=26,
         textColor=COLOR_PRIMARY,
         alignment=0
     )
@@ -48,8 +49,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeTitle",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=10.5,
-        leading=13,
+        fontSize=11.2,
+        leading=14.5,
         textColor=COLOR_ACCENT,
         alignment=0
     )
@@ -58,8 +59,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeContact",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.3,
-        leading=11.5,
+        fontSize=9.05,
+        leading=12.6,
         textColor=COLOR_SECONDARY,
         alignment=0
     )
@@ -68,8 +69,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeContactLinks",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.3,
-        leading=11.5,
+        fontSize=9.05,
+        leading=12.6,
         textColor=COLOR_LINK,
         alignment=0
     )
@@ -78,8 +79,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeSectionHeading",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=9.5,
-        leading=12,
+        fontSize=10.6,
+        leading=13.2,
         textColor=COLOR_PRIMARY,
         textTransform="uppercase",
         spaceAfter=2
@@ -89,8 +90,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeBody",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.2,
-        leading=11,
+        fontSize=9.25,
+        leading=12.9,
         textColor=COLOR_PRIMARY
     )
 
@@ -98,8 +99,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeBoldItem",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=8.5,
-        leading=11,
+        fontSize=9.5,
+        leading=12.9,
         textColor=COLOR_PRIMARY
     )
 
@@ -107,8 +108,8 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeMetaItem",
         parent=styles["Normal"],
         fontName="Helvetica-Oblique",
-        fontSize=8.0,
-        leading=10.5,
+        fontSize=8.85,
+        leading=12.5,
         textColor=COLOR_SECONDARY,
         alignment=2 # Right aligned
     )
@@ -117,20 +118,20 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "ResumeBullet",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.0,
-        leading=10.8,
+        fontSize=9.1,
+        leading=12.7,
         textColor=COLOR_SECONDARY,
-        leftIndent=10,
+        leftIndent=11,
         firstLineIndent=-6,
-        spaceAfter=1.5
+        spaceAfter=3.0
     )
 
     style_skill_label = ParagraphStyle(
         "ResumeSkillLabel",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=8.2,
-        leading=11,
+        fontSize=9.25,
+        leading=12.9,
         textColor=COLOR_PRIMARY
     )
 
@@ -139,7 +140,7 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
     # 1. HEADER (Name, Title, Contact Info, Direct Links)
     header_left = [
         Paragraph("SAHIL NAWAZ", style_name),
-        Spacer(1, 1),
+        Spacer(1, 2),
         Paragraph("FORWARD DEPLOYED DEVELOPER", style_title),
     ]
     header_right = [
@@ -162,15 +163,15 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(header_table)
-    story.append(Spacer(1, 4))
-    story.append(HRFlowable(width="100%", thickness=1.2, color=COLOR_ACCENT, spaceBefore=1, spaceAfter=5))
+    story.append(Spacer(1, 3))
+    story.append(HRFlowable(width="100%", thickness=1.4, color=COLOR_ACCENT, spaceBefore=1, spaceAfter=7))
 
     # Helper function for section headings with subtle accent line
     def add_section_header(title):
         story.append(Paragraph(title, style_section_heading))
-        story.append(HRFlowable(width="100%", thickness=0.6, color=COLOR_BORDER, spaceBefore=1, spaceAfter=4))
+        story.append(HRFlowable(width="100%", thickness=0.75, color=COLOR_BORDER, spaceBefore=1.5, spaceAfter=5))
 
-    # 2. PROFESSIONAL SUMMARY
+    # Summary
     add_section_header("Professional Summary")
     summary_text = (
         "Forward Deployed Developer with a solid computer science foundation and full-stack software engineering proficiency. "
@@ -180,7 +181,7 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         "and production operations."
     )
     story.append(Paragraph(summary_text, style_body))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 9))
 
     # 3. TECHNICAL & BUSINESS SKILLS
     add_section_header("Technical & Business Competencies")
@@ -206,16 +207,16 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
             Paragraph("Forward Deployed Development, Product Development, Business Strategy, Solution Delivery", style_body)
         ],
     ]
-    skills_table = Table(skills_data, colWidths=[130, 417])
+    skills_table = Table(skills_data, colWidths=[140, 407])
     skills_table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 1),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("TOPPADDING", (0, 0), (-1, -1), 2.0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2.0),
     ]))
     story.append(skills_table)
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 9))
 
     # 4. EXPERIENCE
     add_section_header("Professional Experience")
@@ -236,7 +237,7 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
     story.append(Paragraph("• Spearheaded end-to-end digital product planning, technical architecture, and platform roadmap for fitness enterprise management.", style_bullet))
     story.append(Paragraph("• Directed operational workflows, customer-facing technical design, and service automation under Bytewave Innovation.", style_bullet))
     story.append(Paragraph("• Formulated business development and user onboarding strategies to ensure long-term platform scalability and operational resilience.", style_bullet))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 9))
 
     # 5. PROJECTS
     add_section_header("Selected Engineering Projects")
@@ -253,12 +254,12 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(p1_header)
     story.append(Paragraph("• Built an automated computer vision pipeline leveraging YOLOv8 object detection to calculate real-time crowd density and occupancy metrics.", style_bullet))
     story.append(Paragraph("• Designed spatial heatmapping visualizers and automated threshold triggers for venue capacity monitoring and crowd safety management.", style_bullet))
-    story.append(Spacer(1, 3))
+    story.append(Spacer(1, 5.5))
 
     # Project 2: Library Management Software
     p2_header = Table([
@@ -272,12 +273,12 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(p2_header)
     story.append(Paragraph("• Engineered a relational inventory management system with robust ACID transaction support for book circulation and catalog management.", style_bullet))
     story.append(Paragraph("• Developed membership tracking, due-date calculation routines, fine-accrual algorithms, and SQL query optimizations.", style_bullet))
-    story.append(Spacer(1, 3))
+    story.append(Spacer(1, 5.5))
 
     # Project 3: Brand Guideline Audit Tool
     p3_header = Table([
@@ -291,12 +292,12 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(p3_header)
     story.append(Paragraph("• Created an automated compliance tool verifying digital design assets against official typography, hex palettes, and layout hierarchies.", style_bullet))
     story.append(Paragraph("• Streamlined developer-designer collaboration by highlighting styling discrepancies and generating actionable compliance audit summaries.", style_bullet))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 9))
 
     # 6. EDUCATION
     add_section_header("Education & Academic Background")
@@ -313,11 +314,11 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(edu1_header)
     story.append(Paragraph("• Location: Dehradun, Uttarakhand, India &nbsp;|&nbsp; Focus: Data Structures, Algorithmic Analysis, and System Architecture", style_bullet))
-    story.append(Spacer(1, 3))
+    story.append(Spacer(1, 5.5))
 
     # Record 2: The Open University
     edu2_header = Table([
@@ -331,13 +332,14 @@ def build_resume(output_path="frontend/Sahil_Nawaz_Resume.pdf"):
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
     story.append(edu2_header)
     story.append(Paragraph("• Focus: Artificial Intelligence, Retrieval-Augmented Generation (RAG), and LangChain Frameworks", style_bullet))
 
     doc.build(story)
     print(f"[SUCCESS] Resume generated successfully at: {output_path}")
+    return doc.page
 
 if __name__ == "__main__":
     build_resume()

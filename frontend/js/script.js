@@ -788,8 +788,19 @@ function initGoogleMeetBooking() {
         );
       }
     } catch (err) {
+      const fallbackWaText = `Hi Sahil! I would like to schedule a Google Meet consultation for ${dateVal} at ${timeVal}.\nName: ${nameVal}\nTopic: ${purposeVal}\nNotes: ${notesVal || "None"}`;
+      const fallbackWaUrl = `https://wa.me/917323018308?text=${encodeURIComponent(fallbackWaText)}`;
       showMeetStatus(
-        `<strong>Network Notice:</strong> Unable to reach scheduling service (${escapeHtml(err.message)}). Please email Sahil directly at <em>sahilnawaaz257@gmail.com</em>.`,
+        `<strong>Network Notice:</strong> Unable to reach scheduling service (${escapeHtml(err.message)}).<br>
+        <span style="display:block;margin-top:6px;font-size:0.9em;">You can instantly lock in this slot directly with Sahil on WhatsApp:</span>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <a href="${fallbackWaUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+            <span>💬 Confirm via WhatsApp Now</span>
+          </a>
+          <a href="mailto:sahilnawaaz257@gmail.com?subject=Google%20Meet%20Consultation%20Request&body=${encodeURIComponent(fallbackWaText)}" class="btn btn-outline btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+            <span>✉️ Email Sahil</span>
+          </a>
+        </div>`,
         false
       );
     } finally {
