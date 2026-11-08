@@ -620,10 +620,15 @@ function initGoogleMeetBooking() {
       }
 
       if (response.status === 201 && data.success) {
+        const isEmailSent = data.email_notification && data.email_notification.configured && data.email_notification.success;
+        const emailNotice = isEmailSent
+          ? `An automated confirmation email has been dispatched to <strong>${escapeHtml(emailVal)}</strong>.`
+          : `Your consultation request has been securely recorded in the database. Sahil will review your request and send the Google Meet invitation directly.`;
+
         showMeetStatus(
           `<strong>🎉 Request Submitted Successfully! (Ref: #${String(data.booking_id).slice(0, 8)})</strong><br>` +
-          `Thank you, ${escapeHtml(nameVal)}! Your Google Meet consultation request for <strong>${escapeHtml(dateVal)}</strong> at <strong>${escapeHtml(timeVal)}</strong> has been recorded in the database.<br>` +
-          `An automated confirmation email has been sent to <strong>${escapeHtml(emailVal)}</strong>. Sahil has been notified and will approve and send the Google Meet link shortly.`,
+          `Thank you, ${escapeHtml(nameVal)}! Your Google Meet consultation request for <strong>${escapeHtml(dateVal)}</strong> at <strong>${escapeHtml(timeVal)}</strong> has been confirmed.<br>` +
+          `${emailNotice}`,
           true
         );
         form.reset();
