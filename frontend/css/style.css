@@ -5066,7 +5066,7 @@ textarea.form-control {
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: var(--primary-soft);
+  background: #ffffff;
   border: 1px solid rgba(243, 181, 170, 0.6);
   display: flex;
   align-items: center;
@@ -5074,6 +5074,15 @@ textarea.form-control {
   font-size: 1.6rem;
   box-shadow: 0 4px 14px rgba(239, 89, 102, 0.12);
   flex-shrink: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.home-exp-icon img.gymsewa-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .home-exp-title-row {
@@ -5233,7 +5242,7 @@ textarea.form-control {
   width: 68px;
   height: 68px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #fff0ed 0%, #ffe2dc 100%);
+  background: #ffffff;
   border: 1px solid rgba(243, 181, 170, 0.7);
   display: flex;
   align-items: center;
@@ -5241,6 +5250,28 @@ textarea.form-control {
   font-size: 2.2rem;
   box-shadow: 0 6px 20px rgba(223, 117, 104, 0.15);
   flex-shrink: 0;
+  overflow: hidden;
+  padding: 6px;
+}
+
+.exp-brand-icon-box img.gymsewa-logo-img-lg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.overview-icon-badge.overview-logo-badge {
+  background: #ffffff;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.overview-icon-badge img.overview-badge-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .exp-brand-details {
