@@ -9,22 +9,47 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Configuration from Environment Variables
-SMTP_SERVER = os.environ.get("SMTP_SERVER") or os.environ.get("SMTP_HOST") or "smtp.gmail.com"
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
-SMTP_USERNAME = os.environ.get("SMTP_USERNAME") or os.environ.get("SMTP_USER") or ""
-SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD") or os.environ.get("SMTP_PASS") or ""
-NOTIFICATION_EMAIL = os.environ.get("NOTIFICATION_EMAIL") or "sahilnawaz257@gmail.com"
+# Dynamic Configuration from Environment Variables
+def get_smtp_credentials():
+    """
+    Dynamically read SMTP credentials and clean formatting.
+    Supports GMAIL_APP_PASSWORD, SMTP_PASS, SMTP_PASSWORD with or without spaces.
+    """
+    server = os.environ.get("SMTP_SERVER") or os.environ.get("SMTP_HOST") or "smtp.gmail.com"
+    try:
+        port = int(os.environ.get("SMTP_PORT", 587))
+    except (ValueError, TypeError):
+        port = 587
+    notification_email = os.environ.get("NOTIFICATION_EMAIL") or "sahilnawaz257@gmail.com"
+    username = (
+        os.environ.get("SMTP_USERNAME")
+        or os.environ.get("SMTP_USER")
+        or os.environ.get("GMAIL_USER")
+        or notification_email
+    )
+    raw_pass = (
+        os.environ.get("SMTP_PASSWORD")
+        or os.environ.get("SMTP_PASS")
+        or os.environ.get("GMAIL_APP_PASSWORD")
+        or ""
+    )
+    # Strip spaces often present in Google App Passwords (e.g., 'abcd efgh ijkl mnop')
+    password = str(raw_pass).replace(" ", "").replace("-", "").strip()
+    return server, port, username, password, notification_email
 
 def is_smtp_configured():
-    """Check if SMTP credentials are provided."""
-    return bool(SMTP_USERNAME and SMTP_PASSWORD)
+    """Check if SMTP credentials are provided and meet minimum length."""
+    _, _, username, password, _ = get_smtp_credentials()
+    return bool(username and password and len(password) >= 8)
 
 def _dispatch_email(to_email, subject, text_content, html_content=None):
     """
     Internal helper to send an email via SMTP.
+    Uses UTF-8 encoding for reliable unicode/emoji transmission.
     Returns dict with delivery status.
     """
+    server_host, server_port, username, password, _ = get_smtp_credentials()
+
     if not is_smtp_configured():
         # Clean local logging when SMTP is not configured
         print(f"[EMAIL SERVICE - SIMULATED] To: {to_email} | Subject: {subject}")
@@ -38,25 +63,27 @@ def _dispatch_email(to_email, subject, text_content, html_content=None):
 
     try:
         msg = MIMEMultipart("alternative")
-        msg["From"] = f"Sahil Nawaz Portfolio <{SMTP_USERNAME}>"
+        msg["From"] = f"Sahil Nawaz Portfolio <{username}>"
         msg["To"] = to_email
         msg["Subject"] = subject
+        msg["Reply-To"] = username
 
-        part_text = MIMEText(text_content, "plain")
+        part_text = MIMEText(text_content, "plain", "utf-8")
         msg.attach(part_text)
 
         if html_content:
-            part_html = MIMEText(html_content, "html")
+            part_html = MIMEText(html_content, "html", "utf-8")
             msg.attach(part_html)
 
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=10.0)
+        server = smtplib.SMTP(server_host, server_port, timeout=12.0)
         server.ehlo()
         server.starttls()
         server.ehlo()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.sendmail(SMTP_USERNAME, [to_email], msg.as_string())
+        server.login(username, password)
+        server.sendmail(username, [to_email], msg.as_string())
         server.quit()
 
+        print(f"[EMAIL SERVICE - DELIVERED] Email successfully sent to {to_email} | Subject: {subject}")
         return {
             "success": True,
             "configured": True,
@@ -70,7 +97,7 @@ def _dispatch_email(to_email, subject, text_content, html_content=None):
             "configured": True,
             "simulated": False,
             "error": str(e),
-            "message": "Failed to send email due to SMTP transport error."
+            "message": f"Failed to send email due to SMTP transport error: {e}"
         }
 
 def send_contact_notification(name, email, subject, message):
@@ -96,7 +123,8 @@ def send_contact_notification(name, email, subject, message):
         <p style="font-size: 13px; color: #7a6e69;">Reply directly to <a href="mailto:{email}">{email}</a></p>
     </div>
     """
-    return _dispatch_email(NOTIFICATION_EMAIL, email_subj, text_body, html_body)
+    _, _, _, _, notif_email = get_smtp_credentials()
+    return _dispatch_email(notif_email, email_subj, text_body, html_body)
 
 def send_contact_confirmation_to_visitor(name, email, subject, message):
     """Send an automated confirmation receipt to the visitor."""
@@ -249,7 +277,8 @@ def send_meeting_notification(booking, base_url="", secret_key=""):
         </p>
     </div>
     """
-    return _dispatch_email(NOTIFICATION_EMAIL, email_subj, text_body, html_body)
+    _, _, _, _, notif_email = get_smtp_credentials()
+    return _dispatch_email(notif_email, email_subj, text_body, html_body)
 
 def send_booking_receipt_to_visitor(booking):
     """Send an immediate acknowledgement receipt to the visitor with their booking details."""
@@ -336,6 +365,7 @@ def send_booking_confirmation_to_visitor(booking):
     status = booking.get("status")
     meet_link = booking.get("google_meet_link") or ""
 
+    _, _, _, _, notif_email = get_smtp_credentials()
     if status == "Approved":
         email_subj = f"Confirmed: Google Meet with Sahil Nawaz on {date}"
         text_body = (
@@ -367,7 +397,7 @@ def send_booking_confirmation_to_visitor(booking):
             f"Hi {name},\n\n"
             f"Thank you for reaching out to schedule a meeting for {date} at {time_slot}.\n"
             f"Unfortunately, this slot cannot be accommodated at this time ({status}).\n\n"
-            f"Please feel free to reach out directly via email at {NOTIFICATION_EMAIL} or choose an alternate time.\n\n"
+            f"Please feel free to reach out directly via email at {notif_email} or choose an alternate time.\n\n"
             f"Best regards,\nSahil Nawaz"
         )
         html_body = f"""
@@ -376,7 +406,7 @@ def send_booking_confirmation_to_visitor(booking):
             <p>Hi {name},</p>
             <p>Thank you for reaching out to schedule a meeting for <strong>{date}</strong> at <strong>{time_slot}</strong>.</p>
             <p>Unfortunately, this slot is not available or could not be accommodated (Status: {status}).</p>
-            <p>Please feel free to reply directly or contact Sahil at <a href="mailto:{NOTIFICATION_EMAIL}">{NOTIFICATION_EMAIL}</a> to reschedule.</p>
+            <p>Please feel free to reply directly or contact Sahil at <a href="mailto:{notif_email}">{notif_email}</a> to reschedule.</p>
             <p>Best regards,<br><strong>Sahil Nawaz</strong></p>
         </div>
         """

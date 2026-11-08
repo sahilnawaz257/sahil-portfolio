@@ -417,11 +417,65 @@ function getApiBaseUrl() {
 
 /**
  * =============================================================================
- * 08. GOOGLE MEET BOOKING SYSTEM
+ * 08. GOOGLE MEET BOOKING SYSTEM & GOOGLE FORM INTEGRATION
  * Modal scheduling interface with client-side validation, past date prevention,
- * slot selection, and asynchronous booking dispatch to SQLite.
+ * slot selection, 1-click Google Calendar integration, and WhatsApp receipt.
  * =============================================================================
  */
+const GOOGLE_FORM_URL = "https://docs.google.com/forms";
+
+/**
+ * Constructs an instant 1-Click "Add to Google Calendar" URL
+ * Formats start/end dates in IST (Asia/Kolkata) with complete meeting summary.
+ */
+function generateGoogleCalendarUrl({ title, date, timeSlot, details, location }) {
+  const cleanDate = (date || "").replace(/-/g, "");
+  let startHour = 10, startMin = 0, endHour = 10, endMin = 30;
+
+  if (timeSlot) {
+    const parts = timeSlot.split("-");
+    const parseTime = (tStr) => {
+      const match = (tStr || "").trim().match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (match) {
+        let h = parseInt(match[1], 10);
+        const m = parseInt(match[2], 10);
+        const period = match[3].toUpperCase();
+        if (period === "PM" && h < 12) h += 12;
+        if (period === "AM" && h === 12) h = 0;
+        return { h, m };
+      }
+      return null;
+    };
+    if (parts[0]) {
+      const st = parseTime(parts[0]);
+      if (st) { startHour = st.h; startMin = st.m; }
+    }
+    if (parts[1]) {
+      const et = parseTime(parts[1]);
+      if (et) { endHour = et.h; endMin = et.m; }
+    } else {
+      endHour = startHour;
+      endMin = startMin + 30;
+      if (endMin >= 60) { endHour += 1; endMin -= 60; }
+    }
+  }
+
+  const pad = (n) => String(n).padStart(2, "0");
+  const startStr = `${cleanDate}T${pad(startHour)}${pad(startMin)}00`;
+  const endStr = `${cleanDate}T${pad(endHour)}${pad(endMin)}00`;
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title || "Google Meet Consultation with Sahil Nawaz",
+    dates: `${startStr}/${endStr}`,
+    ctz: "Asia/Kolkata",
+    details: details || "Google Meet consultation with Sahil Nawaz (Forward Deployed Developer).",
+    location: location || "Google Meet"
+  });
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 function initGoogleMeetBooking() {
   const modalBackdrop = document.getElementById("meet-modal-backdrop");
   const modalCloseBtn = document.getElementById("meet-modal-close-btn");
@@ -431,10 +485,40 @@ function initGoogleMeetBooking() {
   const slotSelect = document.getElementById("meet-slot");
   const statusBox = document.getElementById("meet-modal-status");
   const submitBtn = document.getElementById("meet-submit-btn");
+  const modalActions = form ? form.querySelector(".meet-modal-actions") : null;
+  const originalActionsHtml = modalActions ? modalActions.innerHTML : "";
+
+  // Bind Google Form links dynamically
+  const topGFormLink = document.getElementById("meet-gform-top-link");
+  const contactGFormCard = document.getElementById("contact-google-form-card");
+  if (topGFormLink) topGFormLink.href = GOOGLE_FORM_URL;
+  if (contactGFormCard) contactGFormCard.href = GOOGLE_FORM_URL;
 
   if (!modalBackdrop || !form) return;
 
   const API_BASE = getApiBaseUrl();
+
+  function restoreOriginalActions() {
+    if (modalActions && originalActionsHtml) {
+      modalActions.innerHTML = originalActionsHtml;
+      const newCancel = document.getElementById("meet-cancel-btn");
+      if (newCancel) newCancel.addEventListener("click", closeModal);
+    }
+  }
+
+  function resetFormToDefault() {
+    form.reset();
+    const formFields = form.querySelectorAll(".meet-form-grid, .meet-field-group");
+    formFields.forEach((el) => { el.style.display = ""; });
+    clearMeetStatus();
+    restoreOriginalActions();
+    if (dateInput) {
+      const todayStr = new Date().toISOString().split("T")[0];
+      dateInput.min = todayStr;
+      dateInput.value = todayStr;
+      fetchAvailableSlots(todayStr);
+    }
+  }
 
   // Set minimum date to today (past dates are physically prevented)
   if (dateInput) {
@@ -495,7 +579,11 @@ function initGoogleMeetBooking() {
     modalBackdrop.classList.remove("is-open");
     modalBackdrop.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
-    clearMeetStatus();
+    if (statusBox && statusBox.classList.contains("status-success-card")) {
+      resetFormToDefault();
+    } else {
+      clearMeetStatus();
+    }
   }
 
   // Bind all triggers that open the Google Meet modal
@@ -598,9 +686,11 @@ function initGoogleMeetBooking() {
       notes: notesVal
     };
 
-    const originalBtnHtml = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>Recording Request...</span> <span class="btn-spinner">⏳</span>`;
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : "";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Recording Request...</span> <span class="btn-spinner">⏳</span>`;
+    }
 
     try {
       const response = await fetch(`${API_BASE}/api/meetings/book`, {
@@ -620,23 +710,73 @@ function initGoogleMeetBooking() {
       }
 
       if (response.status === 201 && data.success) {
-        const isEmailSent = data.email_notification && data.email_notification.configured && data.email_notification.success;
-        const emailNotice = isEmailSent
-          ? `An automated confirmation email has been dispatched to <strong>${escapeHtml(emailVal)}</strong>.`
-          : `Your consultation request has been securely recorded in the database. Sahil will review your request and send the Google Meet invitation directly.`;
-
-        showMeetStatus(
-          `<strong>🎉 Request Submitted Successfully! (Ref: #${String(data.booking_id).slice(0, 8)})</strong><br>` +
-          `Thank you, ${escapeHtml(nameVal)}! Your Google Meet consultation request for <strong>${escapeHtml(dateVal)}</strong> at <strong>${escapeHtml(timeVal)}</strong> has been confirmed.<br>` +
-          `${emailNotice}`,
-          true
+        const isVisitorConfirmed = Boolean(
+          data.email_notification &&
+          (data.email_notification.visitor_confirmed ||
+           (data.email_notification.visitor_details && data.email_notification.visitor_details.success))
         );
-        form.reset();
-        if (dateInput) {
-          const todayStr = new Date().toISOString().split("T")[0];
-          dateInput.min = todayStr;
-          dateInput.value = todayStr;
-          fetchAvailableSlots(todayStr);
+
+        const emailNotice = isVisitorConfirmed
+          ? `<div class="meet-ticket-email delivered">✉️ <strong>Confirmation Sent:</strong> An automated confirmation receipt has been dispatched to <b>${escapeHtml(emailVal)}</b>.</div>`
+          : `<div class="meet-ticket-email pending">💾 <strong>Recorded in Database:</strong> Sahil has received your request and will review and send your official Google Meet link to <b>${escapeHtml(emailVal)}</b> shortly.</div>`;
+
+        const bookingRef = String(data.booking_id || "NEW").slice(0, 8);
+        const gCalUrl = generateGoogleCalendarUrl({
+          title: `Google Meet: Sahil Nawaz & ${nameVal}`,
+          date: dateVal,
+          timeSlot: timeVal,
+          details: `Booking Reference: #${bookingRef}\nVisitor: ${nameVal} (${emailVal})\nTopic: ${purposeVal}\nNotes: ${notesVal || "None"}\nGoogle Meet link will be provided by Sahil Nawaz (Forward Deployed Developer).`,
+          location: "Google Meet"
+        });
+
+        const waText = `Hi Sahil! I have scheduled a Google Meet consultation for ${dateVal} at ${timeVal} (Booking Ref: #${bookingRef}).\nName: ${nameVal}\nTopic: ${purposeVal}\nPlease confirm!`;
+        const waUrl = `https://wa.me/917323018308?text=${encodeURIComponent(waText)}`;
+
+        statusBox.className = "meet-modal-status status-success-card";
+        statusBox.innerHTML = `
+          <div class="meet-receipt-card">
+            <div class="meet-receipt-header">
+              <span class="meet-receipt-check" aria-hidden="true">✓</span>
+              <div>
+                <h4 class="meet-receipt-title">Consultation Request Confirmed!</h4>
+                <span class="meet-receipt-badge">Booking Ref: #${escapeHtml(bookingRef)}</span>
+              </div>
+            </div>
+            <div class="meet-receipt-grid">
+              <div class="receipt-item"><span class="r-label">Name:</span> <span class="r-val">${escapeHtml(nameVal)}</span></div>
+              <div class="receipt-item"><span class="r-label">Email:</span> <span class="r-val">${escapeHtml(emailVal)}</span></div>
+              <div class="receipt-item"><span class="r-label">Topic:</span> <span class="r-val">${escapeHtml(purposeVal)}</span></div>
+              <div class="receipt-item"><span class="r-label">Date:</span> <span class="r-val">📅 ${escapeHtml(dateVal)}</span></div>
+              <div class="receipt-item"><span class="r-label">Time (IST):</span> <span class="r-val">⏰ ${escapeHtml(timeVal)}</span></div>
+            </div>
+            ${emailNotice}
+            <div class="meet-instant-buttons">
+              <a href="${gCalUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm btn-gcal">
+                <span>📅 Add to Google Calendar</span>
+              </a>
+              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm btn-wa-receipt">
+                <span>💬 Confirm on WhatsApp</span>
+              </a>
+              <a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm btn-gform-link">
+                <span>📋 Open Google Form ↗</span>
+              </a>
+            </div>
+          </div>
+        `;
+        statusBox.style.display = "block";
+        statusBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+        // Hide form fields so visitor sees only the clear confirmation ticket
+        const formFields = form.querySelectorAll(".meet-form-grid, .meet-field-group");
+        formFields.forEach((el) => { el.style.display = "none"; });
+
+        if (modalActions) {
+          modalActions.innerHTML = `
+            <button type="button" class="btn btn-outline" id="meet-book-another-btn">Schedule Another Slot</button>
+            <button type="button" class="btn btn-primary" id="meet-done-btn">Done</button>
+          `;
+          document.getElementById("meet-done-btn")?.addEventListener("click", closeModal);
+          document.getElementById("meet-book-another-btn")?.addEventListener("click", resetFormToDefault);
         }
       } else if (response.status === 409) {
         showMeetStatus(
@@ -658,8 +798,10 @@ function initGoogleMeetBooking() {
     } finally {
       setTimeout(() => {
         isBooking = false;
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnHtml;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
       }, 1200);
     }
   });
@@ -837,9 +979,20 @@ function initContactForm() {
             previewIdBadge.textContent = `Ref: #${String(data.contact_id).slice(0, 8)}`;
           }
 
-          if (previewMailto) {
-            const mailtoUrl = `mailto:sahilnawaz257@gmail.com?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent("From: " + payload.full_name + " (" + payload.email + ")\n\n" + payload.message)}`;
-            previewMailto.setAttribute("href", mailtoUrl);
+          const previewWaBtn = document.getElementById("preview-whatsapp-btn");
+          if (previewWaBtn) {
+            const waMsg = `Hi Sahil! I just submitted an inquiry on your portfolio (Ref: #${String(data.contact_id || "").slice(0, 8)}).\nFrom: ${payload.full_name} (${payload.email})\nSubject: ${payload.subject}\nMessage: ${payload.message}`;
+            previewWaBtn.setAttribute("href", `https://wa.me/917323018308?text=${encodeURIComponent(waMsg)}`);
+          }
+
+          const previewDbStatus = document.getElementById("preview-db-status");
+          if (previewDbStatus) {
+            const isVisitorConfirmed = Boolean(data.email_notification && data.email_notification.visitor_confirmed);
+            if (isVisitorConfirmed) {
+              previewDbStatus.textContent = `Your inquiry has been recorded and an automated confirmation copy was dispatched to ${payload.email}.`;
+            } else {
+              previewDbStatus.textContent = `Your message is securely recorded in the database. Sahil will review your inquiry and reply to ${payload.email}.`;
+            }
           }
 
           previewBox.style.display = "block";

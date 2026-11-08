@@ -1576,6 +1576,16 @@
                 <span class="channel-arrow" aria-hidden="true">↗</span>
               </a>
 
+              <!-- Google Form Portal Card -->
+              <a href="https://docs.google.com/forms" target="_blank" rel="noopener noreferrer" class="contact-channel-card contact-channel-gform-card" id="contact-google-form-card" aria-label="Open Google Form for Consultation">
+                <div class="channel-icon-badge gform-badge" aria-hidden="true">📋</div>
+                <div class="channel-meta">
+                  <small>Google Form Portal</small>
+                  <b>Schedule / Inquire via Google Form</b>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">↗</span>
+              </a>
+
               <!-- GitHub Card -->
               <a href="https://github.com/sahilnawaz257" target="_blank" rel="noopener noreferrer" class="contact-channel-card" aria-label="Visit Sahil Nawaz on GitHub">
                 <div class="channel-icon-badge" aria-hidden="true">💻</div>
@@ -1686,6 +1696,9 @@
                 </div>
               </div>
               <div class="preview-actions">
+                <a href="#" id="preview-whatsapp-btn" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" aria-label="Confirm submission via WhatsApp">
+                  <span>Confirm via WhatsApp 💬</span>
+                </a>
                 <button type="button" id="preview-reset-btn" class="btn btn-primary btn-sm">
                   <span>Write Another Message</span>
                 </button>
@@ -1853,7 +1866,12 @@
             <p class="meet-modal-subtitle">Pick a convenient slot to discuss engineering roles, AI, or project collaboration.</p>
           </div>
         </div>
-        <button type="button" class="meet-modal-close" id="meet-modal-close-btn" aria-label="Close scheduling modal">✕</button>
+        <div class="meet-header-actions-wrap">
+          <a href="https://docs.google.com/forms" target="_blank" rel="noopener noreferrer" class="meet-gform-badge-link" id="meet-gform-top-link" title="Open Google Form for Consultation">
+            <span>📋 Google Form</span> ↗
+          </a>
+          <button type="button" class="meet-modal-close" id="meet-modal-close-btn" aria-label="Close scheduling modal">✕</button>
+        </div>
       </div>
 
       <form id="meet-booking-form" class="meet-booking-form" novalidate>
