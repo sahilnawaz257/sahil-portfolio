@@ -53,10 +53,16 @@
         </span>
       </a>
 
-      <!-- Mobile Navigation Hamburger Toggle -->
-      <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="menu-icon" aria-hidden="true">☰</span>
-      </button>
+      <!-- Mobile Quick Actions & Hamburger Toggle -->
+      <div class="header-mobile-actions">
+        <a href="/Sahil_Nawaz_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn-mobile-quick-resume" aria-label="View Sahil Nawaz Resume (PDF)">
+          <span aria-hidden="true">📄</span>
+          <span>Resume</span>
+        </a>
+        <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-icon" aria-hidden="true">☰</span>
+        </button>
+      </div>
 
       <!-- Primary Navigation Links -->
       <nav class="site-nav" id="primary-navigation" aria-label="Primary Navigation">
@@ -69,14 +75,32 @@
           <li class="nav-item"><a href="#education" class="nav-link" data-target="education">Education</a></li>
           <li class="nav-item"><a href="#contact" class="nav-link" data-target="contact">Contact</a></li>
         </ul>
-        <!-- Mobile Call-to-Action -->
+        <!-- Mobile Call-to-Action & Resume -->
         <div class="mobile-nav-cta">
+          <div class="resume-btn-group mobile-resume-wrap">
+            <a href="/Sahil_Nawaz_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-resume btn-sm" aria-label="View Resume PDF">
+              <span class="btn-icon" aria-hidden="true">📄</span>
+              <span>View Resume</span>
+            </a>
+            <a href="/Sahil_Nawaz_Resume.pdf" download="Sahil_Nawaz_Resume.pdf" class="btn-resume-download btn-sm" title="Download Resume PDF" aria-label="Download Sahil_Nawaz_Resume.pdf">
+              <span aria-hidden="true">⬇</span>
+            </a>
+          </div>
           <a href="#contact" class="btn btn-primary nav-link-trigger" data-target="contact">Let’s Connect ↗</a>
         </div>
       </nav>
 
-      <!-- Call-To-Action Button in Desktop Header -->
+      <!-- Desktop Header Actions: Resume Button & Let's Connect -->
       <div class="header-cta">
+        <div class="resume-btn-group" id="header-resume-group">
+          <a href="/Sahil_Nawaz_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-resume" id="navbar-resume-btn" aria-label="View Sahil Nawaz Resume (PDF)">
+            <span class="btn-icon" aria-hidden="true">📄</span>
+            <span>Resume</span>
+          </a>
+          <a href="/Sahil_Nawaz_Resume.pdf" download="Sahil_Nawaz_Resume.pdf" class="btn-resume-download" id="navbar-resume-download-btn" title="Download Sahil_Nawaz_Resume.pdf" aria-label="Download Sahil Nawaz Resume PDF">
+            <span aria-hidden="true">⬇</span>
+          </a>
+        </div>
         <a href="#contact" class="btn btn-primary nav-link-trigger" data-target="contact">Let’s Connect ↗</a>
       </div>
     </div>
@@ -151,8 +175,8 @@
                 <span>LeetCode</span> <span class="pill-arrow" aria-hidden="true">↗</span>
               </a>
               <span class="sep-dot" aria-hidden="true">·</span>
-              <a href="mailto:sahilnawaz257@gmail.com" class="hero-email-link" aria-label="Send direct email">
-                <span>sahilnawaz257@gmail.com</span>
+              <a href="mailto:sahilnawaaz257@gmail.com" class="hero-email-link" aria-label="Send direct email">
+                <span>sahilnawaaz257@gmail.com</span>
               </a>
             </div>
           </div>
@@ -771,7 +795,7 @@
                 <span class="channel-pill-icon">✉️</span>
                 <div>
                   <small>Direct Email</small>
-                  <a href="mailto:sahilnawaz257@gmail.com">sahilnawaz257@gmail.com</a>
+                  <a href="mailto:sahilnawaaz257@gmail.com">sahilnawaaz257@gmail.com</a>
                 </div>
               </div>
               <div class="channel-pill-item">
@@ -829,12 +853,16 @@
                   <strong class="spec-val">JB Group of Institutions of Technology</strong>
                 </div>
                 <div class="spec-row">
-                  <span class="spec-key">Location:</span>
-                  <strong class="spec-val">Dehradun, Uttarakhand, India</strong>
+                  <span class="spec-key">Home:</span>
+                  <strong class="spec-val">Bihar, India</strong>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Mobile:</span>
+                  <a href="tel:+917323018308" class="spec-val">+91 7323018308</a>
                 </div>
                 <div class="spec-row">
                   <span class="spec-key">Email:</span>
-                  <a href="mailto:sahilnawaz257@gmail.com" class="spec-val email-val">sahilnawaz257@gmail.com</a>
+                  <a href="mailto:sahilnawaaz257@gmail.com" class="spec-val email-val">sahilnawaaz257@gmail.com</a>
                 </div>
               </div>
             </div>
@@ -1566,12 +1594,22 @@
                 <span class="channel-arrow" aria-hidden="true">↗</span>
               </a>
 
+              <!-- Direct Mobile Phone Card -->
+              <a href="tel:+917323018308" class="contact-channel-card contact-channel-phone-card" aria-label="Call Sahil Nawaz directly">
+                <div class="channel-icon-badge phone-badge" aria-hidden="true">📞</div>
+                <div class="channel-meta">
+                  <small>Direct Mobile</small>
+                  <b>+91 7323018308</b>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">↗</span>
+              </a>
+
               <!-- Direct Email Card -->
-              <a href="mailto:sahilnawaz257@gmail.com" class="contact-channel-card" aria-label="Send direct email to Sahil Nawaz">
+              <a href="mailto:sahilnawaaz257@gmail.com" class="contact-channel-card" aria-label="Send direct email to Sahil Nawaz">
                 <div class="channel-icon-badge" aria-hidden="true">✉️</div>
                 <div class="channel-meta">
                   <small>Email Address</small>
-                  <b>sahilnawaz257@gmail.com</b>
+                  <b>sahilnawaaz257@gmail.com</b>
                 </div>
                 <span class="channel-arrow" aria-hidden="true">↗</span>
               </a>
@@ -1731,9 +1769,9 @@
             Forward Deployed Developer engineering high-impact AI, Computer Vision, and full-stack software systems. Pursuing B.Tech CSE (2025–2029) at JB Group of Institutions of Technology, Dehradun, and Data Analytics at The Open University.
           </p>
           <div class="footer-email-wrap">
-            <a href="mailto:sahilnawaz257@gmail.com" class="footer-email-link" aria-label="Email Sahil Nawaz">
+            <a href="mailto:sahilnawaaz257@gmail.com" class="footer-email-link" aria-label="Email Sahil Nawaz">
               <span class="email-icon" aria-hidden="true">✉️</span>
-              <span>sahilnawaz257@gmail.com</span>
+              <span>sahilnawaaz257@gmail.com</span>
             </a>
           </div>
         </div>

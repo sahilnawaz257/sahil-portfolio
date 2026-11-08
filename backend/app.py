@@ -179,6 +179,25 @@ def serve_experience():
 def serve_projects():
     return send_from_directory(FRONTEND_DIR, "projects.html")
 
+@app.route("/resume")
+@app.route("/resume.pdf")
+@app.route("/Sahil_Nawaz_Resume.pdf")
+def serve_resume():
+    pdf_path = os.path.join(FRONTEND_DIR, "Sahil_Nawaz_Resume.pdf")
+    if not os.path.exists(pdf_path):
+        try:
+            from generate_resume import build_resume
+            build_resume(pdf_path)
+        except Exception as e:
+            app.logger.warning(f"Could not auto-generate resume: {e}")
+    return send_from_directory(
+        FRONTEND_DIR,
+        "Sahil_Nawaz_Resume.pdf",
+        mimetype="application/pdf",
+        as_attachment=request.args.get("download") == "true",
+        download_name="Sahil_Nawaz_Resume.pdf"
+    )
+
 @app.route("/favicon.ico")
 @app.route("/favicon.svg")
 def serve_favicon():

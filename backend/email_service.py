@@ -20,7 +20,7 @@ def get_smtp_credentials():
         port = int(os.environ.get("SMTP_PORT", 587))
     except (ValueError, TypeError):
         port = 587
-    notification_email = os.environ.get("NOTIFICATION_EMAIL") or "sahilnawaz257@gmail.com"
+    notification_email = os.environ.get("NOTIFICATION_EMAIL") or "sahilnawaaz257@gmail.com"
     username = (
         os.environ.get("SMTP_USERNAME")
         or os.environ.get("SMTP_USER")

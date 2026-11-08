@@ -792,7 +792,7 @@ function initGoogleMeetBooking() {
       }
     } catch (err) {
       showMeetStatus(
-        `<strong>Network Notice:</strong> Unable to reach scheduling service (${escapeHtml(err.message)}). Please email Sahil directly at <em>sahilnawaz257@gmail.com</em>.`,
+        `<strong>Network Notice:</strong> Unable to reach scheduling service (${escapeHtml(err.message)}). Please email Sahil directly at <em>sahilnawaaz257@gmail.com</em>.`,
         false
       );
     } finally {

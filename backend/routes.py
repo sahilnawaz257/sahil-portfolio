@@ -300,7 +300,7 @@ def submit_contact():
         # Safe logging without exposing DB credentials
         return jsonify({
             "success": False,
-            "error": "Database error while recording your message. Please try again or email directly to sahilnawaz257@gmail.com."
+            "error": "Database error while recording your message. Please try again or email directly to sahilnawaaz257@gmail.com."
         }), 500
 
     # Dispatch Email Notifications (Owner alert to sahilnawaz257@gmail.com + Visitor confirmation receipt)
