@@ -271,89 +271,29 @@ button {
   flex-shrink: 0;
 }
 
-/* Navbar Resume Button & Button Group */
-.resume-btn-group {
+/* Single Elegant Navbar Resume Button */
+.btn-resume-clean {
   display: inline-flex;
   align-items: center;
-  gap: 0;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
   border-radius: var(--radius-full);
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  overflow: hidden;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  text-decoration: none;
   transition: all 0.25s ease;
   margin-right: 12px;
 }
 
-.resume-btn-group:hover {
-  border-color: var(--primary);
-  box-shadow: 0 4px 14px rgba(223, 117, 104, 0.2);
-}
-
-.btn-resume {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  transition: all 0.2s ease;
-}
-
-.btn-resume:hover {
+.btn-resume-clean:hover {
   background: var(--primary);
   color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(223, 117, 104, 0.3);
   text-decoration: none;
-}
-
-.btn-resume-download {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9px 12px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-decoration: none;
-  border-left: 1px solid var(--border);
-  background: transparent;
-  transition: all 0.2s ease;
-}
-
-.btn-resume-download:hover {
-  background: var(--primary);
-  color: #ffffff;
-  text-decoration: none;
-}
-
-/* Quick Resume Pill on Mobile Header */
-.header-mobile-actions {
-  display: none;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-mobile-quick-resume {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 7px 12px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--primary);
-  background: var(--primary-soft);
-  border: 1px solid var(--primary);
-  border-radius: var(--radius-full);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.btn-mobile-quick-resume:hover {
-  background: var(--primary);
-  color: #ffffff;
 }
 
 .mobile-nav-cta {
@@ -1794,13 +1734,124 @@ button {
 }
 
 /* ==========================================================================
-   Contact Section & Form
+   Contact Section & Direct Channels Hub
    ========================================================================== */
 .contact-section {
   background-color: var(--dark);
   color: #ffffff;
   padding: 90px 0 70px;
   position: relative;
+}
+
+.contact-hub-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.contact-hub-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 36px;
+}
+
+.contact-hub-header .contact-subheading {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.contact-hub-header .contact-subtext {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+.contact-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.contact-channel-card.featured-meet-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(223, 117, 104, 0.18) 0%, rgba(30, 20, 18, 0.95) 100%);
+  border: 1px solid rgba(223, 117, 104, 0.65);
+  padding: 22px 26px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.contact-channel-card.featured-meet-card:hover {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(223, 117, 104, 0.28) 0%, rgba(38, 26, 24, 0.98) 100%);
+  transform: translateY(-2px);
+}
+
+.channel-tag-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: rgba(223, 117, 104, 0.14);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.channel-title-main {
+  display: block;
+  font-size: 1.15rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.channel-detail {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-top: 3px;
+}
+
+.contact-assurance-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 26px;
+  padding: 18px 24px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(243, 181, 170, 0.2);
+}
+
+.contact-assurance-card .assurance-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.contact-assurance-card b {
+  display: block;
+  color: #ffffff;
+  font-size: 0.92rem;
+  margin-bottom: 3px;
+}
+
+.contact-assurance-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.45;
+}
+
+@media (max-width: 768px) {
+  .contact-channel-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .contact-grid {

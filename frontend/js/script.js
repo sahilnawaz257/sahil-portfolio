@@ -757,9 +757,6 @@ function initGoogleMeetBooking() {
               <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm btn-wa-receipt">
                 <span>💬 Confirm on WhatsApp</span>
               </a>
-              <a href="${GOOGLE_FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm btn-gform-link">
-                <span>📋 Open Google Form ↗</span>
-              </a>
             </div>
           </div>
         `;
