@@ -66,7 +66,7 @@ def is_origin_allowed(req_origin):
     """Check if request origin is authorized."""
     if not req_origin or not IS_PRODUCTION:
         return True
-    if req_origin in ALLOWED_ORIGINS or req_origin.endswith(".onrender.com"):
+    if req_origin in ALLOWED_ORIGINS or req_origin.endswith(".onrender.com") or req_origin.endswith(".github.io") or req_origin.endswith(".vercel.app"):
         return True
     return False
 
